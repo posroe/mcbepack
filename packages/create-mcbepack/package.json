@@ -1,0 +1,27 @@
+{
+  "name": "create-mcbepack",
+  "module": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "test": "bun run src/index.ts",
+    "dev": "tsc --watch",
+    "build": "tsc"
+  },
+  "bin": {
+    "create-mcbepack": "./bin/index.js"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@mcbepack/common": "workspace:*",
+    "enquirer": "^2.4.1",
+    "node-fetch": "^3.3.2",
+    "nodemon": "^3.1.11",
+    "picocolors": "^1.1.1",
+    "uuid": "^13.0.0"
+  }
+}

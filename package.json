@@ -1,0 +1,13 @@
+{
+    "private": true,
+    "workspaces": [
+        "packages/*"
+    ],
+    "dependencies": {
+        "@types/yargs": "^17.0.35",
+        "chokidar": "^5.0.0",
+        "dotenv": "^17.2.3",
+        "picocolors": "^1.1.1",
+        "yargs": "^18.0.0"
+    }
+}

@@ -1,0 +1,19 @@
+{
+    "name": "@mcbepack/common",
+    "main": "bin/index.js",
+    "types": "bin/index.d.ts",
+    "type": "module",
+    "scripts": {
+        "dev": "tsc --watch",
+        "build": "tsc"
+    },
+    "devDependencies": {
+        "@types/bun": "latest"
+    },
+    "peerDependencies": {
+        "typescript": "^5"
+    },
+    "dependencies": {
+        "node-fetch": "^3.3.2"
+    }
+}

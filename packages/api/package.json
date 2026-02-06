@@ -1,0 +1,19 @@
+{
+    "name": "@mcbepack/api",
+    "main": "bin/index.js",
+    "types": "bin/index.d.ts",
+    "type": "module",
+    "scripts": {
+        "dev": "tsc --watch",
+        "build": "tsc"
+    },
+    "devDependencies": {
+        "@types/bun": "latest"
+    },
+    "peerDependencies": {
+        "typescript": "^5"
+    },
+    "dependencies": {
+        "@minecraft/server": "^2.4.0"
+    }
+}

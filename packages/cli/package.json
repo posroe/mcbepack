@@ -1,0 +1,33 @@
+{
+    "name": "@mcbepack/cli",
+    "main": "bin/index.js",
+    "types": "bin/index.d.ts",
+    "type": "module",
+    "bin": {
+        "mcbepack": "bin/index.js"
+    },
+    "scripts": {
+        "dev": "tsc --watch",
+        "build": "tsc"
+    },
+    "devDependencies": {
+        "@types/bun": "latest"
+    },
+    "peerDependencies": {
+        "typescript": "^5"
+    },
+    "dependencies": {
+        "@mcbepack/common": "workspace:*",
+        "@types/archiver": "^7.0.0",
+        "archiver": "^7.0.1",
+        "chokidar": "^4.0.3",
+        "dotenv": "^16.4.7",
+        "inquirer": "^13.2.2",
+        "node-fetch": "^3.3.2",
+        "nodemon": "^3.1.11",
+        "picocolors": "^1.1.1",
+        "ts-loader": "^9.5.4",
+        "webpack": "^5.105.0",
+        "yargs": "^17.7.2"
+    }
+}
