@@ -3,6 +3,10 @@
     "workspaces": [
         "packages/*"
     ],
+    "scripts": {
+        "build": "bun run --filter '*' build",
+        "dev": "bun run --filter '*' dev"
+    },
     "dependencies": {
         "@types/yargs": "^17.0.35",
         "chokidar": "^5.0.0",

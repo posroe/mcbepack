@@ -1,19 +1,22 @@
 # @mcbepack/cli
 
-> Development and build tooling for MCBEPACK projects
+Development and build tooling for MCBEPACK projects
 
+[![npm version](https://badge.fury.io/js/create-mcbepack.svg)](https://www.npmjs.com/package/@mcbepack/cli)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
+## Overview
 
 `@mcbepack/cli` provides command-line tools for developing and building Minecraft Bedrock Edition addons. It includes a development server with hot-reload capabilities and multiple build format options.
 
 ## Features
 
-- 🔄 **Development Server** - Watch mode with automatic file synchronization
-- 📦 **Multiple Build Formats** - Export as `.zip`, `.mcpack`, or `.mcaddon`
-- 🔌 **Script API Compilation** - Webpack-based bundling for Script API projects
-- 📁 **Smart File Sync** - Automatic synchronization to Minecraft development folders
-- 🔄 **Dependency Updates** - Update Script API packages to latest versions
-- 🎯 **Environment Configuration** - `.env.local` support for custom paths
+- **Development Server** - Watch mode with automatic file synchronization
+- **Multiple Build Formats** - Export as `.zip`, `.mcpack`, or `.mcaddon`
+- **Script API Compilation** - Webpack-based bundling for Script API projects
+- **Smart File Sync** - Automatic synchronization to Minecraft development folders
+- **Dependency Updates** - Update Script API packages to latest versions
+- **Environment Configuration** - `.env.local` support for custom paths
 
 ## Installation
 
@@ -42,70 +45,34 @@ mcbepack dev
 - Syncs compiled files to Minecraft development folder
 - Provides real-time feedback on file changes
 
-### `mcbepack build:zip`
+### `mcbepack build`
 
-Build the addon as a `.zip` archive.
+Build the addon as a .zip, .mcpack, or .mcaddon file.
 
 ```bash
-bun run build:zip
-# or
-mcbepack build:zip
+# Build the addon as a .zip archive.
+mcbepack build -o zip
+
+# Build the addon as a .mcpack file.
+mcbepack build -o mcpack
+
+# Build the addon as a .mcaddon file.
+mcbepack build -o addon
 ```
 
-Creates a compressed archive containing all pack files, suitable for distribution or manual installation.
+### `mcbepack update`
 
-### `mcbepack build:mcpack`
-
-Build the addon as a `.mcpack` file.
+Update Script API dependencies to the latest release.
 
 ```bash
-bun run build:mcpack
-# or
-mcbepack build:mcpack
-```
+# Update Script API dependencies to the latest stable release.
+mcbepack update -t stable
 
-Creates a Minecraft pack file that can be double-clicked to install directly into Minecraft.
+# Update Script API dependencies to the latest beta release.
+mcbepack update -t beta
 
-### `mcbepack build:addon`
-
-Build the addon as a `.mcaddon` file.
-
-```bash
-bun run build:addon
-# or
-mcbepack build:addon
-```
-
-Creates a Minecraft addon file containing both behavior and resource packs (if applicable).
-
-### `mcbepack update:stable`
-
-Update Script API dependencies to the latest stable release.
-
-```bash
-bun run update:stable
-# or
-mcbepack update:stable
-```
-
-### `mcbepack update:beta`
-
-Update Script API dependencies to the latest beta release.
-
-```bash
-bun run update:beta
-# or
-mcbepack update:beta
-```
-
-### `mcbepack update:preview`
-
-Update Script API dependencies to the latest preview release.
-
-```bash
-bun run update:preview
-# or
-mcbepack update:preview
+# Update Script API dependencies to the latest preview release.
+mcbepack update -t preview
 ```
 
 ## Configuration
@@ -189,26 +156,6 @@ The build commands:
 3. Create archive using `archiver`
 4. Output to project root
 
-## API
-
-### Programmatic Usage
-
-```typescript
-import { devCommand, buildCommand, updateCommand } from "@mcbepack/cli";
-
-// Use commands programmatically
-```
-
-## Dependencies
-
-- `chokidar` - File watching
-- `webpack` - Module bundling
-- `ts-loader` - TypeScript compilation
-- `archiver` - Archive creation
-- `yargs` - Command-line parsing
-- `dotenv` - Environment variable loading
-- `picocolors` - Terminal colors
-
 ## Related Packages
 
 - [`create-mcbepack`](../create-mcbepack) - Project scaffolding tool
@@ -237,9 +184,9 @@ import { devCommand, buildCommand, updateCommand } from "@mcbepack/cli";
 
 ## License
 
-GPL-3.0 - see [LICENSE](./LICENSE) for details
+GPL-3.0 - see [LICENSE](../../LICENSE) for details
 
-## Links
+## Resources
 
 - [GitHub Repository](https://github.com/bugphxne/create-mcbepack)
 - [Documentation](https://docs.mbext.online/mcbepack)

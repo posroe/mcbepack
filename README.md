@@ -1,36 +1,38 @@
 # MCBEPACK
 
-> A modern development toolkit for Minecraft Bedrock Edition addons
+A comprehensive development toolkit for Minecraft Bedrock Edition addon development.
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![npm version](https://badge.fury.io/js/create-mcbepack.svg)](https://www.npmjs.com/package/create-mcbepack)
+[![GitHub release (latest by date)](https://img.shields.io/github/downloads/bugphxne/mcbepack-workspaces/total)](https://github.com/bugphxne/mcbepack-workspaces/releases)
 
-MCBEPACK is a comprehensive toolkit designed to streamline Minecraft Bedrock Edition addon development. It provides a modern development experience with TypeScript/JavaScript support, hot-reload capabilities, and seamless integration with Minecraft's Script API.
+## Overview
 
-## ✨ Features
+MCBEPACK is a professional-grade toolkit designed to streamline the development workflow for Minecraft Bedrock Edition addons. The toolkit provides a modern development environment with comprehensive TypeScript support, automated build processes, and seamless integration with Minecraft's Script API.
 
-- 🚀 **Quick Project Scaffolding** - Create new projects in seconds with `create-mcbepack`
-- 🔄 **Hot Reload Development** - Automatic file synchronization during development
-- 📦 **Multiple Build Formats** - Export as `.zip`, `.mcpack`, or `.mcaddon`
-- 🎯 **Full TypeScript Support** - Complete type definitions for Minecraft Script API
-- 🔌 **Script API Integration** - Seamless integration with Minecraft's official Script API
-- 🛠️ **Utility Libraries** - Built-in Database and Scoreboard helpers
-- 📚 **Monorepo Architecture** - Well-organized package structure for maintainability
+## Core Features
 
-## 📦 Packages
+- **Rapid Project Initialization** - Automated project scaffolding with customizable configurations
+- **Development Server** - Real-time file synchronization and hot-reload capabilities
+- **Multiple Build Formats** - Support for `.zip`, `.mcpack`, and `.mcaddon` distribution formats
+- **TypeScript Support** - Complete type definitions for Minecraft Script API
+- **Script API Integration** - Native integration with Minecraft's official Script API
+- **Utility Libraries** - Pre-built Database and Scoreboard management utilities
+- **Monorepo Architecture** - Modular package structure for enhanced maintainability
 
-This monorepo contains the following packages:
+## Package Structure
 
-| Package                                         | Description                           | Version |
-| ----------------------------------------------- | ------------------------------------- | ------- |
-| [`create-mcbepack`](./packages/create-mcbepack) | CLI tool for scaffolding new projects | -       |
-| [`@mcbepack/cli`](./packages/cli)               | Development and build tooling         | -       |
-| [`@mcbepack/api`](./packages/api)               | Utility APIs for Script API           | -       |
-| [`@mcbepack/common`](./packages/common)         | Shared utilities and constants        | -       |
+This repository is organized as a monorepo containing the following packages:
+
+| Package                                         | Description                   | Version |
+| ----------------------------------------------- | ----------------------------- | ------- |
+| [`create-mcbepack`](./packages/create-mcbepack) | Project scaffolding CLI tool  | -       |
+| [`@mcbepack/cli`](./packages/cli)               | Development and build tooling | -       |
+| [`@mcbepack/api`](./packages/api)               | Script API utility library    | -       |
+| [`@mcbepack/common`](./packages/common)         | Shared utilities and types    | -       |
 
 ### create-mcbepack
 
-Interactive CLI tool for creating new MCBEPACK projects with customizable configurations.
+Interactive command-line interface for initializing new MCBEPACK projects with customizable configurations.
 
 ```bash
 bunx create-mcbepack
@@ -38,57 +40,47 @@ bunx create-mcbepack
 
 ### @mcbepack/cli
 
-Command-line interface for managing MCBEPACK projects.
+Command-line interface providing development and build management capabilities.
 
 **Available Commands:**
 
-- `mcbepack dev` - Start development server with file watching
-- `mcbepack build:zip` - Build addon as `.zip` archive
-- `mcbepack build:mcpack` - Build addon as `.mcpack` file
-- `mcbepack build:addon` - Build addon as `.mcaddon` file
-- `mcbepack update:stable` - Update dependencies to stable release
-- `mcbepack update:beta` - Update dependencies to beta release
-- `mcbepack update:preview` - Update dependencies to preview release
+- `mcbepack dev` - Initialize development server with file watching
+- `mcbepack build -o zip` - Generate addon as `.zip` archive
+- `mcbepack build -o mcpack` - Generate addon as `.mcpack` file
+- `mcbepack build -o mcaddon` - Generate addon as `.mcaddon` file
+- `mcbepack update -t stable` - Update dependencies to stable release channel
+- `mcbepack update -t beta` - Update dependencies to beta release channel
+- `mcbepack update -t preview` - Update dependencies to preview release channel
 
 ### @mcbepack/api
 
-Utility library providing convenient wrappers for Minecraft Script API functionality.
+Utility library providing convenient abstractions for Minecraft Script API functionality.
 
-**Features:**
+**Available Utilities:**
 
-- `Database` - Persistent data storage using Dynamic Properties
-- `Scoreboard` - Simplified scoreboard management
-
-**Example:**
-
-```typescript
-import { Database } from "@mcbepack/api";
-
-const db = new Database("playerData");
-db.set("player123", { score: 100, level: 5 });
-const data = db.get("player123");
-```
+- `Database` - Persistent data storage implementation using Dynamic Properties
+- `Scoreboard` - Simplified scoreboard management interface
 
 ### @mcbepack/common
 
-Shared utilities, types, and constants used across all MCBEPACK packages.
+Shared utilities, type definitions, and constants utilized across all MCBEPACK packages.
 
-## 🚀 Quick Start
+## Installation and Usage
 
-### Creating a New Project
+### Project Initialization
 
 ```bash
 bunx create-mcbepack
 ```
 
-The interactive CLI will guide you through:
+The interactive CLI will guide you through the following configuration steps:
 
-1. Selecting pack types (Behavior Pack / Resource Pack)
-2. Entering project metadata (name, description, author, version)
-3. Choosing whether to use Script API
-4. Selecting programming language (TypeScript / JavaScript)
-5. Choosing game release channel (stable / beta / preview)
-6. Selecting Script API packages to include
+1. Pack type selection (Behavior Pack / Resource Pack)
+2. Project metadata configuration (name, description, author, version)
+3. Script API integration selection
+4. Programming language selection (TypeScript / JavaScript)
+5. Game release channel selection (stable / beta / preview)
+6. Script API package selection
 
 ### Development Workflow
 
@@ -98,37 +90,37 @@ bun install
 bun run dev
 ```
 
-The development server will:
+The development server provides the following capabilities:
 
-- Watch for file changes in your source directory
-- Automatically compile TypeScript/JavaScript
-- Sync changes to Minecraft's development folder
-- Provide real-time feedback
+- Automated file change detection in source directories
+- Real-time TypeScript/JavaScript compilation
+- Automatic synchronization to Minecraft's development directory
+- Immediate feedback on compilation status
 
-### Building for Distribution
+### Production Build
 
 ```bash
-# Build as ZIP archive
+# Generate ZIP archive
 bun run build:zip
 
-# Build as MCPACK (single pack)
+# Generate MCPACK (single pack)
 bun run build:mcpack
 
-# Build as MCADDON (multiple packs)
+# Generate MCADDON (multiple packs)
 bun run build:addon
 ```
 
-## 🛠️ Development
+## Development
 
-### Prerequisites
+### System Requirements
 
 - [Bun](https://bun.sh) v1.0 or higher
 - Minecraft Bedrock Edition
 
-### Setting Up the Monorepo
+### Repository Setup
 
 ```bash
-# Clone the repository
+# Clone repository
 git clone https://github.com/bugphxne/create-mcbepack.git
 cd mcbepack
 
@@ -142,9 +134,9 @@ cd ../api && bun run build
 cd ../common && bun run build
 ```
 
-### Development Workflow
+### Package Development
 
-Each package can be developed independently:
+Individual packages can be developed independently:
 
 ```bash
 # Watch mode for specific package
@@ -152,31 +144,9 @@ cd packages/cli
 bun run dev
 ```
 
-### Project Structure
+## Configuration
 
-```
-mcbepack/
-├── packages/
-│   ├── create-mcbepack/    # Project scaffolding CLI
-│   │   ├── src/           # Source code
-│   │   ├── templates/     # Project templates
-│   │   └── bin/           # Compiled CLI executable
-│   ├── cli/               # Development and build tools
-│   │   ├── src/           # Source code
-│   │   └── bin/           # Compiled executables
-│   ├── api/               # Utility APIs
-│   │   ├── src/           # Source code
-│   │   └── bin/           # Compiled library
-│   └── common/            # Shared utilities
-│       ├── src/           # Source code
-│       └── bin/           # Compiled library
-├── package.json           # Root package configuration
-└── LICENSE               # GPL-3.0 License
-```
-
-## 📝 Configuration
-
-Projects created with `create-mcbepack` include a `.env.local` file for configuring Minecraft paths:
+Projects generated with `create-mcbepack` include a `.env.local` file for Minecraft path configuration:
 
 ```env
 BASE_PATH="C:\Users\YourName\AppData\Roaming\Minecraft Bedrock\Users\Shared\games\com.mojang"
@@ -186,46 +156,46 @@ BEHAVIOR_PATH="development_behavior_packs"
 
 Adjust these paths according to your Minecraft installation location.
 
-## 📚 Documentation
+## Documentation
 
 - [MCBEPACK Documentation](https://docs.mbext.online/mcbepack) - Comprehensive guides and API reference
-- [Minecraft Script API Documentation](https://learn.microsoft.com/en-us/minecraft/creator/scriptapi/) - Official Minecraft Script API docs
+- [Minecraft Script API Documentation](https://learn.microsoft.com/en-us/minecraft/creator/scriptapi/) - Official Minecraft Script API documentation
 
-## 🤝 Contributing
+## Contributing
 
-Contributions are welcome! Please feel free to submit issues and pull requests.
+Contributions are welcome. Please follow the guidelines below:
 
-### Guidelines
+### Contribution Guidelines
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+2. Create a feature branch (`git checkout -b feature/feature-name`)
+3. Commit your changes (`git commit -m 'Add feature description'`)
+4. Push to the branch (`git push origin feature/feature-name`)
+5. Submit a Pull Request
 
-## 📄 License
+## License
 
-This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](./LICENSE) file for details.
+This project is licensed under the GNU General Public License v3.0. See the [LICENSE](./LICENSE) file for complete details.
 
-## 🔗 Links
+## Resources
 
 - [GitHub Repository](https://github.com/bugphxne/create-mcbepack)
 - [npm Package](https://npmjs.com/package/create-mcbepack)
 - [Documentation](https://docs.mbext.online/mcbepack)
 - [Issue Tracker](https://github.com/bugphxne/create-mcbepack/issues)
 
-## 💡 Support
+## Support
 
 For questions, issues, or feature requests:
 
-- Open an issue on [GitHub](https://github.com/bugphxne/create-mcbepack/issues)
+- Submit an issue on [GitHub](https://github.com/bugphxne/create-mcbepack/issues)
 - Consult the [documentation](https://docs.mbext.online/mcbepack)
-- Check existing issues for solutions
+- Review existing issues for solutions
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
-Built for the Minecraft Bedrock Edition community with ❤️
+Developed for the Minecraft Bedrock Edition community.
 
----
+## Disclaimer
 
-**Note:** This project is not affiliated with or endorsed by Mojang Studios or Microsoft.
+This project is not affiliated with or endorsed by Mojang Studios or Microsoft Corporation.

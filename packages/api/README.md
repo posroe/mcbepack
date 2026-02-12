@@ -1,17 +1,20 @@
 # @mcbepack/api
 
-> Utility library for Minecraft Bedrock Script API
+Utility library for Minecraft Bedrock Script API
 
+[![npm version](https://badge.fury.io/js/create-mcbepack.svg)](https://www.npmjs.com/package/@mcbepack/cli)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-`@mcbepack/api` provides convenient utility classes and helpers for working with Minecraft Bedrock Edition's Script API, simplifying common tasks like data persistence and scoreboard management.
+## Overview
+
+`@mcbepack/api` provides utility classes and helper functions for working with Minecraft Bedrock Edition's Script API, simplifying common tasks such as data persistence and scoreboard management.
 
 ## Features
 
-- 💾 **Database** - Persistent data storage using Dynamic Properties
-- 🎯 **Scoreboard** - Simplified scoreboard management
-- 🔄 **Type-Safe** - Full TypeScript support with type definitions
-- 🎮 **Script API Integration** - Built on official Minecraft Script API
+- **Database** - Persistent data storage using Dynamic Properties
+- **Scoreboard** - Simplified scoreboard management
+- **Type-Safe** - Full TypeScript support with type definitions
+- **Script API Integration** - Built on official Minecraft Script API
 
 ## Installation
 
@@ -207,7 +210,7 @@ import { createObjective, getObjective } from "@mcbepack/api";
 import { world } from "@minecraft/server";
 
 // Create a kills tracker
-const killsObjective = createObjective("kills", "§6Total Kills");
+const killsObjective = createObjective("kills", "Total Kills");
 
 // Track player kills
 world.afterEvents.entityDie.subscribe((event) => {
@@ -278,8 +281,8 @@ questDb.set("quest1", {
   rewards: ["diamond", "emerald"],
 });
 
-// Type error if structure doesn't match
-// questDb.set("quest2", { invalid: "data" }); // ❌ Error
+// Type error if structure does not match
+// questDb.set("quest2", { invalid: "data" }); // Error
 ```
 
 ## Dependencies
@@ -294,11 +297,11 @@ questDb.set("quest1", {
 
 ## License
 
-GPL-3.0 - see [LICENSE](./LICENSE) for details
+GPL-3.0 - see [LICENSE](../../LICENSE) for details
 
-## Links
+## Resources
 
 - [GitHub Repository](https://github.com/bugphxne/create-mcbepack)
 - [Documentation](https://docs.mbext.online/mcbepack)
-- [Minecraft Script API Docs](https://learn.microsoft.com/en-us/minecraft/creator/scriptapi/)
+- [Minecraft Script API Documentation](https://learn.microsoft.com/en-us/minecraft/creator/scriptapi/)
 - [Issue Tracker](https://github.com/bugphxne/create-mcbepack/issues)

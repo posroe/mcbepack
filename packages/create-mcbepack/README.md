@@ -1,21 +1,23 @@
 # create-mcbepack
 
-> Interactive CLI tool for scaffolding MCBEPACK projects
+Interactive CLI tool for scaffolding MCBEPACK projects
 
 [![npm version](https://badge.fury.io/js/create-mcbepack.svg)](https://www.npmjs.com/package/create-mcbepack)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-`create-mcbepack` is an interactive command-line tool that helps you quickly scaffold new Minecraft Bedrock Edition addon projects with best practices and modern development tooling.
+## Overview
+
+`create-mcbepack` is an interactive command-line tool that facilitates rapid scaffolding of Minecraft Bedrock Edition addon projects with best practices and modern development tooling.
 
 ## Features
 
-- 🎯 **Interactive Project Setup** - Guided prompts for project configuration
-- 📦 **Multiple Pack Types** - Support for Behavior Packs and Resource Packs
-- 🔌 **Script API Integration** - Optional Script API setup with package selection
-- 💻 **Language Choice** - TypeScript or JavaScript support
-- 🎮 **Release Channel Selection** - Choose between stable, beta, or preview releases
-- 📝 **Auto-generated Configuration** - Automatic manifest, package.json, and tsconfig generation
-- 🎨 **Project Templates** - Pre-configured templates with best practices
+- **Interactive Project Setup** - Guided prompts for project configuration
+- **Multiple Pack Types** - Support for Behavior Packs and Resource Packs
+- **Script API Integration** - Optional Script API setup with package selection
+- **Language Choice** - TypeScript or JavaScript support
+- **Release Channel Selection** - Choose between stable, beta, or preview releases
+- **Auto-generated Configuration** - Automatic manifest, package.json, and tsconfig generation
+- **Project Templates** - Pre-configured templates with best practices
 
 ## Usage
 
@@ -177,13 +179,6 @@ create-mcbepack/
 └── bin/                  # Compiled output
 ```
 
-## Dependencies
-
-- `enquirer` - Interactive prompts
-- `picocolors` - Terminal colors
-- `uuid` - UUID generation for manifests
-- `@mcbepack/common` - Shared utilities
-
 ## Related Packages
 
 - [`@mcbepack/cli`](../cli) - Development and build tooling
@@ -192,9 +187,9 @@ create-mcbepack/
 
 ## License
 
-GPL-3.0 - see [LICENSE](./LICENSE) for details
+GPL-3.0 - see [LICENSE](../../LICENSE) for details
 
-## Links
+## Resources
 
 - [GitHub Repository](https://github.com/bugphxne/create-mcbepack)
 - [npm Package](https://www.npmjs.com/package/create-mcbepack)

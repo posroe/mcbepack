@@ -1,11 +1,9 @@
-// Import Minecraft server types for storage
 import {
     World,
     Entity,
     Player,
     ItemStack,
-    world,
-    system
+    world
 } from "@minecraft/server";
 
 /**
@@ -15,10 +13,113 @@ import {
 export type StorageType = World | Entity | Player | ItemStack;
 
 /**
- * Default pattern that all database entries must follow
- * Adds an 'id' field to the generic type T
+ * Record type with auto-generated id field
  */
-export type DefaultPattern<T> = { id: string; } & T;
+export type WithId<T> = { id: string } & T;
+
+/**
+ * Where clause for filtering records
+ */
+export type WhereInput<T> = {
+    [K in keyof WithId<T>]?: WithId<T>[K] | {
+        equals?: WithId<T>[K];
+        not?: WithId<T>[K];
+        in?: WithId<T>[K][];
+        notIn?: WithId<T>[K][];
+    };
+};
+
+/**
+ * Order by clause for sorting
+ */
+export type OrderByInput<T> = {
+    [K in keyof WithId<T>]?: 'asc' | 'desc';
+};
+
+/**
+ * Arguments for findUnique operation
+ */
+export type FindUniqueArgs<T> = {
+    where: WhereInput<T>;
+};
+
+/**
+ * Arguments for findFirst operation
+ */
+export type FindFirstArgs<T> = {
+    where?: WhereInput<T>;
+    orderBy?: OrderByInput<T>;
+};
+
+/**
+ * Arguments for findMany operation
+ */
+export type FindManyArgs<T> = {
+    where?: WhereInput<T>;
+    orderBy?: OrderByInput<T>;
+    take?: number;
+    skip?: number;
+};
+
+/**
+ * Arguments for create operation
+ */
+export type CreateArgs<T> = {
+    data: Omit<T, "id">;
+};
+
+/**
+ * Arguments for createMany operation
+ */
+export type CreateManyArgs<T> = {
+    data: Omit<T, "id">[];
+};
+
+/**
+ * Arguments for update operation
+ */
+export type UpdateArgs<T> = {
+    where: WhereInput<T>;
+    data: Partial<T>;
+};
+
+/**
+ * Arguments for updateMany operation
+ */
+export type UpdateManyArgs<T> = {
+    where: WhereInput<T>;
+    data: Partial<T>;
+};
+
+/**
+ * Arguments for delete operation
+ */
+export type DeleteArgs<T> = {
+    where: WhereInput<T>;
+};
+
+/**
+ * Arguments for deleteMany operation
+ */
+export type DeleteManyArgs<T> = {
+    where: WhereInput<T>;
+};
+
+/**
+ * Arguments for upsert operation
+ */
+export type UpsertArgs<T> = {
+    where: WhereInput<T>;
+    create: Omit<T, "id">;
+    update: Partial<T>;
+};
+
+/**
+ * Arguments for count operation
+ */
+export type CountArgs<T> = {
+    where?: WhereInput<T>;
+};
 
 /**
  * A generic database class for Minecraft Bedrock Edition
@@ -38,9 +139,9 @@ export type DefaultPattern<T> = { id: string; } & T;
  * const entry = statsDb.find((data) => data.id === id);
  * ```
  */
-export class Database<T> {
+export class DynamicProperty<T> {
     /** In-memory cache of all database entries */
-    private data = new Set<DefaultPattern<T>>();
+    private sets = new Set<WithId<T>>();
 
     /**
      * Creates a new database instance
@@ -70,15 +171,14 @@ export class Database<T> {
      */
     private initialize(): void {
         try {
-            console.log("Database 1");
             world.afterEvents.worldLoad.subscribe(() => {
                 // Retrieve stored JSON string from dynamic properties
-                const storedData = this.storageType.getDynamicProperty(this.collectionName) as string;
-                if (storedData) {
+                const data = this.storageType.getDynamicProperty(this.collectionName) as string;
+                if (data) {
                     // Parse JSON and populate in-memory cache
-                    const entries = JSON.parse(storedData);
+                    const entries = JSON.parse(data);
                     for (const data of entries) {
-                        this.data.add(data);
+                        this.sets.add(data);
                     }
                 }
             })
@@ -97,7 +197,7 @@ export class Database<T> {
     private saveChanges(): void {
         try {
             // Convert Set to Array and serialize to JSON
-            const entries = Array.from(this.data.values());
+            const entries = Array.from(this.sets.values());
             this.storageType.setDynamicProperty(this.collectionName, JSON.stringify(entries));
         } catch (error) {
             throw new Error(`Failed to save changes: ${error}`);
@@ -130,13 +230,16 @@ export class Database<T> {
      * const id = db.create({ name: "Steve", level: 5 });
      * ```
      */
-    public create(data: T): string {
+    public create(data: Omit<T, "id">): string {
+        if ("id" in data) {
+            throw new Error("ID cannot be provided during creation");
+        }
         const id = this.generateId();
         // Merge user data with generated ID
-        this.data.add({
-            ...data,
-            id
-        });
+        this.sets.add({
+            id,
+            ...data
+        } as WithId<T>);
         // Persist to storage
         this.saveChanges();
         return id;
@@ -153,9 +256,9 @@ export class Database<T> {
      * const player = db.find((data) => data.name === "Steve");
      * ```
      */
-    public find(papredicate: (data: DefaultPattern<T>) => boolean) {
+    public find(papredicate: (data: WithId<T>) => boolean) {
         try {
-            return Array.from(this.data.values()).find(papredicate);
+            return Array.from(this.sets.values()).find(papredicate);
         } catch (error) {
             return null;
         }
@@ -172,7 +275,7 @@ export class Database<T> {
      * ```
      */
     public findMany() {
-        return Array.from(this.data.values());
+        return Array.from(this.sets.values());
     }
 
     /**
@@ -187,8 +290,8 @@ export class Database<T> {
      * const level5Players = db.findLike("level", 5);
      * ```
      */
-    public findLike<K extends keyof DefaultPattern<T>>(key: K, value: DefaultPattern<T>[K]) {
-        return Array.from(this.data.values()).filter((data) => data[key] === value);
+    public findLike<K extends keyof WithId<T>>(key: K, value: WithId<T>[K]) {
+        return Array.from(this.sets.values()).filter((data) => data[key] === value);
     }
 
     /**
@@ -203,8 +306,8 @@ export class Database<T> {
      * const highLevelPlayers = db.count((data) => data.level > 10);
      * ```
      */
-    public count(predicate?: (data: DefaultPattern<T>) => boolean) {
-        return predicate ? Array.from(this.data.values()).filter(predicate).length : this.data.size;
+    public count(predicate?: (data: WithId<T>) => boolean) {
+        return predicate ? Array.from(this.sets.values()).filter(predicate).length : this.sets.size;
     }
 
     /**
@@ -217,10 +320,10 @@ export class Database<T> {
      * db.delete((data) => data.id === "abc123");
      * ```
      */
-    public delete(predicate: (data: DefaultPattern<T>) => boolean) {
+    public delete(predicate: (data: WithId<T>) => boolean) {
         const data = this.find(predicate);
         if (data) {
-            this.data.delete(data);
+            this.sets.delete(data);
             this.saveChanges();
         }
     }
@@ -236,13 +339,13 @@ export class Database<T> {
      * db.update((data) => data.id === "abc123", { level: 10 });
      * ```
      */
-    public update(predicate: (data: DefaultPattern<T>) => boolean, data: Partial<DefaultPattern<T>>) {
+    public update(predicate: (data: WithId<T>) => boolean, data: Partial<WithId<T>>) {
         const existingData = this.find(predicate);
         if (existingData) {
             // Remove old entry
-            this.data.delete(existingData);
+            this.sets.delete(existingData);
             // Add updated entry (merge existing with new data)
-            this.data.add({
+            this.sets.add({
                 ...existingData,
                 ...data
             });
@@ -259,7 +362,7 @@ export class Database<T> {
      * ```
      */
     public clear() {
-        this.data.clear();
+        this.sets.clear();
         this.saveChanges();
     }
 }
