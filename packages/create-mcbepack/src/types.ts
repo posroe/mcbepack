@@ -1,3 +1,5 @@
+import { Version } from "@mcbepack/common";
+
 export interface ProjectConfig {
     name: string;
     description: string;
@@ -11,7 +13,7 @@ export interface ProjectConfig {
         packages: string[];
         dependencies: Array<{
             packageName: string;
-            version: string;
+            version: Version;
             fullVersion: string;
         }>;
     };

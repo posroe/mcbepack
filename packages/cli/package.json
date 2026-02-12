@@ -1,10 +1,10 @@
 {
     "name": "@mcbepack/cli",
-    "main": "bin/index.js",
-    "types": "bin/index.d.ts",
+    "main": "out/index.js",
+    "types": "out/index.d.ts",
     "type": "module",
     "bin": {
-        "mcbepack": "bin/index.js"
+        "mcbepack": "out/index.js"
     },
     "scripts": {
         "dev": "tsc --watch",

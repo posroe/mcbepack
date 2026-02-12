@@ -1,14 +1,13 @@
 {
   "name": "create-mcbepack",
-  "module": "src/index.ts",
+  "main": "out/index.js",
   "type": "module",
   "scripts": {
-    "test": "bun run src/index.ts",
     "dev": "tsc --watch",
     "build": "tsc"
   },
   "bin": {
-    "create-mcbepack": "./bin/index.js"
+    "create-mcbepack": "./out/index.js"
   },
   "devDependencies": {
     "@types/bun": "latest"

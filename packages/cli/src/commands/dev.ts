@@ -19,6 +19,12 @@ export const devCommand: CommandModule = {
                 aggregateTimeout: 300,
                 poll: 1000
             }, (err, stats) => {
+                if (stats?.hasWarnings()) {
+                    console.error(pc.yellow("Compilation warnings:"));
+                    console.error(stats.toString({ warnings: true }));
+                    return;
+                }
+
                 if (err) {
                     console.error(pc.red("Webpack error:"), err);
                     return;

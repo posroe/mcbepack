@@ -23,6 +23,21 @@
         "typescript": "^5",
       },
     },
+    "packages/asd": {
+      "name": "asd",
+      "dependencies": {
+        "stable": "^0.1.8",
+      },
+      "devDependencies": {
+        "@minecraft/server": "2.5.0-beta.1.21.132-stable",
+        "@minecraft/server-ui": "2.1.0-beta.1.21.132-stable",
+      },
+      "peerDependencies": {
+        "@mcbepack/api": "workspace:*",
+        "@mcbepack/cli": "workspace:*",
+        "typescript": "latest",
+      },
+    },
     "packages/cli": {
       "name": "@mcbepack/cli",
       "bin": {
@@ -81,19 +96,6 @@
         "typescript": "^5",
       },
     },
-    "packages/test": {
-      "name": "test",
-      "devDependencies": {
-        "@minecraft/math": "2.3.1",
-        "@minecraft/server": "2.4.0",
-        "@minecraft/server-ui": "2.0.0",
-      },
-      "peerDependencies": {
-        "@mcbepack/api": "workspace:*",
-        "@mcbepack/cli": "workspace:*",
-        "typescript": "latest",
-      },
-    },
   },
   "packages": {
     "@inquirer/ansi": ["@inquirer/ansi@2.0.3", "", {}, "sha512-g44zhR3NIKVs0zUesa4iMzExmZpLUdTLRMCStqX3GE5NT6VkPcxQGJ+uC8tDgBUC/vB1rUhUd55cOf++4NZcmw=="],
@@ -148,11 +150,9 @@
 
     "@minecraft/common": ["@minecraft/common@1.2.0", "", {}, "sha512-JdmEq4P3Z/FtoBzhLijFgMSVFnFRrUoLwY8DHHrgtFo0mfLTOLTB1RErYjLMsA6b7BGVNxkX/pfFRiH7QZ0XwQ=="],
 
-    "@minecraft/math": ["@minecraft/math@2.3.1", "", { "peerDependencies": { "@minecraft/server": "^1.15.0 || ^2.0.0" } }, "sha512-hT4vu/0lExcmgj85fObSIeGV+O+ALA4FvhpEWl5zN8/I8qbqOOyHnrCJNBecsrV6ncjLgKXDgAx8ZwZ254rRIA=="],
-
     "@minecraft/server": ["@minecraft/server@2.4.0", "", { "peerDependencies": { "@minecraft/common": "^1.2.0", "@minecraft/vanilla-data": ">=1.20.70" } }, "sha512-xd9dOWQ4RhPQBCt2aui9tp/GCnjvXpi6ZHVxaUr0SPDHfh/GkMRWnyf2Ud6D3pEThp/0giOEtHY1sx2HN9Qd+A=="],
 
-    "@minecraft/server-ui": ["@minecraft/server-ui@2.0.0", "", { "dependencies": { "@minecraft/common": "^1.0.0", "@minecraft/server": "^2.0.0" } }, "sha512-K1xFK1OEJSNfIgyRElaoxDTW/nbEqjBp1YnUdyPCs4kGDglwoXNyFz3wzMOkvT04CJXSifZGcTJeWda4C6OkXw=="],
+    "@minecraft/server-ui": ["@minecraft/server-ui@2.1.0-beta.1.21.132-stable", "", { "peerDependencies": { "@minecraft/common": "^1.0.0", "@minecraft/server": "^2.0.0 || ^2.5.0-beta.1.21.132-stable" } }, "sha512-bzuMVVFoidwdc9LjCV1ZwfZHVBIi1CmNfSAWBPnTNbApi0pYRId4TVZvwsP4OdiRVfXgwiaNQdhx6j/1ETcYZA=="],
 
     "@minecraft/vanilla-data": ["@minecraft/vanilla-data@1.21.131", "", {}, "sha512-Ptw6t5mgyOODFmZxpZRRawjfhgcniGNf7kZqxV98RTAJi61tZ6wEMcI9muiWXw5yrNstYcTxJmqVjx1RaZKkxg=="],
 
@@ -235,6 +235,8 @@
     "archiver": ["archiver@7.0.1", "", { "dependencies": { "archiver-utils": "^5.0.2", "async": "^3.2.4", "buffer-crc32": "^1.0.0", "readable-stream": "^4.0.0", "readdir-glob": "^1.1.2", "tar-stream": "^3.0.0", "zip-stream": "^6.0.1" } }, "sha512-ZcbTaIqJOfCc03QwD468Unz/5Ir8ATtvAHsK+FdXbDIbGfihqh9mrvdcYunQzqn4HrvWWaFyaxJhGZagaJJpPQ=="],
 
     "archiver-utils": ["archiver-utils@5.0.2", "", { "dependencies": { "glob": "^10.0.0", "graceful-fs": "^4.2.0", "is-stream": "^2.0.1", "lazystream": "^1.0.0", "lodash": "^4.17.15", "normalize-path": "^3.0.0", "readable-stream": "^4.0.0" } }, "sha512-wuLJMmIBQYCsGZgYLTy5FIB2pF6Lfb6cXMSF8Qywwk3t20zWnAi7zLcQFdKQmIB8wyZpY5ER38x08GbwtR2cLA=="],
+
+    "asd": ["asd@workspace:packages/asd"],
 
     "async": ["async@3.2.6", "", {}, "sha512-htCUDlxyyCLMgaM3xXg0C0LW2xqfuQ6p05pCEIsXuyQ+a1koYKTuBMzRNwmybfLgvJDMd0r1LTn4+E0Ti6C2AA=="],
 
@@ -484,6 +486,8 @@
 
     "source-map-support": ["source-map-support@0.5.21", "", { "dependencies": { "buffer-from": "^1.0.0", "source-map": "^0.6.0" } }, "sha512-uBHU3L3czsIyYXKX88fdrGovxdSCoTGDRZ6SYXtSRxLZUzHg5P/66Ht6uoUlHu9EZod+inXhKo3qQgwXUT/y1w=="],
 
+    "stable": ["stable@0.1.8", "", {}, "sha512-ji9qxRnOVfcuLDySj9qzhGSEFVobyt1kIOSkj1qZzYLzq7Tos/oUUWvotUPQLlrsidqsK6tBH89Bc9kL5zHA6w=="],
+
     "streamx": ["streamx@2.23.0", "", { "dependencies": { "events-universal": "^1.0.0", "fast-fifo": "^1.3.2", "text-decoder": "^1.1.0" } }, "sha512-kn+e44esVfn2Fa/O0CPFcex27fjIL6MkVae0Mm6q+E6f0hWv578YCERbv+4m02cjxvDsPKLnmxral/rR6lBMAg=="],
 
     "string-width": ["string-width@7.2.0", "", { "dependencies": { "emoji-regex": "^10.3.0", "get-east-asian-width": "^1.0.0", "strip-ansi": "^7.1.0" } }, "sha512-tsaTIkKW9b4N+AEj+SVA+WhJzV7/zMhcSu78mLKWSk7cXMOSHsBKFWUs0fWwq8QyK3MgJBQRX6Gbi4kYbdvGkQ=="],
@@ -505,8 +509,6 @@
     "terser": ["terser@5.46.0", "", { "dependencies": { "@jridgewell/source-map": "^0.3.3", "acorn": "^8.15.0", "commander": "^2.20.0", "source-map-support": "~0.5.20" }, "bin": { "terser": "bin/terser" } }, "sha512-jTwoImyr/QbOWFFso3YoU3ik0jBBDJ6JTOQiy/J2YxVJdZCc+5u7skhNwiOR3FQIygFqVUPHl7qbbxtjW2K3Qg=="],
 
     "terser-webpack-plugin": ["terser-webpack-plugin@5.3.16", "", { "dependencies": { "@jridgewell/trace-mapping": "^0.3.25", "jest-worker": "^27.4.5", "schema-utils": "^4.3.0", "serialize-javascript": "^6.0.2", "terser": "^5.31.1" }, "peerDependencies": { "webpack": "^5.1.0" } }, "sha512-h9oBFCWrq78NyWWVcSwZarJkZ01c2AyGrzs1crmHZO3QUg9D61Wu4NPjBy69n7JqylFF5y+CsUZYmYEIZ3mR+Q=="],
-
-    "test": ["test@workspace:packages/test"],
 
     "text-decoder": ["text-decoder@1.2.3", "", { "dependencies": { "b4a": "^1.6.4" } }, "sha512-3/o9z3X0X0fTupwsYvR03pJ/DjWuqqrfwBgTQzdWDiQSm9KitAyz/9WqsT2JQW7KV2m+bC2ol/zqpW37NHxLaA=="],
 
@@ -563,6 +565,8 @@
     "@mcbepack/cli/dotenv": ["dotenv@16.6.1", "", {}, "sha512-uBq4egWHTcTt33a72vpSG0z3HnPuIl6NqYcTrKEg2azoEyl2hpW0zqlxysq2pK9HlDIHyHyakeYaYnSAwd8bow=="],
 
     "@mcbepack/cli/yargs": ["yargs@17.7.2", "", { "dependencies": { "cliui": "^8.0.1", "escalade": "^3.1.1", "get-caller-file": "^2.0.5", "require-directory": "^2.1.1", "string-width": "^4.2.3", "y18n": "^5.0.5", "yargs-parser": "^21.1.1" } }, "sha512-7dSzzRQ++CKnNI/krKnYRV7JKKPUXMEh61soaHKg9mrWEhzFWhFnxPxGl+69cD1Ou63C13NUPCnmIcrvqCuM6w=="],
+
+    "asd/@minecraft/server": ["@minecraft/server@2.5.0-beta.1.21.132-stable", "", { "peerDependencies": { "@minecraft/common": "^1.2.0", "@minecraft/vanilla-data": ">=1.20.70" } }, "sha512-P6v5Pe0DvndbF3zt88N/vknh0UMe4E0DQ4EWi72TYyS656uxJcsq3gi/w2O744HW4XN2MSeiOV1ns0PJLWwfQA=="],
 
     "chalk/supports-color": ["supports-color@7.2.0", "", { "dependencies": { "has-flag": "^4.0.0" } }, "sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw=="],
 

@@ -70,13 +70,10 @@ export function generateFileList(config: ProjectConfig): FileToCreate[] {
             bpManifest.dependencies = [
                 ...config.script.dependencies
                     .filter(dep => !constants.packages.plugins.includes(dep.packageName))
-                    .map(dep => {
-                        const versionParts = dep.version.split('.').map(Number) as [number, number, number];
-                        return {
-                            module_name: dep.packageName,
-                            version: versionParts,
-                        };
-                    }),
+                    .map(dep => ({
+                        module_name: dep.packageName,
+                        version: dep.version,
+                    })),
             ];
 
             if (config.extensions.includes("resource")) {

@@ -38,7 +38,7 @@ export async function collectProjectInfo(): Promise<ProjectConfig> {
                     const dep = await getDependency(packageName, release);
                     return {
                         packageName: dep.packageName,
-                        version: String(dep.version),
+                        version: dep.version,
                         fullVersion: dep.fullVersion,
                     };
                 })

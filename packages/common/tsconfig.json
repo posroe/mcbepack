@@ -6,7 +6,7 @@
     "lib": [
       "esnext"
     ],
-    "outDir": "./bin",
+    "outDir": "./out",
     "rootDir": "./src",
     "strict": true,
     "esModuleInterop": true,

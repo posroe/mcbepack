@@ -9,6 +9,9 @@ export function createWebpackConfig(): Configuration {
             mode: 'development',
             entry: './scripts/index',
             target: 'node',
+            infrastructureLogging: {
+                level: 'warn'
+            },
             output: {
                 path: path.resolve(process.cwd(), 'src', 'behavior_pack', 'scripts'),
                 filename: 'index.js',
@@ -42,11 +45,14 @@ export function createWebpackConfig(): Configuration {
                 outputModule: true
             }
         };
-    } else {
+    } else if (fs.existsSync(path.join(process.cwd(), 'scripts', 'index.js'))) {
         return {
             mode: 'development',
             entry: './scripts/index',
             target: 'node',
+            infrastructureLogging: {
+                level: 'warn'
+            },
             output: {
                 path: path.resolve(process.cwd(), 'src', 'behavior_pack', 'scripts'),
                 filename: 'index.js'
@@ -61,6 +67,8 @@ export function createWebpackConfig(): Configuration {
                 outputModule: true
             }
         };
+    } else {
+        throw new Error('This project does not use script api.');
     }
 }
 

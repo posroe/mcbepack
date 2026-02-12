@@ -1,7 +1,7 @@
 {
     "name": "@mcbepack/api",
-    "main": "bin/index.js",
-    "types": "bin/index.d.ts",
+    "main": "out/index.js",
+    "types": "out/index.d.ts",
     "type": "module",
     "scripts": {
         "dev": "tsc --watch",
