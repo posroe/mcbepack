@@ -3,7 +3,7 @@
     "main": "out/index.js",
     "types": "out/index.d.ts",
     "type": "module",
-    "bin": {
+    "out": {
         "mcbepack": "out/index.js"
     },
     "scripts": {

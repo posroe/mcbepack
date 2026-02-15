@@ -1,2 +1,2 @@
-export * from "./dynamic-property";
-export * from "./advanced-board";
+export * from "./dynamic-property.js";
+export * from "./advanced-board.js";

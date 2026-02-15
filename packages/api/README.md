@@ -2,7 +2,7 @@
 
 Utility library for Minecraft Bedrock Script API
 
-[![npm version](https://badge.fury.io/js/create-mcbepack.svg)](https://www.npmjs.com/package/@mcbepack/cli)
+[![npm version](https://badge.fury.io/js/@mcbepack/api.svg)](https://www.npmjs.com/package/@mcbepack/api)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 ## Overview
@@ -11,8 +11,8 @@ Utility library for Minecraft Bedrock Script API
 
 ## Features
 
-- **Database** - Persistent data storage using Dynamic Properties
-- **Scoreboard** - Simplified scoreboard management
+- **DynamicProperty** - Prisma-like database with auto-generated IDs and query methods
+- **Advancedboard** - Simplified scoreboard management with chainable methods
 - **Type-Safe** - Full TypeScript support with type definitions
 - **Script API Integration** - Built on official Minecraft Script API
 
@@ -26,103 +26,105 @@ bun add @mcbepack/api
 
 ## API Reference
 
-### Database
+### DynamicProperty
 
-A persistent key-value storage system using Minecraft's Dynamic Properties.
+A Prisma-like database class that stores data using Minecraft's Dynamic Properties with auto-generated IDs.
 
 #### Constructor
 
 ```typescript
-new Database<T>(collectionName: string, storageType?: World | Entity)
+new DynamicProperty<T>(collectionName: string, storageType: StorageType)
 ```
 
 **Parameters:**
 
-- `collectionName` - Unique identifier for the database collection
-- `storageType` - Storage location (default: `world`)
-  - `world` - Global world storage
-  - `Entity` - Per-entity storage
+- `collectionName` - Unique identifier for the database collection (1-16 characters)
+- `storageType` - Storage location: `World`, `Entity`, `Player`, or `ItemStack`
+
+**Note:** All records automatically include an `id` field. Your type `T` should not include an `id` field.
 
 #### Methods
 
-##### `set(key: string, value: T): void`
+##### `create(data: Omit<T, "id">): string`
 
-Store data in the database.
+Creates a new entry with an auto-generated ID.
 
 ```typescript
-const db = new Database<PlayerData>("players");
-db.set("player123", { name: "Steve", score: 100 });
+const db = new DynamicProperty<{ name: string; score: number }>(
+  "players",
+  world,
+);
+const id = db.create({ name: "Steve", score: 100 });
+console.log(id); // "lx3k9a2b7f"
 ```
 
-##### `get(key: string): T | undefined`
+##### `find(predicate: (data: WithId<T>) => boolean): WithId<T> | null`
 
-Retrieve data from the database.
+Finds the first entry matching the predicate.
 
 ```typescript
-const data = db.get("player123");
-if (data) {
-  console.log(data.name); // "Steve"
+const player = db.find((data) => data.name === "Steve");
+if (player) {
+  console.log(player.id, player.name, player.score);
 }
 ```
 
-##### `delete(key: string): void`
+##### `findMany(): WithId<T>[]`
 
-Remove data from the database.
+Returns all entries in the database.
 
 ```typescript
-db.delete("player123");
+const allPlayers = db.findMany();
+for (const player of allPlayers) {
+  console.log(`${player.name}: ${player.score}`);
+}
 ```
 
-##### `has(key: string): boolean`
+##### `findLike<K extends keyof WithId<T>>(key: K, value: WithId<T>[K]): WithId<T>[]`
 
-Check if a key exists in the database.
+Finds all entries where a specific field matches a value.
 
 ```typescript
-if (db.has("player123")) {
-  console.log("Player exists!");
-}
+const highScorers = db.findLike("score", 100);
+```
+
+##### `update(predicate: (data: WithId<T>) => boolean, data: Partial<WithId<T>>): void`
+
+Updates the first entry matching the predicate.
+
+```typescript
+db.update((data) => data.id === "abc123", { score: 150 });
+```
+
+##### `delete(predicate: (data: WithId<T>) => boolean): void`
+
+Deletes the first entry matching the predicate.
+
+```typescript
+db.delete((data) => data.name === "Steve");
+```
+
+##### `count(predicate?: (data: WithId<T>) => boolean): number`
+
+Counts entries in the database, optionally filtered by predicate.
+
+```typescript
+const totalPlayers = db.count();
+const highLevelPlayers = db.count((data) => data.score > 100);
 ```
 
 ##### `clear(): void`
 
-Remove all data from the database.
+Removes all entries from the database.
 
 ```typescript
 db.clear();
 ```
 
-##### `keys(): string[]`
-
-Get all keys in the database.
-
-```typescript
-const allKeys = db.keys();
-console.log(allKeys); // ["player123", "player456", ...]
-```
-
-##### `values(): T[]`
-
-Get all values in the database.
-
-```typescript
-const allPlayers = db.values();
-```
-
-##### `entries(): [string, T][]`
-
-Get all key-value pairs in the database.
-
-```typescript
-const allEntries = db.entries();
-for (const [key, value] of allEntries) {
-  console.log(`${key}: ${value.name}`);
-}
-```
-
 #### Example Usage
 
 ```typescript
-import { Database } from "@mcbepack/api";
+import { DynamicProperty } from "@mcbepack/api";
 import { world } from "@minecraft/server";
 
 interface PlayerStats {
@@ -132,14 +134,17 @@ interface PlayerStats {
 }
 
 // Create a database for player statistics
-const statsDb = new Database<PlayerStats>("playerStats");
+const statsDb = new DynamicProperty<PlayerStats>("playerStats", world);
 
 // Store player data
 world.afterEvents.playerSpawn.subscribe((event) => {
-  const playerId = event.player.id;
+  const player = event.player;
 
-  if (!statsDb.has(playerId)) {
-    statsDb.set(playerId, {
+  // Check if player already exists
+  const existing = statsDb.find((data) => data.id === player.id);
+
+  if (!existing) {
+    statsDb.create({
       kills: 0,
       deaths: 0,
       level: 1,
@@ -151,86 +156,106 @@ world.afterEvents.playerSpawn.subscribe((event) => {
 world.afterEvents.entityDie.subscribe((event) => {
   if (event.deadEntity.typeId === "minecraft:player") {
     const playerId = event.deadEntity.id;
-    const stats = statsDb.get(playerId);
 
-    if (stats) {
-      stats.deaths++;
-      statsDb.set(playerId, stats);
-    }
+    statsDb.update(
+      (data) => data.id === playerId,
+      (stats) => ({ deaths: (stats?.deaths ?? 0) + 1 }),
+    );
   }
 });
 
 // Retrieve and display data
-const stats = statsDb.get("player123");
-if (stats) {
-  console.log(`Level: ${stats.level}, K/D: ${stats.kills}/${stats.deaths}`);
+const allStats = statsDb.findMany();
+for (const stats of allStats) {
+  console.log(
+    `Player ${stats.id}: Level ${stats.level}, K/D: ${stats.kills}/${stats.deaths}`,
+  );
 }
 ```
 
-### Scoreboard
+### Advancedboard
 
-Simplified scoreboard management utilities.
+A simplified scoreboard management utility with chainable methods.
+
+#### Initialization
+
+```typescript
+import { Advancedboard } from "@mcbepack/api";
+import { world } from "@minecraft/server";
+
+// Initialize the scoreboard (required before use)
+Advancedboard.initialize(world.scoreboard);
+```
 
 #### Methods
 
-##### `getObjective(objectiveName: string): ScoreboardObjective | undefined`
+##### `get(name: string, player: Player): number`
 
-Get a scoreboard objective by name.
+Gets a player's score from a scoreboard objective. Returns 0 if not set.
 
 ```typescript
-import { getObjective } from "@mcbepack/api";
-
-const objective = getObjective("kills");
+const kills = Advancedboard.get("kills", player);
+console.log(`Player has ${kills} kills`);
 ```
 
-##### `createObjective(objectiveName: string, displayName?: string): ScoreboardObjective`
+##### `set(name: string, player: Player, value: number): Advancedboard`
 
-Create a new scoreboard objective.
+Sets a player's score in a scoreboard objective. Returns the class for chaining.
 
 ```typescript
-import { createObjective } from "@mcbepack/api";
-
-const objective = createObjective("kills", "Total Kills");
+Advancedboard.set("health", player, 100);
 ```
 
-##### `removeObjective(objectiveName: string): void`
+##### `add(name: string, player: Player, value: number): Advancedboard`
 
-Remove a scoreboard objective.
+Adds a value to a player's current score. Returns the class for chaining.
 
 ```typescript
-import { removeObjective } from "@mcbepack/api";
+Advancedboard.add("kills", player, 1);
+```
 
-removeObjective("kills");
+##### `reset(name: string, player: Player): Advancedboard`
+
+Resets a player's score to 0. Returns the class for chaining.
+
+```typescript
+Advancedboard.reset("deaths", player);
+```
+
+##### `delete(name: string, player: Player, value: number): Advancedboard`
+
+Subtracts a value from a player's current score. Returns the class for chaining.
+
+```typescript
+Advancedboard.delete("coins", player, 50);
 ```
 
 #### Example Usage
 
 ```typescript
-import { createObjective, getObjective } from "@mcbepack/api";
+import { Advancedboard } from "@mcbepack/api";
 import { world } from "@minecraft/server";
 
-// Create a kills tracker
-const killsObjective = createObjective("kills", "Total Kills");
+// Initialize
+Advancedboard.initialize(world.scoreboard);
 
-// Track player kills
+// Track player kills with method chaining
 world.afterEvents.entityDie.subscribe((event) => {
   const killer = event.damageSource.damagingEntity;
 
   if (killer && killer.typeId === "minecraft:player") {
-    const currentScore = killsObjective.getScore(killer) ?? 0;
-    killsObjective.setScore(killer, currentScore + 1);
+    Advancedboard.add("kills", killer, 1).add("totalScore", killer, 10);
   }
 });
 
-// Display scores
-const objective = getObjective("kills");
-if (objective) {
-  const participants = objective.getParticipants();
-  for (const participant of participants) {
-    const score = objective.getScore(participant);
-    console.log(`${participant.displayName}: ${score} kills`);
-  }
-}
+// Display player stats
+world.afterEvents.playerSpawn.subscribe((event) => {
+  const player = event.player;
+  const kills = Advancedboard.get("kills", player);
+  const deaths = Advancedboard.get("deaths", player);
+
+  player.sendMessage(`Your K/D: ${kills}/${deaths}`);
+});
 ```
 
 ## Advanced Usage
@@ -240,7 +265,7 @@ if (objective) {
 Store data specific to individual entities:
 
 ```typescript
-import { Database } from "@mcbepack/api";
+import { DynamicProperty } from "@mcbepack/api";
 import { world } from "@minecraft/server";
 
 interface EntityData {
@@ -250,9 +275,9 @@ interface EntityData {
 
 world.afterEvents.entitySpawn.subscribe((event) => {
   const entity = event.entity;
-  const db = new Database<EntityData>("entityData", entity);
+  const db = new DynamicProperty<EntityData>("entityData", entity);
 
-  db.set("metadata", {
+  db.create({
     customName: "Special Mob",
     spawnTime: Date.now(),
   });
@@ -265,29 +290,47 @@ Leverage TypeScript for type-safe data storage:
 
 ```typescript
 interface QuestData {
-  id: string;
+  title: string;
   completed: boolean;
   progress: number;
   rewards: string[];
 }
 
-const questDb = new Database<QuestData>("quests");
+const questDb = new DynamicProperty<QuestData>("quests", world);
 
 // TypeScript ensures type safety
-questDb.set("quest1", {
-  id: "quest1",
+const questId = questDb.create({
+  title: "Defeat the Dragon",
   completed: false,
   progress: 50,
   rewards: ["diamond", "emerald"],
 });
 
 // Type error if structure does not match
-// questDb.set("quest2", { invalid: "data" }); // Error
+// questDb.create({ invalid: "data" }); // Error: missing required fields
 ```
 
-## Dependencies
+### Querying with Predicates
 
-- `@minecraft/server` - Minecraft Script API
+Use powerful predicate functions for complex queries:
+
+```typescript
+interface Player {
+  name: string;
+  level: number;
+  guild: string;
+}
+
+const playerDb = new DynamicProperty<Player>("players", world);
+
+// Find high-level players in a specific guild
+const elitePlayers = playerDb
+  .findMany()
+  .filter((player) => player.level > 50 && player.guild === "Warriors");
+
+// Count players by condition
+const beginnerCount = playerDb.count((player) => player.level < 10);
+```
 
 ## Related Packages
 

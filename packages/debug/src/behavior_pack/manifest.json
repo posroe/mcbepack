@@ -1,0 +1,52 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "bebug",
+    "description": "-",
+    "uuid": "14629093-02c7-4020-9917-3323f430a592",
+    "version": [
+      1,
+      0,
+      0
+    ],
+    "min_engine_version": [
+      1,
+      26,
+      0
+    ]
+  },
+  "metadata": {
+    "authors": [
+      "-"
+    ],
+    "generated_with": {
+      "create-mcbepack": [
+        1,
+        0,
+        0
+      ]
+    }
+  },
+  "capabilities": [
+    "script_eval"
+  ],
+  "modules": [
+    {
+      "type": "script",
+      "language": "javascript",
+      "entry": "scripts/index.js",
+      "uuid": "eabf4ba6-ac12-492e-b11e-18bb496af0ae",
+      "version": [
+        1,
+        0,
+        0
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "module_name": "@minecraft/server",
+      "version": "2.5.0"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
+    "target": "esnext",
+    "module": "esnext",
     "moduleResolution": "bundler",
     "outDir": "./out",
     "rootDir": "./src",
@@ -14,6 +14,6 @@
   ],
   "exclude": [
     "node_modules",
-    "bin"
+    "out"
   ]
 }

@@ -1,4 +1,4 @@
-import { Scoreboard, ScoreboardObjective, Player } from "@minecraft/server";
+import { Scoreboard, ScoreboardObjective, Player, world } from "@minecraft/server";
 
 /**
  * Advanced scoreboard utility class for Minecraft Bedrock Edition
@@ -10,7 +10,7 @@ import { Scoreboard, ScoreboardObjective, Player } from "@minecraft/server";
  * import { Advancedboard } from "@mcbepack/api";
  * 
  * // Initialize the scoreboard
- * Advancedboard.scoreboard = world.scoreboard;
+ * Advancedboard.initialize(world.scoreboard);
  * 
  * // Set a player's score
  * Advancedboard.set("kills", player, 10);
@@ -26,6 +26,11 @@ export class Advancedboard {
     /** The Minecraft scoreboard instance to operate on */
     public static scoreboard: Scoreboard;
 
+    static initialize(scoreboard: Scoreboard) {
+        this.scoreboard = scoreboard;
+        return this;
+    }
+
     /**
      * Gets or creates a scoreboard objective
      * If the objective doesn't exist, it will be created automatically
@@ -35,13 +40,8 @@ export class Advancedboard {
      * @returns The scoreboard objective instance
      */
     private static getObjective(name: string) {
-        const objective = this.scoreboard.getObjective(name);
-        if (objective) {
-            return objective;
-        } else {
-            this.scoreboard.addObjective(name);
-            return this.scoreboard.getObjective(name) as ScoreboardObjective;
-        }
+        this.scoreboard.addObjective(name);
+        return this.scoreboard.getObjective(name) as ScoreboardObjective;
     }
 
     /**

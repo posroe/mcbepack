@@ -1,0 +1,20 @@
+{
+  "name": "bebug",
+  "scripts": {
+    "dev": "mcbepack dev",
+    "build:zip": "mcbepack build -o zip",
+    "build:mcpack": "mcbepack build -o mcpack",
+    "build:addon": "mcbepack build -o addon",
+    "update:stable": "mcbepack update -o stable",
+    "update:beta": "mcbepack update -o beta",
+    "update:preview": "mcbepack update -o preview"
+  },
+  "devDependencies": {
+    "@minecraft/server": "2.5.0"
+  },
+  "peerDependencies": {
+    "@mcbepack/cli": "workspace:*",
+    "@mcbepack/api": "workspace:*",
+    "typescript": "latest"
+  }
+}

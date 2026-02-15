@@ -1,24 +1,19 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "lib": [
-      "esnext"
-    ],
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "outDir": "./out",
     "rootDir": "./src",
     "strict": true,
-    "esModuleInterop": true,
     "declaration": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "esModuleInterop": true
   },
   "include": [
     "src/**/*"
   ],
   "exclude": [
     "node_modules",
-    "dist"
+    "out"
   ]
 }

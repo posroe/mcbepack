@@ -28,7 +28,7 @@ export function getProjectPaths(): ProjectPaths {
         resourcePath: path.join(process.env.BASE_PATH!, process.env.RESOURCE_PATH!),
         behaviorRootPath: path.join(process.cwd(), "src", "behavior_pack"),
         resourceRootPath: path.join(process.cwd(), "src", "resource_pack"),
-        binPath: path.join(process.cwd(), "bin"),
+        binPath: path.join(process.cwd(), "out"),
         projectName
     };
 }
