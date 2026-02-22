@@ -98,6 +98,7 @@ export function generateFileList(config: ProjectConfig): FileToCreate[] {
             });
 
             const packageJson = {
+                name: config.name,
                 scripts: {
                     dev: "mcbepack dev",
                     "build:zip": "mcbepack build -o zip",
