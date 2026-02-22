@@ -1,5 +1,6 @@
 {
     "name": "@mcbepack/cli",
+    "version": "1.0.0",
     "main": "out/index.js",
     "types": "out/index.d.ts",
     "type": "module",
@@ -17,7 +18,7 @@
         "typescript": "^5"
     },
     "dependencies": {
-        "@mcbepack/common": "workspace:*",
+        "@mcbepack/common": "^1.0.0",
         "@types/archiver": "^7.0.0",
         "archiver": "^7.0.1",
         "chokidar": "^4.0.3",

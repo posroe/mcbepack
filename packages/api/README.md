@@ -2,7 +2,7 @@
 
 Utility library for Minecraft Bedrock Script API
 
-[![npm version](https://badge.fury.io/js/@mcbepack/api.svg)](https://www.npmjs.com/package/@mcbepack/api)
+[![npm version](https://badge.fury.io/js/@mcbepack%2Fapi.svg)](https://www.npmjs.com/package/@mcbepack/api)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 ## Overview

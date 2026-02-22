@@ -1,5 +1,6 @@
 {
   "name": "create-mcbepack",
+  "version": "1.0.0",
   "main": "out/index.js",
   "type": "module",
   "scripts": {
@@ -16,7 +17,7 @@
     "typescript": "^5"
   },
   "dependencies": {
-    "@mcbepack/common": "workspace:*",
+    "@mcbepack/common": "^1.0.0",
     "enquirer": "^2.4.1",
     "node-fetch": "^3.3.2",
     "nodemon": "^3.1.11",

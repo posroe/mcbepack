@@ -177,13 +177,6 @@ Contributions are welcome. Please follow the guidelines below:
 
 This project is licensed under the GNU General Public License v3.0. See the [LICENSE](./LICENSE) file for complete details.
 
-## Resources
-
-- [GitHub Repository](https://github.com/bugphxne/create-mcbepack)
-- [npm Package](https://npmjs.com/package/create-mcbepack)
-- [Documentation](https://docs.mbext.online/mcbepack)
-- [Issue Tracker](https://github.com/bugphxne/create-mcbepack/issues)
-
 ## Support
 
 For questions, issues, or feature requests:

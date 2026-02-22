@@ -2,7 +2,7 @@
 
 Development and build tooling for MCBEPACK projects
 
-[![npm version](https://badge.fury.io/js/create-mcbepack.svg)](https://www.npmjs.com/package/@mcbepack/cli)
+[![npm version](https://badge.fury.io/js/@mcbepack%2Fcli.svg)](https://www.npmjs.com/package/@mcbepack/cli)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 ## Overview

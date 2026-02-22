@@ -1,5 +1,6 @@
 {
     "name": "@mcbepack/common",
+    "version": "1.0.0",
     "main": "out/index.js",
     "types": "out/index.d.ts",
     "type": "module",

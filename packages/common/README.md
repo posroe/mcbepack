@@ -2,7 +2,7 @@
 
 Shared utilities and constants for MCBEPACK packages
 
-[![npm version](https://badge.fury.io/js/create-mcbepack.svg)](https://www.npmjs.com/package/@mcbepack/common)
+[![npm version](https://badge.fury.io/js/@mcbepack%2Fcommon.svg)](https://www.npmjs.com/package/@mcbepack/common)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 ## Overview
