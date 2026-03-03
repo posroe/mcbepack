@@ -1,6 +1,6 @@
 {
     "name": "@mcbepack/api",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "main": "out/index.js",
     "types": "out/index.d.ts",
     "type": "module",
@@ -9,12 +9,8 @@
         "build": "tsc"
     },
     "devDependencies": {
-        "@types/bun": "latest"
-    },
-    "peerDependencies": {
+        "@types/bun": "latest",
+        "@minecraft/server": "^2.4.0",
         "typescript": "^5"
-    },
-    "dependencies": {
-        "@minecraft/server": "^2.4.0"
     }
 }
