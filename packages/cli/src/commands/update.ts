@@ -45,11 +45,6 @@ export const updateCommand: CommandModule<{}, UpdateArgs> = {
 
             const dependencyTypes = ["dependencies", "devDependencies", "peerDependencies"];
 
-            if (dependencyTypes.some(key => !packageJson[key])) {
-                console.log(pc.yellow("No dependencies found in package.json"));
-                process.exit(0);
-            }
-
             const minecraftPackages = [
                 ...constants.packages.modules,
                 ...constants.packages.plugins,
@@ -61,6 +56,11 @@ export const updateCommand: CommandModule<{}, UpdateArgs> = {
             for (const packageName of minecraftPackages) {
 
                 for (const dependencyType of dependencyTypes) {
+
+                    if (!packageJson[dependencyType]) {
+                        continue;
+                    }
+
                     if (packageJson[dependencyType][packageName]) {
                         try {
                             const dependency = await getDependency(packageName, type);
@@ -73,7 +73,8 @@ export const updateCommand: CommandModule<{}, UpdateArgs> = {
                                 updated = true;
                                 updatedCount++;
                             } else {
-                                console.log(pc.dim(`  ${packageName} is already up to date (${currentVersion})`));
+                                console.log(`  ○ ${pc.bold(packageName)}`);
+                                console.log(pc.dim(`    Is already up to date (${currentVersion})`));
                             }
                         } catch (error) {
                             console.error(pc.red(`  Failed to update ${packageName}: ${error instanceof Error ? error.message : String(error)}`));
