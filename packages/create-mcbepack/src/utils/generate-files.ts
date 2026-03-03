@@ -87,14 +87,14 @@ export function generateFileList(config: ProjectConfig): FileToCreate[] {
                 path: path.join(projectRoot, ".env.local"),
                 content: "",
                 type: "copy",
-                source: path.join(templatesDir, ".env.txt"),
+                source: path.join(templatesDir, ".env.local.txt"),
             });
 
             files.push({
                 path: path.join(projectRoot, ".gitignore"),
                 content: "",
                 type: "copy",
-                source: path.join(templatesDir, ".gitignore"),
+                source: path.join(templatesDir, ".gitignore.txt"),
             });
 
             const packageJson = {
