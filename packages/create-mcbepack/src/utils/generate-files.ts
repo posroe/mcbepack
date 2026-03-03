@@ -87,7 +87,7 @@ export function generateFileList(config: ProjectConfig): FileToCreate[] {
                 path: path.join(projectRoot, ".env.local"),
                 content: "",
                 type: "copy",
-                source: path.join(templatesDir, ".env.local"),
+                source: path.join(templatesDir, ".env.txt"),
             });
 
             files.push({
