@@ -43,7 +43,9 @@ export const updateCommand: CommandModule<{}, UpdateArgs> = {
             const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf-8"));
             const manifestJson = JSON.parse(readFileSync(manifestJsonPath, "utf-8")) as APIBehaviorManifest;
 
-            if (!packageJson.dependencies) {
+            const dependencyTypes = ["dependencies", "devDependencies", "peerDependencies"];
+
+            if (dependencyTypes.some(key => !packageJson[key])) {
                 console.log(pc.yellow("No dependencies found in package.json"));
                 process.exit(0);
             }
@@ -57,22 +59,25 @@ export const updateCommand: CommandModule<{}, UpdateArgs> = {
             let updatedCount = 0;
 
             for (const packageName of minecraftPackages) {
-                if (packageJson.dependencies[packageName]) {
-                    try {
-                        const dependency = await getDependency(packageName, type);
-                        const currentVersion = packageJson.dependencies[packageName];
 
-                        if (currentVersion !== dependency.fullVersion) {
-                            packageJson.dependencies[packageName] = dependency.fullVersion;
-                            console.log(pc.green(`  ✓ ${pc.bold(packageName)}`));
-                            console.log(pc.dim(`    ${currentVersion} → ${pc.white(dependency.fullVersion)}`));
-                            updated = true;
-                            updatedCount++;
-                        } else {
-                            console.log(pc.dim(`  ${packageName} is already up to date (${currentVersion})`));
+                for (const dependencyType of dependencyTypes) {
+                    if (packageJson[dependencyType][packageName]) {
+                        try {
+                            const dependency = await getDependency(packageName, type);
+                            const currentVersion = packageJson[dependencyType][packageName];
+
+                            if (currentVersion !== dependency.fullVersion) {
+                                packageJson[dependencyType][packageName] = dependency.fullVersion;
+                                console.log(pc.green(`  ✓ ${pc.bold(packageName)}`));
+                                console.log(pc.dim(`    ${currentVersion} → ${pc.white(dependency.fullVersion)}`));
+                                updated = true;
+                                updatedCount++;
+                            } else {
+                                console.log(pc.dim(`  ${packageName} is already up to date (${currentVersion})`));
+                            }
+                        } catch (error) {
+                            console.error(pc.red(`  Failed to update ${packageName}: ${error instanceof Error ? error.message : String(error)}`));
                         }
-                    } catch (error) {
-                        console.error(pc.red(`  Failed to update ${packageName}: ${error instanceof Error ? error.message : String(error)}`));
                     }
                 }
 
