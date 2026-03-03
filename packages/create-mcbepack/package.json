@@ -1,6 +1,6 @@
 {
   "name": "create-mcbepack",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "out/index.js",
   "type": "module",
   "scripts": {

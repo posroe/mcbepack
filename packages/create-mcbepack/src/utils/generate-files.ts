@@ -104,9 +104,9 @@ export function generateFileList(config: ProjectConfig): FileToCreate[] {
                     "build:zip": "mcbepack build -o zip",
                     "build:mcpack": "mcbepack build -o mcpack",
                     "build:addon": "mcbepack build -o addon",
-                    "update:stable": "mcbepack update -o stable",
-                    "update:beta": "mcbepack update -o beta",
-                    "update:preview": "mcbepack update -o preview",
+                    "update:stable": "mcbepack update -t stable",
+                    "update:beta": "mcbepack update -t beta",
+                    "update:preview": "mcbepack update -t preview",
                 },
                 devDependencies: Object.fromEntries(
                     config.script.dependencies.map(dep => [dep.packageName, dep.fullVersion])
