@@ -1,10 +1,10 @@
 {
     "name": "@mcbepack/cli",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "main": "out/index.js",
     "types": "out/index.d.ts",
     "type": "module",
-    "out": {
+    "bin": {
         "mcbepack": "out/index.js"
     },
     "scripts": {
