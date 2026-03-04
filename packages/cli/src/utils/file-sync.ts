@@ -44,16 +44,18 @@ export class FileSync {
     }
 
     private getDestPath(filePath: string): string | undefined {
-        const outputPath = path.relative(this.paths.behaviorRootPath, filePath)
         if (filePath.startsWith(this.paths.behaviorRootPath)) {
             return path.join(
                 this.paths.behaviorPath,
-                path.relative(path.dirname(process.cwd()), outputPath)
+                path.basename(process.cwd()),
+                path.relative(this.paths.behaviorRootPath, filePath)
             );
-        } else if (filePath.startsWith(this.paths.resourceRootPath)) {
+        }
+        else if (filePath.startsWith(this.paths.resourceRootPath)) {
             return path.join(
                 this.paths.resourcePath,
-                path.relative(path.dirname(process.cwd()), outputPath)
+                path.basename(process.cwd()),
+                path.relative(this.paths.resourceRootPath, filePath)
             );
         }
         return undefined;
