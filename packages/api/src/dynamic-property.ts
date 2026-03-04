@@ -3,7 +3,8 @@ import {
     Entity,
     Player,
     ItemStack,
-    world
+    world,
+    system
 } from "@minecraft/server";
 
 /**
@@ -171,16 +172,18 @@ export class DynamicProperty<T> {
      */
     private initialize(): void {
         try {
-            world.afterEvents.worldLoad.subscribe(() => {
-                // Retrieve stored JSON string from dynamic properties
-                const data = this.storageType.getDynamicProperty(this.collectionName) as string;
-                if (data) {
-                    // Parse JSON and populate in-memory cache
-                    const entries = JSON.parse(data);
-                    for (const data of entries) {
-                        this.sets.add(data);
+            system.run(() => {
+                world.afterEvents.worldLoad.subscribe(() => {
+                    // Retrieve stored JSON string from dynamic properties
+                    const data = this.storageType.getDynamicProperty(this.collectionName) as string;
+                    if (data) {
+                        // Parse JSON and populate in-memory cache
+                        const entries = JSON.parse(data);
+                        for (const data of entries) {
+                            this.sets.add(data);
+                        }
                     }
-                }
+                })
             })
         } catch (error) {
             throw new Error(`Failed to initialize database: ${error}`);

@@ -53,5 +53,5 @@ BEHAVIOR_PATH="development_behavior_packs"
 
 To learn more about MCBEPACK, take a look at the following resources:
 
-- [MCBEPACK Documentation](https://docs.mbext.online/mcbepack) - learn about MCBEPACK features and API
-- [MCBEPACK GitHub Repository](https://github.com/bugphxne/create-mcbepack) - your feedback and contributions are welcome!
+- [MCBEPACK Documentation](https://mcbepack.roverdosh.studio) - learn about MCBEPACK features and API
+- [MCBEPACK GitHub Repository](https://github.com/posroe/create-mcbepack) - your feedback and contributions are welcome!

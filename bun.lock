@@ -16,18 +16,15 @@
     },
     "packages/api": {
       "name": "@mcbepack/api",
-      "dependencies": {
-        "@minecraft/server": "^2.4.0",
-      },
+      "version": "1.0.2",
       "devDependencies": {
-        "@types/bun": "latest",
-      },
-      "peerDependencies": {
+        "@minecraft/server": "^2.4.0",
         "typescript": "^5",
       },
     },
     "packages/cli": {
       "name": "@mcbepack/cli",
+      "version": "1.0.3",
       "dependencies": {
         "@mcbepack/common": "workspace:*",
         "@types/archiver": "^7.0.0",
@@ -51,6 +48,7 @@
     },
     "packages/common": {
       "name": "@mcbepack/common",
+      "version": "1.0.0",
       "dependencies": {
         "node-fetch": "^3.3.2",
       },
@@ -63,6 +61,7 @@
     },
     "packages/create-mcbepack": {
       "name": "create-mcbepack",
+      "version": "1.0.3",
       "bin": {
         "create-mcbepack": "./out/index.js",
       },
