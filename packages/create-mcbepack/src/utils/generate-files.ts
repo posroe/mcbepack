@@ -173,7 +173,7 @@ export function generateFileList(config: ProjectConfig): FileToCreate[] {
             modules: [
                 {
                     type: "resources",
-                    uuid: config.uuids.resource,
+                    uuid: crypto.randomUUID(),
                     version: [1, 0, 0],
                 },
             ],
