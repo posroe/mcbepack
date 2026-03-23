@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Preview Skin</title>
+    <link
+      href="https://avatars.githubusercontent.com/u/217301373?s=400&u=78d5163aa4dfc521058dd55c6186483a230c3e47&v=4"
+      rel="icon"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="flex justify-center items-center h-screen">
+    <div id="skin-container" class="w-full h-full" />
+
+    <div class="fixed bottom-0 right-0 grid backdrop-blur-sm p-4 space-y-2">
+      <img
+        id="skin-image"
+        class="w-32 h-32 [image-rendering:pixelated]"
+        alt="Skin Texture"
+      />
+      <input
+        id="skin-bg-brightness"
+        type="range"
+        min="0"
+        max="100"
+        value="0"
+        step="5"
+        class="w-full"
+      />
+    </div>
+
+    <script type="module">
+      import * as sv3d from "https://esm.sh/skinview3d";
+
+      const animations = [
+        new sv3d.IdleAnimation(),
+        new sv3d.WalkingAnimation(),
+        new sv3d.RunningAnimation(),
+        new sv3d.FlyingAnimation(),
+        new sv3d.WaveAnimation(),
+        new sv3d.CrouchAnimation(),
+        new sv3d.HitAnimation(),
+      ];
+
+      const container = document.getElementById("skin-container");
+      const image = document.getElementById("skin-image");
+      const skinBgBrightness = document.getElementById("skin-bg-brightness");
+
+      const viewer = new sv3d.SkinViewer({
+        canvas: document.createElement("canvas"),
+        width: window.innerWidth,
+        height: window.innerHeight,
+        zoom: 0.7,
+        animation: animations[0],
+      });
+
+      container.appendChild(viewer.canvas);
+
+      let animationIndex = 0;
+
+      image.addEventListener("click", () => {
+        animationIndex = (animationIndex + 1) % animations.length;
+        viewer.animation = animations[animationIndex];
+      });
+
+      skinBgBrightness.addEventListener("input", (e) => {
+        document.body.style.backgroundColor = `rgba(0, 0, 0, ${e.target.value / 100})`;
+      });
+
+      window.addEventListener("resize", () => {
+        viewer.setSize(window.innerWidth, window.innerHeight);
+      });
+
+      const socket = new WebSocket(`ws://${location.host}`);
+
+      socket.onmessage = ({ data }) => {
+        const { skinBase64, skinName } = JSON.parse(data);
+        viewer.loadSkin(skinBase64);
+        image.src = skinBase64;
+      };
+    </script>
+  </body>
+</html>
