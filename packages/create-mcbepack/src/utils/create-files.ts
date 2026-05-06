@@ -8,7 +8,6 @@ export function createFiles(files: FileToCreate[]): void {
 
     for (const file of files) {
         try {
-
             const dir = path.dirname(file.path);
             if (!fs.existsSync(dir)) {
                 fs.mkdirSync(dir, { recursive: true });
@@ -20,9 +19,9 @@ export function createFiles(files: FileToCreate[]): void {
                 fs.writeFileSync(file.path, file.content);
             }
 
-            console.log(`  ${pc.green("✓")} ${path.relative(process.cwd(), file.path)}`);
+            console.log(`  ${pc.green("[OK]")} ${path.relative(process.cwd(), file.path)}`);
         } catch (error) {
-            console.error(`  ${pc.red("✗")} ${path.relative(process.cwd(), file.path)}`);
+            console.error(`  ${pc.red("[ERR]")} ${path.relative(process.cwd(), file.path)}`);
             throw error;
         }
     }
@@ -78,7 +77,7 @@ function buildFileTree(files: FileToCreate[], projectRoot: string): TreeNode {
 }
 
 function printTree(node: TreeNode, prefix: string = "", isLast: boolean = true): void {
-    const connector = isLast ? "└── " : "├── ";
+    const connector = isLast ? "`-- " : "|-- ";
 
     if (prefix === "") {
         console.log(`  ${pc.cyan(node.name)}/`);
@@ -91,7 +90,7 @@ function printTree(node: TreeNode, prefix: string = "", isLast: boolean = true):
         const children = Array.from(node.children.values());
         children.forEach((child, index) => {
             const isLastChild = index === children.length - 1;
-            const newPrefix = prefix + (isLast ? "    " : "│   ");
+            const newPrefix = prefix + (isLast ? "    " : "|   ");
             printTree(child, newPrefix, isLastChild);
         });
     }

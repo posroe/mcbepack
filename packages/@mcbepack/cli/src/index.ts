@@ -9,10 +9,8 @@ import { buildCommand } from "./commands/build";
 import { updateCommand } from "./commands/update";
 
 dotenv.config({
-    path: process.cwd() + "/.env.local"
+    path: `${process.cwd()}/.env.local`
 });
-
-process.env.NODE_NO_WARNINGS = "1";
 
 yargs(hideBin(process.argv))
     .command(devCommand)

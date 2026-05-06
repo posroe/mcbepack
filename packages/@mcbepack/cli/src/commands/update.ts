@@ -17,12 +17,12 @@ export const updateCommand: CommandModule<{}, UpdateArgs> = {
             alias: "t",
             type: "string",
             description: "Update type",
-            choices: ['stable', 'beta', 'preview'] as const,
-            default: 'stable' as const
+            choices: ["stable", "beta", "preview"] as const,
+            default: "stable" as const
         });
     },
     handler: async (argv) => {
-        const { type = 'stable' } = argv;
+        const { type = "stable" } = argv;
 
         console.log(pc.cyan(`Updating dependencies to ${pc.bold(type)} version...\n`));
 
@@ -44,7 +44,6 @@ export const updateCommand: CommandModule<{}, UpdateArgs> = {
             const manifestJson = JSON.parse(readFileSync(manifestJsonPath, "utf-8")) as APIBehaviorManifest;
 
             const dependencyTypes = ["dependencies", "devDependencies", "peerDependencies"];
-
             const minecraftPackages = [
                 ...constants.packages.modules,
                 ...constants.packages.plugins,
@@ -52,11 +51,10 @@ export const updateCommand: CommandModule<{}, UpdateArgs> = {
 
             let updated = false;
             let updatedCount = 0;
+            let manifestUpdatedCount = 0;
 
             for (const packageName of minecraftPackages) {
-
                 for (const dependencyType of dependencyTypes) {
-
                     if (!packageJson[dependencyType]) {
                         continue;
                     }
@@ -68,12 +66,12 @@ export const updateCommand: CommandModule<{}, UpdateArgs> = {
 
                             if (currentVersion !== dependency.fullVersion) {
                                 packageJson[dependencyType][packageName] = dependency.fullVersion;
-                                console.log(pc.green(`  ✓ ${pc.bold(packageName)}`));
-                                console.log(pc.dim(`    ${currentVersion} → ${pc.white(dependency.fullVersion)}`));
+                                console.log(pc.green(`  [updated] ${pc.bold(packageName)}`));
+                                console.log(pc.dim(`    ${currentVersion} -> ${pc.white(dependency.fullVersion)}`));
                                 updated = true;
                                 updatedCount++;
                             } else {
-                                console.log(`  ○ ${pc.bold(packageName)}`);
+                                console.log(`  [current] ${pc.bold(packageName)}`);
                                 console.log(pc.dim(`    Is already up to date (${currentVersion})`));
                             }
                         } catch (error) {
@@ -98,6 +96,8 @@ export const updateCommand: CommandModule<{}, UpdateArgs> = {
                                 }
                                 return dep;
                             });
+                            updated = true;
+                            manifestUpdatedCount++;
                         }
                     } catch (error) {
                         console.error(pc.red(`  Failed to update manifest for ${packageName}: ${error instanceof Error ? error.message : String(error)}`));
@@ -108,14 +108,13 @@ export const updateCommand: CommandModule<{}, UpdateArgs> = {
             if (updated) {
                 writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2) + "\n", "utf-8");
                 writeFileSync(manifestJsonPath, JSON.stringify(manifestJson, null, 2) + "\n", "utf-8");
-                console.log(pc.green(`\n✓ Updated ${updatedCount} package${updatedCount > 1 ? 's' : ''} successfully!`));
+                console.log(pc.green(`\nUpdated ${updatedCount} package entr${updatedCount === 1 ? "y" : "ies"} and ${manifestUpdatedCount} manifest entr${manifestUpdatedCount === 1 ? "y" : "ies"} successfully!`));
                 console.log(pc.dim(`Run ${pc.bold("bun install")} to install the new versions`));
             } else {
-                console.log(pc.green(`\n✓ All dependencies are up to date!`));
+                console.log(pc.green("\nAll dependencies are up to date!"));
             }
-
         } catch (error) {
-            console.error(pc.red(`\n✗ Error updating dependencies: ${error instanceof Error ? error.message : String(error)}`));
+            console.error(pc.red(`\nError updating dependencies: ${error instanceof Error ? error.message : String(error)}`));
             process.exit(1);
         }
     }

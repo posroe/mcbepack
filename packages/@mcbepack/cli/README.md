@@ -1,85 +1,40 @@
 # @mcbepack/cli
 
-Development and build tooling for MCBEPACK projects
+Command-line tooling for MCBEPACK projects.
 
-[![npm version](https://badge.fury.io/js/@mcbepack%2Fcli.svg)](https://www.npmjs.com/package/@mcbepack/cli)
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+The CLI handles three jobs: running a local development loop, syncing pack files into Minecraft's development folders, and building distributable archives.
 
-## Overview
+## Install
 
-`@mcbepack/cli` provides command-line tools for developing and building Minecraft Bedrock Edition addons. It includes a development server with hot-reload capabilities and multiple build format options.
-
-## Features
-
-- **Development Server** - Watch mode with automatic file synchronization
-- **Multiple Build Formats** - Export as `.zip`, `.mcpack`, or `.mcaddon`
-- **Script API Compilation** - Webpack-based bundling for Script API projects
-- **Smart File Sync** - Automatic synchronization to Minecraft development folders
-- **Dependency Updates** - Update Script API packages to latest versions
-- **Environment Configuration** - `.env.local` support for custom paths
-
-## Installation
-
-This package is automatically installed as a peer dependency when creating a project with `create-mcbepack`.
+Generated projects include this package automatically:
 
 ```bash
 bun add -D @mcbepack/cli
 ```
 
-## Commands
+## Project Layout
 
-### `mcbepack dev`
+The CLI expects this shape:
 
-Start the development server with file watching and automatic synchronization.
-
-```bash
-bun run dev
-# or
-mcbepack dev
+```text
+your-addon/
+|-- scripts/
+|   `-- index.ts
+|-- src/
+|   |-- behavior_pack/
+|   |   `-- manifest.json
+|   `-- resource_pack/
+|       `-- manifest.json
+|-- .env.local
+|-- package.json
+`-- tsconfig.json
 ```
 
-**Features:**
-
-- Watches `scripts/` directory for changes
-- Compiles TypeScript/JavaScript with Webpack
-- Syncs compiled files to Minecraft development folder
-- Provides real-time feedback on file changes
-
-### `mcbepack build`
-
-Build the addon as a .zip, .mcpack, or .mcaddon file.
-
-```bash
-# Build the addon as a .zip archive.
-mcbepack build -o zip
-
-# Build the addon as a .mcpack file.
-mcbepack build -o mcpack
-
-# Build the addon as a .mcaddon file.
-mcbepack build -o addon
-```
-
-### `mcbepack update`
-
-Update Script API dependencies to the latest release.
-
-```bash
-# Update Script API dependencies to the latest stable release.
-mcbepack update -t stable
-
-# Update Script API dependencies to the latest beta release.
-mcbepack update -t beta
-
-# Update Script API dependencies to the latest preview release.
-mcbepack update -t preview
-```
+`scripts/index.ts` or `scripts/index.js` is bundled into `src/behavior_pack/scripts/index.js` when Script API is enabled.
 
 ## Configuration
 
-### Environment Variables
-
-Create a `.env.local` file in your project root:
+Create `.env.local` in the project root:
 
 ```env
 BASE_PATH="C:\Users\YourName\AppData\Roaming\Minecraft Bedrock\Users\Shared\games\com.mojang"
@@ -87,107 +42,44 @@ RESOURCE_PATH="development_resource_packs"
 BEHAVIOR_PATH="development_behavior_packs"
 ```
 
-**Variables:**
+## Commands
 
-- `BASE_PATH` - Path to Minecraft's `com.mojang` directory
-- `RESOURCE_PATH` - Relative path to resource packs folder
-- `BEHAVIOR_PATH` - Relative path to behavior packs folder
+Start the development watcher:
 
-### Project Structure
-
-The CLI expects the following project structure:
-
-```
-your-project/
-├── scripts/              # Source files (TypeScript/JavaScript)
-│   └── index.ts
-├── behavior/             # Auto-generated behavior pack (if applicable)
-├── resource/             # Auto-generated resource pack (if applicable)
-├── .env.local           # Environment configuration
-└── package.json
+```bash
+mcbepack dev
 ```
 
-## Development Workflow
+Build archives:
 
-1. **Start Development Server**
+```bash
+mcbepack build -o zip
+mcbepack build -o mcpack
+mcbepack build -o mcaddon
+```
 
-   ```bash
-   bun run dev
-   ```
+Update selected Minecraft Script API packages in `package.json` and `src/behavior_pack/manifest.json`:
 
-2. **Edit Source Files**
-   - Modify files in `scripts/` directory
-   - Changes are automatically detected and compiled
+```bash
+mcbepack update -t stable
+mcbepack update -t beta
+mcbepack update -t preview
+```
 
-3. **Test in Minecraft**
-   - Files are synced to Minecraft's development folder
-   - Reload the world or restart Minecraft to see changes
+## Outputs
 
-4. **Build for Distribution**
-   ```bash
-   bun run build:mcaddon
-   ```
+Build artifacts are written to the project's `out/` directory.
 
-## Technical Details
-
-### File Watching
-
-The development server uses `chokidar` for efficient file watching:
-
-- Monitors `scripts/` directory for changes
-- Triggers recompilation on file add/change/delete
-- Syncs compiled output to Minecraft folders
-
-### Webpack Configuration
-
-For Script API projects, the CLI uses Webpack with:
-
-- TypeScript support via `ts-loader`
-- ESNext target
-- Bundler module resolution
-- Source map generation (development only)
-
-### Build Process
-
-The build commands:
-
-1. Compile source files (if Script API enabled)
-2. Copy pack files to temporary directory
-3. Create archive using `archiver`
-4. Output to project root
+- `zip` creates separate behavior/resource `.zip` files when those packs exist.
+- `mcpack` creates separate behavior/resource `.mcpack` files when those packs exist.
+- `mcaddon` creates one `.mcaddon` containing the available packs.
 
 ## Related Packages
 
-- [`create-mcbepack`](../create-mcbepack) - Project scaffolding tool
-- [`@mcbepack/api`](../api) - Utility APIs for Script API
-- [`@mcbepack/common`](../common) - Shared utilities
-
-## Troubleshooting
-
-### Files Not Syncing
-
-1. Check `.env.local` paths are correct
-2. Ensure Minecraft development folders exist
-3. Verify file permissions
-
-### Compilation Errors
-
-1. Check TypeScript configuration in `tsconfig.json`
-2. Ensure all dependencies are installed
-3. Verify source file syntax
-
-### Build Failures
-
-1. Check for file permission issues
-2. Ensure sufficient disk space
-3. Verify pack manifest files are valid
+- [`create-mcbepack`](../../create-mcbepack)
+- [`@mcbepack/api`](../api)
+- [`@mcbepack/common`](../common)
 
 ## License
 
-GPL-3.0 - see [LICENSE](./LICENSE) for details
-
-## Resources
-
-- [GitHub Repository](https://github.com/bugphxne/create-mcbepack)
-- [Documentation](https://docs.mbext.online/mcbepack)
-- [Issue Tracker](https://github.com/bugphxne/create-mcbepack/issues)
+GPL-3.0. See [LICENSE](./LICENSE).

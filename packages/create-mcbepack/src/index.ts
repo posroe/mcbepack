@@ -46,22 +46,18 @@ async function main() {
             console.log(`  ${pc.cyan("2.")} bun install`);
             console.log(`  ${pc.cyan("3.")} bun run dev\n`);
         } else {
-            console.log(`  ${pc.cyan("2.")} Start developing your project\n`);
+            console.log(`  ${pc.cyan("2.")} bun install`);
+            console.log(`  ${pc.cyan("3.")} Start developing your project\n`);
         }
 
+        console.log(pc.dim("Available commands:"));
         if (config.script?.enabled) {
-            console.log(pc.dim("Available commands:"));
-            console.log(pc.dim("   • bun run dev    - Start development server"));
-            console.log(pc.dim("   • bun run build:zip  - Build project"));
-            console.log(pc.dim("   • bun run build:mcpack  - Build project"));
-            console.log(pc.dim("   • bun run build:mcaddon  - Build project"));
-        } else {
-            console.log(pc.dim("Available commands:"));
-            console.log(pc.dim("   • bun run build:zip  - Build project"));
-            console.log(pc.dim("   • bun run build:mcpack  - Build project"));
-            console.log(pc.dim("   • bun run build:mcaddon  - Build project"));
+            console.log(pc.dim("   - bun run dev             - Start development server"));
+            console.log(pc.dim("   - bun run update:stable   - Update Script API packages"));
         }
-
+        console.log(pc.dim("   - bun run build:zip       - Build a .zip archive"));
+        console.log(pc.dim("   - bun run build:mcpack    - Build .mcpack archive(s)"));
+        console.log(pc.dim("   - bun run build:mcaddon   - Build a .mcaddon archive"));
     } catch (error) {
         console.error(pc.red("\nError occurred:"), error);
         process.exit(1);

@@ -24,7 +24,7 @@ import { Scoreboard, ScoreboardObjective, Player, world } from "@minecraft/serve
  */
 export class Advancedboard {
     /** The Minecraft scoreboard instance to operate on */
-    public static scoreboard: Scoreboard;
+    private static scoreboard?: Scoreboard;
 
     static initialize(scoreboard: Scoreboard) {
         this.scoreboard = scoreboard;
@@ -39,9 +39,12 @@ export class Advancedboard {
      * @param name - Name of the scoreboard objective
      * @returns The scoreboard objective instance
      */
-    private static getObjective(name: string) {
-        this.scoreboard.addObjective(name);
-        return this.scoreboard.getObjective(name) as ScoreboardObjective;
+    private static getObjective(name: string): ScoreboardObjective {
+        if (!this.scoreboard) {
+            this.scoreboard = world.scoreboard;
+        }
+
+        return this.scoreboard.getObjective(name) ?? this.scoreboard.addObjective(name);
     }
 
     /**

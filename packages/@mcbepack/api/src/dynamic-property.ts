@@ -143,6 +143,7 @@ export type CountArgs<T> = {
 export class DynamicProperty<T> {
     /** In-memory cache of all database entries */
     private sets = new Set<WithId<T>>();
+    private loaded = false;
 
     /**
      * Creates a new database instance
@@ -172,22 +173,38 @@ export class DynamicProperty<T> {
      */
     private initialize(): void {
         try {
+            this.loadFromStorage();
+        } catch {
+            // Some Script API storage calls are only valid after the world is ready.
+        }
+
+        try {
             system.run(() => {
                 world.afterEvents.worldLoad.subscribe(() => {
-                    // Retrieve stored JSON string from dynamic properties
-                    const data = this.storageType.getDynamicProperty(this.collectionName) as string;
-                    if (data) {
-                        // Parse JSON and populate in-memory cache
-                        const entries = JSON.parse(data);
-                        for (const data of entries) {
-                            this.sets.add(data);
-                        }
-                    }
+                    this.loadFromStorage();
                 })
             })
         } catch (error) {
             throw new Error(`Failed to initialize database: ${error}`);
         }
+    }
+
+    private loadFromStorage(): void {
+        if (this.loaded) {
+            return;
+        }
+
+        const data = this.storageType.getDynamicProperty(this.collectionName);
+        if (typeof data !== "string" || data.length === 0) {
+            return;
+        }
+
+        const entries = JSON.parse(data) as WithId<T>[];
+        this.sets.clear();
+        for (const entry of entries) {
+            this.sets.add(entry);
+        }
+        this.loaded = true;
     }
 
     /**
@@ -202,6 +219,7 @@ export class DynamicProperty<T> {
             // Convert Set to Array and serialize to JSON
             const entries = Array.from(this.sets.values());
             this.storageType.setDynamicProperty(this.collectionName, JSON.stringify(entries));
+            this.loaded = true;
         } catch (error) {
             throw new Error(`Failed to save changes: ${error}`);
         }

@@ -29,7 +29,7 @@ export const buildCommand: CommandModule<{}, BuildArgs> = {
             console.log(pc.cyan("Building project...\n"));
 
             if (fs.existsSync(paths.scriptsDir)) {
-                const compiler = createCompiler();
+                const compiler = createCompiler("production");
 
                 await new Promise<void>((resolve, reject) => {
                     compiler.run((err, stats) => {

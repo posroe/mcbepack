@@ -108,13 +108,13 @@ export function generateFileList(config: ProjectConfig): FileToCreate[] {
                     "update:beta": "mcbepack update -t beta",
                     "update:preview": "mcbepack update -t preview",
                 },
-                devDependencies: Object.fromEntries(
-                    config.script.dependencies.map(dep => [dep.packageName, dep.fullVersion])
-                ),
-                peerDependencies: {
+                devDependencies: {
                     "@mcbepack/cli": "latest",
                     "@mcbepack/api": "latest",
-                    ...(config.script.language === "typescript" ? { "typescript": "latest" } : {})
+                    ...(config.script.language === "typescript" ? { "typescript": "latest" } : {}),
+                    ...Object.fromEntries(
+                        config.script.dependencies.map(dep => [dep.packageName, dep.fullVersion])
+                    )
                 }
             };
 
@@ -203,9 +203,9 @@ export function generateFileList(config: ProjectConfig): FileToCreate[] {
                 scripts: {
                     "build:zip": "mcbepack build -o zip",
                     "build:mcpack": "mcbepack build -o mcpack",
-                    "build:addon": "mcbepack build -o addon",
+                    "build:mcaddon": "mcbepack build -o mcaddon",
                 },
-                peerDependencies: {
+                devDependencies: {
                     "@mcbepack/cli": "latest"
                 }
             }, null, 2),

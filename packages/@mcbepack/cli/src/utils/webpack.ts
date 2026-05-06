@@ -3,10 +3,10 @@ import { webpack, Configuration } from "webpack";
 import { constants } from "@mcbepack/common";
 import fs from "node:fs";
 
-export function createWebpackConfig(): Configuration {
+export function createWebpackConfig(mode: "development" | "production" = "development"): Configuration {
     if (fs.existsSync(path.join(process.cwd(), 'scripts', 'index.ts'))) {
         return {
-            mode: 'development',
+            mode,
             entry: './scripts/index',
             target: 'node',
             infrastructureLogging: {
@@ -47,7 +47,7 @@ export function createWebpackConfig(): Configuration {
         };
     } else if (fs.existsSync(path.join(process.cwd(), 'scripts', 'index.js'))) {
         return {
-            mode: 'development',
+            mode,
             entry: './scripts/index',
             target: 'node',
             infrastructureLogging: {
@@ -72,6 +72,6 @@ export function createWebpackConfig(): Configuration {
     }
 }
 
-export function createCompiler() {
-    return webpack(createWebpackConfig());
+export function createCompiler(mode?: "development" | "production") {
+    return webpack(createWebpackConfig(mode));
 }
