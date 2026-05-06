@@ -21,7 +21,6 @@
     "enquirer": "^2.4.1",
     "node-fetch": "^3.3.2",
     "nodemon": "^3.1.11",
-    "picocolors": "^1.1.1",
-    "uuid": "^13.0.0"
+    "picocolors": "^1.1.1"
   }
 }

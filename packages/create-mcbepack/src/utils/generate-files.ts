@@ -103,7 +103,7 @@ export function generateFileList(config: ProjectConfig): FileToCreate[] {
                     dev: "mcbepack dev",
                     "build:zip": "mcbepack build -o zip",
                     "build:mcpack": "mcbepack build -o mcpack",
-                    "build:addon": "mcbepack build -o addon",
+                    "build:mcaddon": "mcbepack build -o mcaddon",
                     "update:stable": "mcbepack update -t stable",
                     "update:beta": "mcbepack update -t beta",
                     "update:preview": "mcbepack update -t preview",

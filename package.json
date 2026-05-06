@@ -4,17 +4,18 @@
         "packages/*"
     ],
     "scripts": {
-        "build": "bun run --filter '*' build",
-        "dev": "bun run --filter '*' dev"
+        "bootstrap": "bun install",
+        "build": "bun run --workspaces build",
+        "dev": "bun run --workspaces dev"
     },
     "dependencies": {
-        "@types/node": "^25.3.0",
         "chokidar": "^5.0.0",
         "dotenv": "^17.2.3",
         "picocolors": "^1.1.1",
         "yargs": "^18.0.0"
     },
     "devDependencies": {
+        "@types/node": "^25.3.0",
         "@types/yargs": "^17.0.35"
     }
 }

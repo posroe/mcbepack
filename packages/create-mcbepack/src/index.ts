@@ -54,12 +54,12 @@ async function main() {
             console.log(pc.dim("   • bun run dev    - Start development server"));
             console.log(pc.dim("   • bun run build:zip  - Build project"));
             console.log(pc.dim("   • bun run build:mcpack  - Build project"));
-            console.log(pc.dim("   • bun run build:addon  - Build project"));
+            console.log(pc.dim("   • bun run build:mcaddon  - Build project"));
         } else {
             console.log(pc.dim("Available commands:"));
             console.log(pc.dim("   • bun run build:zip  - Build project"));
             console.log(pc.dim("   • bun run build:mcpack  - Build project"));
-            console.log(pc.dim("   • bun run build:addon  - Build project"));
+            console.log(pc.dim("   • bun run build:mcaddon  - Build project"));
         }
 
     } catch (error) {

@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from "uuid";
+import { randomUUID } from "node:crypto";
 import pc from "picocolors";
 import { getDependency } from "@mcbepack/common";
 import prompt from "../prompt";
@@ -12,9 +12,9 @@ export async function collectProjectInfo(): Promise<ProjectConfig> {
     const { name, description, author, minimumEngineVersion } = await prompt.info();
 
     const uuids = {
-        behavior: uuidv4(),
-        resource: uuidv4(),
-        scriptModule: uuidv4(),
+        behavior: randomUUID(),
+        resource: randomUUID(),
+        scriptModule: randomUUID(),
     };
 
     const config: ProjectConfig = {
