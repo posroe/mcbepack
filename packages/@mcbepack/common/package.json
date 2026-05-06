@@ -9,9 +9,6 @@
         "build": "tsc"
     },
     "devDependencies": {
-        "@types/bun": "latest"
-    },
-    "peerDependencies": {
         "typescript": "^5"
     },
     "dependencies": {

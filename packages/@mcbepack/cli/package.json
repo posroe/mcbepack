@@ -12,14 +12,11 @@
         "build": "tsc"
     },
     "devDependencies": {
-        "@types/bun": "latest"
-    },
-    "peerDependencies": {
+        "@types/archiver": "^7.0.0",
         "typescript": "^5"
     },
     "dependencies": {
         "@mcbepack/common": "^1.0.0",
-        "@types/archiver": "^7.0.0",
         "archiver": "^7.0.1",
         "chokidar": "^4.0.3",
         "dotenv": "^16.4.7",
