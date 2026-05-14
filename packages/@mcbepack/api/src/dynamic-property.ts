@@ -11,218 +11,43 @@ import {
  * Supported storage types for the database
  * Can store data on World, Entity, Player, or ItemStack using dynamic properties
  */
-export type StorageType = World | Entity | Player | ItemStack;
+export type Storage = World | Entity | Player | ItemStack;
 
 /**
  * Record type with auto-generated id field
  */
-export type WithId<T> = { id: string } & T;
-
-/**
- * Where clause for filtering records
- */
-export type WhereInput<T> = {
-    [K in keyof WithId<T>]?: WithId<T>[K] | {
-        equals?: WithId<T>[K];
-        not?: WithId<T>[K];
-        in?: WithId<T>[K][];
-        notIn?: WithId<T>[K][];
-    };
+export type WithId<T> = Omit<T, "id"> & {
+    id: string;
 };
 
-/**
- * Order by clause for sorting
- */
-export type OrderByInput<T> = {
-    [K in keyof WithId<T>]?: 'asc' | 'desc';
-};
-
-/**
- * Arguments for findUnique operation
- */
-export type FindUniqueArgs<T> = {
-    where: WhereInput<T>;
-};
-
-/**
- * Arguments for findFirst operation
- */
-export type FindFirstArgs<T> = {
-    where?: WhereInput<T>;
-    orderBy?: OrderByInput<T>;
-};
-
-/**
- * Arguments for findMany operation
- */
-export type FindManyArgs<T> = {
-    where?: WhereInput<T>;
-    orderBy?: OrderByInput<T>;
-    take?: number;
-    skip?: number;
-};
-
-/**
- * Arguments for create operation
- */
-export type CreateArgs<T> = {
-    data: Omit<T, "id">;
-};
-
-/**
- * Arguments for createMany operation
- */
-export type CreateManyArgs<T> = {
-    data: Omit<T, "id">[];
-};
-
-/**
- * Arguments for update operation
- */
-export type UpdateArgs<T> = {
-    where: WhereInput<T>;
-    data: Partial<T>;
-};
-
-/**
- * Arguments for updateMany operation
- */
-export type UpdateManyArgs<T> = {
-    where: WhereInput<T>;
-    data: Partial<T>;
-};
-
-/**
- * Arguments for delete operation
- */
-export type DeleteArgs<T> = {
-    where: WhereInput<T>;
-};
-
-/**
- * Arguments for deleteMany operation
- */
-export type DeleteManyArgs<T> = {
-    where: WhereInput<T>;
-};
-
-/**
- * Arguments for upsert operation
- */
-export type UpsertArgs<T> = {
-    where: WhereInput<T>;
-    create: Omit<T, "id">;
-    update: Partial<T>;
-};
-
-/**
- * Arguments for count operation
- */
-export type CountArgs<T> = {
-    where?: WhereInput<T>;
-};
-
-/**
- * A generic database class for Minecraft Bedrock Edition
- * Stores data using dynamic properties and provides CRUD operations
- * 
- * @template T - The type of data to store (will automatically include an 'id' field)
- * 
- * @example
- * ```typescript
- * // Create a database for player stats
- * const statsDb = new Database<{ kills: number, deaths: number }>("stats", world);
- * 
- * // Create a new entry
- * const id = statsDb.create({ kills: 10, deaths: 5 });
- * 
- * // Find an entry
- * const entry = statsDb.find((data) => data.id === id);
- * ```
- */
 export class DynamicProperty<T> {
-    /** In-memory cache of all database entries */
-    private sets = new Set<WithId<T>>();
-    private loaded = false;
+    private name: string;
+    private storage: Storage;
+    private values: WithId<T>[] = [];
 
-    /**
-     * Creates a new database instance
-     * 
-     * @param collectionName - Name of the collection (1-16 characters, used as dynamic property key)
-     * @param storageType - Where to store the data (World, Entity, Player, or ItemStack)
-     * @throws Error if collection name is invalid or initialization fails
-     */
-    constructor(
-        private collectionName: string,
-        private storageType: StorageType
-    ) {
-        // Validate collection name length (Minecraft dynamic property limitation)
-        if (collectionName.length < 1 || collectionName.length > 16) {
-            throw new Error('Collection name must be between 1 and 16 characters');
-        }
-        // Load existing data from storage
-        this.initialize();
+    constructor(name: string, storage: Storage) {
+        this.name = name;
+        this.storage = storage;
+        this.init();
     }
 
     /**
-     * Loads existing data from dynamic properties into memory
-     * Called automatically during construction
+     * Loads all values from dynamic properties into memory
      * 
      * @private
-     * @throws Error if data cannot be loaded or parsed
      */
-    private initialize(): void {
-        try {
-            this.loadFromStorage();
-        } catch {
-            // Some Script API storage calls are only valid after the world is ready.
-        }
-
-        try {
-            system.run(() => {
-                world.afterEvents.worldLoad.subscribe(() => {
-                    this.loadFromStorage();
-                })
+    private init(): void {
+        system.run(() => {
+            world.afterEvents.worldLoad.subscribe(() => {
+                const keys = this.storage.getDynamicPropertyIds();
+                for (const key of keys) {
+                    const value = this.storage.getDynamicProperty(key);
+                    if (typeof value === "string") {
+                        this.values.push(JSON.parse(value));
+                    }
+                }
             })
-        } catch (error) {
-            throw new Error(`Failed to initialize database: ${error}`);
-        }
-    }
-
-    private loadFromStorage(): void {
-        if (this.loaded) {
-            return;
-        }
-
-        const data = this.storageType.getDynamicProperty(this.collectionName);
-        if (typeof data !== "string" || data.length === 0) {
-            return;
-        }
-
-        const entries = JSON.parse(data) as WithId<T>[];
-        this.sets.clear();
-        for (const entry of entries) {
-            this.sets.add(entry);
-        }
-        this.loaded = true;
-    }
-
-    /**
-     * Persists in-memory data to dynamic properties
-     * Called automatically after any data modification
-     * 
-     * @private
-     * @throws Error if data cannot be saved
-     */
-    private saveChanges(): void {
-        try {
-            // Convert Set to Array and serialize to JSON
-            const entries = Array.from(this.sets.values());
-            this.storageType.setDynamicProperty(this.collectionName, JSON.stringify(entries));
-            this.loaded = true;
-        } catch (error) {
-            throw new Error(`Failed to save changes: ${error}`);
-        }
+        })
     }
 
     /**
@@ -241,137 +66,107 @@ export class DynamicProperty<T> {
     }
 
     /**
+     * Finds entries in the database
+     * 
+     * @example
+     * ```typescript
+     * const value = db.find((value) => value.id === "1"); // Finds the entry with id "1"
+     * ```
+     * 
+     * @param predicate - Predicate function to filter entries
+     * @returns The entry if found, otherwise undefined
+     */
+    public find(predicate: (value: WithId<T>) => boolean) {
+        return this.values.find(predicate);
+    }
+
+    /**
      * Creates a new entry in the database
      * 
-     * @param data - The data to store (id will be auto-generated)
-     * @returns The generated ID of the new entry
-     * 
      * @example
      * ```typescript
-     * const id = db.create({ name: "Steve", level: 5 });
+     * const value = db.create({ name: "New Value" }); // Creates a new entry
      * ```
+     * 
+     * @param value - The data to store (id will be auto-generated)
+     * @returns The created entry
      */
-    public create(data: Omit<T, "id">): string {
-        if ("id" in data) {
-            throw new Error("ID cannot be provided during creation");
-        }
+    public create(value: Omit<T, "id">): WithId<T> {
         const id = this.generateId();
-        // Merge user data with generated ID
-        this.sets.add({
-            id,
-            ...data
-        } as WithId<T>);
-        // Persist to storage
-        this.saveChanges();
-        return id;
+
+        const data = { ...value, id };
+        this.values.push(data);
+        this.storage.setDynamicProperty(
+            `${this.name}:${id}`,
+            JSON.stringify(data),
+        );
+
+        return data;
     }
 
     /**
-     * Finds a single entry matching the predicate
-     * 
-     * @param papredicate - Function to test each entry
-     * @returns The first matching entry or null if not found
+     * Deletes entries from the database
      * 
      * @example
      * ```typescript
-     * const player = db.find((data) => data.name === "Steve");
+     * db.delete((value) => value.id === "1"); // Deletes the entry with id "1"
      * ```
+     * 
+     * @param predicate - Predicate function to filter entries
      */
-    public find(papredicate: (data: WithId<T>) => boolean) {
-        try {
-            return Array.from(this.sets.values()).find(papredicate);
-        } catch (error) {
-            return null;
+    public delete(predicate: (value: WithId<T>) => boolean): void {
+        const values = this.values.filter(predicate)
+
+        values.forEach((value) => {
+            this.storage.setDynamicProperty(
+                `${this.name}:${value.id}`,
+                undefined
+            );
+        });
+
+        this.values = this.values.filter((value) => !values.some(v => v.id === value.id));
+    }
+
+    /**
+     * Updates entries in the database
+     * 
+     * @example
+     * ```typescript
+     * db.update((value) => value.id === "1", (value) => ({ ...value, name: "New Name" })); // Updates the entry with id "1"
+     * ```
+     * 
+     * @param predicate - Predicate function to filter entries
+     * @param prev - Function to update the entries
+     */
+    public update(predicate: (value: WithId<T>) => boolean, prev: (value: WithId<T>) => WithId<T>): void {
+        const values = this.values.filter(predicate).map(prev)
+
+        values.forEach((value) => {
+            this.storage.setDynamicProperty(
+                `${this.name}:${value.id}`,
+                JSON.stringify(value)
+            );
+        });
+
+        this.values = this.values.map(value => values.find(v => v.id === value.id) ?? value);
+    }
+
+    /**
+     * Gets the number of entries in the database
+     * 
+     * @example
+     * ```typescript
+     * const count = db.count(); // Gets the number of entries
+     * ```
+     * 
+     * @param predicate - Optional predicate function to filter entries
+     * @returns The number of entries
+     */
+    public count(predicate?: (value: WithId<T>) => boolean): number {
+        if (predicate) {
+            return this.values.filter(predicate).length;
         }
-    }
-
-    /**
-     * Returns all entries in the database
-     * 
-     * @returns Array of all database entries
-     * 
-     * @example
-     * ```typescript
-     * const allPlayers = db.findMany();
-     * ```
-     */
-    public findMany() {
-        return Array.from(this.sets.values());
-    }
-
-    /**
-     * Finds all entries where a specific field matches a value
-     * 
-     * @param key - The field name to match
-     * @param value - The value to match
-     * @returns Array of matching entries
-     * 
-     * @example
-     * ```typescript
-     * const level5Players = db.findLike("level", 5);
-     * ```
-     */
-    public findLike<K extends keyof WithId<T>>(key: K, value: WithId<T>[K]) {
-        return Array.from(this.sets.values()).filter((data) => data[key] === value);
-    }
-
-    /**
-     * Counts entries in the database
-     * 
-     * @param predicate - Optional filter function
-     * @returns Number of entries (matching predicate if provided)
-     * 
-     * @example
-     * ```typescript
-     * const totalPlayers = db.count();
-     * const highLevelPlayers = db.count((data) => data.level > 10);
-     * ```
-     */
-    public count(predicate?: (data: WithId<T>) => boolean) {
-        return predicate ? Array.from(this.sets.values()).filter(predicate).length : this.sets.size;
-    }
-
-    /**
-     * Deletes a single entry matching the predicate
-     * 
-     * @param predicate - Function to find the entry to delete
-     * 
-     * @example
-     * ```typescript
-     * db.delete((data) => data.id === "abc123");
-     * ```
-     */
-    public delete(predicate: (data: WithId<T>) => boolean) {
-        const data = this.find(predicate);
-        if (data) {
-            this.sets.delete(data);
-            this.saveChanges();
-        }
-    }
-
-    /**
-     * Updates a single entry matching the predicate
-     * 
-     * @param predicate - Function to find the entry to update
-     * @param data - Partial data to merge with existing entry
-     * 
-     * @example
-     * ```typescript
-     * db.update((data) => data.id === "abc123", { level: 10 });
-     * ```
-     */
-    public update(predicate: (data: WithId<T>) => boolean, data: Partial<WithId<T>>) {
-        const existingData = this.find(predicate);
-        if (existingData) {
-            // Remove old entry
-            this.sets.delete(existingData);
-            // Add updated entry (merge existing with new data)
-            this.sets.add({
-                ...existingData,
-                ...data
-            });
-            this.saveChanges();
-        }
+        return this.values.length;
     }
 
     /**
@@ -382,8 +177,10 @@ export class DynamicProperty<T> {
      * db.clear(); // Deletes all data
      * ```
      */
-    public clear() {
-        this.sets.clear();
-        this.saveChanges();
+    public clear(): void {
+        this.values.forEach((value) => {
+            this.storage.setDynamicProperty(`${this.name}:${value.id}`, undefined);
+        });
+        this.values = [];
     }
 }

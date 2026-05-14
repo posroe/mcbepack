@@ -10,7 +10,8 @@
     "esModuleInterop": true
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "../../../.dynamic-property.ts"
   ],
   "exclude": [
     "node_modules",

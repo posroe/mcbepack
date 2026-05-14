@@ -28,7 +28,10 @@ const stats = new DynamicProperty<PlayerStats>("stats", world);
 const id = stats.create({ name: "Steve", kills: 0 });
 const steve = stats.find((entry) => entry.id === id);
 
-stats.update((entry) => entry.id === id, { kills: 1 });
+stats.update(
+  (entry) => entry.id === id,
+  (entry) => ({ ...entry, kills: entry.kills + 1 }),
+);
 ```
 
 Available methods:
