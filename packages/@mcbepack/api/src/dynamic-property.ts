@@ -23,10 +23,10 @@ export type WithId<T> = Omit<T, "id"> & {
 export class DynamicProperty<T> {
     private name: string;
     private storage: Storage;
-    private values: WithId<T>[] = [];
+    public values: WithId<T>[] = [];
 
     constructor(name: string, storage: Storage) {
-        this.name = name;
+        this.name = `db:${name}`;
         this.storage = storage;
         this.init();
     }
@@ -40,7 +40,7 @@ export class DynamicProperty<T> {
         system.run(() => {
             world.afterEvents.worldLoad.subscribe(() => {
                 const keys = this.storage.getDynamicPropertyIds();
-                for (const key of keys) {
+                for (const key of keys.filter((k) => k.startsWith(this.name))) {
                     const value = this.storage.getDynamicProperty(key);
                     if (typeof value === "string") {
                         this.values.push(JSON.parse(value));
@@ -132,7 +132,10 @@ export class DynamicProperty<T> {
      * 
      * @example
      * ```typescript
-     * db.update((value) => value.id === "1", (value) => ({ ...value, name: "New Name" })); // Updates the entry with id "1"
+     * db.update(
+     *    (value) => value.id === "1",
+     *    (value) => ({ ...value, name: "New Name" })
+     * ); // Updates the entry with id "1"
      * ```
      * 
      * @param predicate - Predicate function to filter entries
