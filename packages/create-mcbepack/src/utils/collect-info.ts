@@ -1,8 +1,8 @@
 import { randomUUID } from "node:crypto";
 import pc from "picocolors";
 import { getDependency } from "@mcbepack/common";
-import prompt from "../prompt";
-import { ProjectConfig } from "../types";
+import prompt from "../prompt.js";
+import { ProjectConfig } from "../types.js";
 
 export async function collectProjectInfo(): Promise<ProjectConfig> {
     console.log(pc.bold("Please provide project information\n"));

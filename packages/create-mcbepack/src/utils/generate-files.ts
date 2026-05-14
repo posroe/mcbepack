@@ -1,7 +1,7 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { Manifest, APIBehaviorManifest, constants } from "@mcbepack/common";
-import { ProjectConfig, FileToCreate } from "../types";
+import type { ProjectConfig, FileToCreate } from "../types.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

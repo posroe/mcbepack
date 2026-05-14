@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import pc from "picocolors";
-import { FileToCreate } from "../types";
+import type { FileToCreate } from "../types.js";
 
 export function createFiles(files: FileToCreate[]): void {
     console.log(`\nCreating ${files.length} files...\n`);

@@ -2,8 +2,8 @@ import { afterEach, describe, expect, test } from "bun:test";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { generateFileList } from "./generate-files";
-import { ProjectConfig } from "../types";
+import { generateFileList } from "./generate-files.js";
+import type { ProjectConfig } from "../types";
 
 const originalCwd = process.cwd();
 

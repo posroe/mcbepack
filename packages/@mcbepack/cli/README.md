@@ -68,7 +68,7 @@ mcbepack update -t preview
 
 ## Outputs
 
-Build artifacts are written to the project's `out/` directory.
+Build artifacts are written to the project's `dist/` directory.
 
 - `zip` creates separate behavior/resource `.zip` files when those packs exist.
 - `mcpack` creates separate behavior/resource `.mcpack` files when those packs exist.

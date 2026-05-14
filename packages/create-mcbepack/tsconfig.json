@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "outDir": "./out",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
     "esModuleInterop": true
@@ -13,7 +13,7 @@
   ],
   "exclude": [
     "node_modules",
-    "out",
+    "dist",
     "**/*.test.ts"
   ]
 }

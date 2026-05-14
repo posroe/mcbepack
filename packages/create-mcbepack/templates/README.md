@@ -26,7 +26,7 @@ bun run build:mcpack
 bun run build:mcaddon
 ```
 
-Build outputs are written to `out/`.
+Build outputs are written to `dist/`.
 
 ## Configure Minecraft Paths
 

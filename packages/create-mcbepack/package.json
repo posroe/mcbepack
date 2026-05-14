@@ -1,9 +1,9 @@
 {
   "name": "create-mcbepack",
-  "version": "1.0.5",
-  "main": "out/index.js",
+  "version": "1.0.6",
+  "main": "dist/index.js",
   "dependencies": {
-    "@mcbepack/common": "^1.0.0",
+    "@mcbepack/common": "^1.0.1",
     "enquirer": "^2.4.1",
     "node-fetch": "^3.3.2",
     "nodemon": "^3.1.11",
@@ -13,7 +13,7 @@
     "typescript": "^5"
   },
   "bin": {
-    "create-mcbepack": "./out/index.js"
+    "create-mcbepack": "./dist/index.js"
   },
   "scripts": {
     "dev": "tsc --watch",

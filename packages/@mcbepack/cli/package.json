@@ -1,11 +1,10 @@
 {
     "name": "@mcbepack/cli",
-    "version": "1.0.4",
-    "main": "out/index.js",
-    "types": "out/index.d.ts",
+    "version": "1.0.5",
+    "main": "dist/index.js",
     "type": "module",
     "bin": {
-        "mcbepack": "out/index.js"
+        "mcbepack": "dist/index.js"
     },
     "scripts": {
         "dev": "tsc --watch",
@@ -16,7 +15,7 @@
         "typescript": "^5"
     },
     "dependencies": {
-        "@mcbepack/common": "^1.0.0",
+        "@mcbepack/common": "^1.0.1",
         "archiver": "^7.0.1",
         "chokidar": "^4.0.3",
         "dotenv": "^16.4.7",

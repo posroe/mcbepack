@@ -3,10 +3,10 @@
 import fs from "node:fs";
 import path from "node:path";
 import pc from "picocolors";
-import { collectProjectInfo } from "./utils/collect-info";
-import { generateFileList } from "./utils/generate-files";
-import { createFiles, previewFiles } from "./utils/create-files";
-import prompt from "./prompt";
+import { collectProjectInfo } from "./utils/collect-info.js";
+import { generateFileList } from "./utils/generate-files.js";
+import { createFiles, previewFiles } from "./utils/create-files.js";
+import prompt from "./prompt.js";
 
 async function main() {
     try {

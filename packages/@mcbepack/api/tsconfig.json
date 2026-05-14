@@ -3,7 +3,7 @@
     "target": "esnext",
     "module": "nodenext",
     "moduleResolution": "nodenext",
-    "outDir": "./out",
+    "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
     "declaration": true,
@@ -15,7 +15,7 @@
   ],
   "exclude": [
     "node_modules",
-    "out",
+    "dist",
     "**/*.test.ts"
   ]
 }
