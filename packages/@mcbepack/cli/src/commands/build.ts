@@ -1,8 +1,9 @@
 import { CommandModule } from "yargs";
 import pc from "picocolors";
-import { createCompiler } from "../utils/webpack";
-import { PackArchiver, ArchiveFormat } from "../utils/archiver";
-import { getProjectPaths } from "../utils/paths";
+import type { Stats } from "webpack";
+import { createCompiler } from "../utils/webpack.js";
+import { PackArchiver, ArchiveFormat } from "../utils/archiver.js";
+import { getProjectPaths } from "../utils/paths.js";
 import fs from "fs";
 
 interface BuildArgs {
@@ -32,7 +33,7 @@ export const buildCommand: CommandModule<{}, BuildArgs> = {
                 const compiler = createCompiler("production");
 
                 await new Promise<void>((resolve, reject) => {
-                    compiler.run((err, stats) => {
+                    compiler.run((err: Error | null | undefined, stats: Stats | undefined) => {
                         if (err) {
                             reject(err);
                             return;

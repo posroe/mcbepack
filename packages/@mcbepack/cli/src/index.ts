@@ -4,9 +4,9 @@ import "@mcbepack/common";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import dotenv from "dotenv";
-import { devCommand } from "./commands/dev";
-import { buildCommand } from "./commands/build";
-import { updateCommand } from "./commands/update";
+import { devCommand } from "./commands/dev.js";
+import { buildCommand } from "./commands/build.js";
+import { updateCommand } from "./commands/update.js";
 
 dotenv.config({
     path: `${process.cwd()}/.env.local`

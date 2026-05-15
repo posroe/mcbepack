@@ -3,7 +3,7 @@ import pc from "picocolors";
 import { APIBehaviorManifest, constants, getDependency } from "@mcbepack/common";
 import { readFileSync, writeFileSync, existsSync } from "fs";
 import { join } from "path";
-import { getProjectPaths } from "../utils/paths";
+import { getProjectPaths } from "../utils/paths.js";
 
 interface UpdateArgs {
     type?: "stable" | "beta" | "preview"

@@ -1,8 +1,9 @@
 import { CommandModule } from "yargs";
 import pc from "picocolors";
-import { createCompiler } from "../utils/webpack";
-import { FileSync } from "../utils/file-sync";
-import { getProjectPaths, validateEnv } from "../utils/paths";
+import type { Stats } from "webpack";
+import { createCompiler } from "../utils/webpack.js";
+import { PackLinker } from "../utils/pack-linker.js";
+import { getProjectPaths, validateEnv } from "../utils/paths.js";
 
 export const devCommand: CommandModule = {
     command: "dev",
@@ -18,7 +19,7 @@ export const devCommand: CommandModule = {
             compiler.watch({
                 aggregateTimeout: 300,
                 poll: 1000
-            }, (err, stats) => {
+            }, (err: Error | null | undefined, stats: Stats | undefined) => {
                 if (stats?.hasWarnings()) {
                     console.error(pc.yellow("Compilation warnings:"));
                     console.error(stats.toString({ warnings: true }));
@@ -39,11 +40,12 @@ export const devCommand: CommandModule = {
                 console.log(pc.green(`Rebuilt at ${new Date().toLocaleTimeString()}`));
             });
 
-            const fileSync = new FileSync(paths);
-            fileSync.watchBehaviorPack();
-            fileSync.watchResourcePack();
+            const packLinker = new PackLinker(paths);
+            packLinker.linkBehaviorPack();
+            packLinker.linkResourcePack();
 
-            console.log(pc.dim("Watching for file changes...\n"));
+            console.log(pc.dim("Pack folders are linked into Minecraft development folders."));
+            console.log(pc.dim("Watching for script changes...\n"));
         } catch (error) {
             console.error(pc.red("Failed to start dev server:"), error);
             process.exit(1);

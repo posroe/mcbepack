@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import archiver from "archiver";
 import pc from "picocolors";
-import { ProjectPaths } from "./paths";
+import { ProjectPaths } from "./paths.js";
 
 export type ArchiveFormat = "mcpack" | "mcaddon" | "zip";
 

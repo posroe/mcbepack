@@ -2,7 +2,7 @@
 
 Command-line tooling for MCBEPACK projects.
 
-The CLI handles three jobs: running a local development loop, syncing pack files into Minecraft's development folders, and building distributable archives.
+The CLI handles three jobs: running a local development loop, linking pack folders into Minecraft's development folders, and building distributable archives.
 
 ## Install
 
