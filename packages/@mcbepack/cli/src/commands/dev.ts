@@ -1,7 +1,6 @@
 import { CommandModule } from "yargs";
 import pc from "picocolors";
-import type { Stats } from "webpack";
-import { createCompiler } from "../utils/webpack.js";
+import { createBuildContext, formatBuildMessages } from "../utils/esbuild.js";
 import { PackLinker } from "../utils/pack-linker.js";
 import { getProjectPaths, validateEnv } from "../utils/paths.js";
 
@@ -15,30 +14,22 @@ export const devCommand: CommandModule = {
 
             console.log(pc.cyan("Starting development server...\n"));
 
-            const compiler = createCompiler();
-            compiler.watch({
-                aggregateTimeout: 300,
-                poll: 1000
-            }, (err: Error | null | undefined, stats: Stats | undefined) => {
-                if (stats?.hasWarnings()) {
+            const context = await createBuildContext("development", async (result) => {
+                if (result.warnings.length > 0) {
                     console.error(pc.yellow("Compilation warnings:"));
-                    console.error(stats.toString({ warnings: true }));
+                    console.error(await formatBuildMessages(result.warnings, "warning"));
                     return;
                 }
 
-                if (err) {
-                    console.error(pc.red("Webpack error:"), err);
-                    return;
-                }
-
-                if (stats?.hasErrors()) {
+                if (result.errors.length > 0) {
                     console.error(pc.red("Compilation errors:"));
-                    console.error(stats.toString({ errors: true }));
+                    console.error(await formatBuildMessages(result.errors, "error"));
                     return;
                 }
 
                 console.log(pc.green(`Rebuilt at ${new Date().toLocaleTimeString()}`));
             });
+            await context.watch();
 
             const packLinker = new PackLinker(paths);
             packLinker.linkBehaviorPack();

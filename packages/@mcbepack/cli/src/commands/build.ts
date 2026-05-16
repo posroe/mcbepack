@@ -1,10 +1,10 @@
 import { CommandModule } from "yargs";
 import pc from "picocolors";
-import type { Stats } from "webpack";
-import { createCompiler } from "../utils/webpack.js";
+import { buildScripts, formatBuildMessages } from "../utils/esbuild.js";
 import { PackArchiver, ArchiveFormat } from "../utils/archiver.js";
 import { getProjectPaths } from "../utils/paths.js";
 import fs from "fs";
+import type { BuildFailure } from "esbuild";
 
 interface BuildArgs {
     output: ArchiveFormat;
@@ -30,34 +30,14 @@ export const buildCommand: CommandModule<{}, BuildArgs> = {
             console.log(pc.cyan("Building project...\n"));
 
             if (fs.existsSync(paths.scriptsDir)) {
-                const compiler = createCompiler("production");
+                const result = await buildScripts("production");
 
-                await new Promise<void>((resolve, reject) => {
-                    compiler.run((err: Error | null | undefined, stats: Stats | undefined) => {
-                        if (err) {
-                            reject(err);
-                            return;
-                        }
+                if (result.warnings.length > 0) {
+                    console.error(pc.yellow("Compilation warnings:"));
+                    console.error(await formatBuildMessages(result.warnings, "warning"));
+                }
 
-                        if (stats?.hasErrors()) {
-                            console.error(pc.red("Compilation errors:"));
-                            console.error(stats.toString({ errors: true }));
-                            reject(new Error("Compilation failed"));
-                            return;
-                        }
-
-                        console.log(stats?.toString({
-                            colors: true,
-                            modules: false,
-                            children: false,
-                            chunks: false,
-                            chunkModules: false,
-                        }));
-
-                        console.log(pc.green("\nWebpack compilation completed\n"));
-                        resolve();
-                    });
-                });
+                console.log(pc.green("Script bundle completed\n"));
             }
 
             const archiver = new PackArchiver(paths);
@@ -65,6 +45,13 @@ export const buildCommand: CommandModule<{}, BuildArgs> = {
 
             console.log(pc.green("\nBuild completed successfully!\n"));
         } catch (error) {
+            const buildError = error as BuildFailure;
+
+            if (buildError.errors?.length) {
+                console.error(pc.red("Compilation errors:"));
+                console.error(await formatBuildMessages(buildError.errors, "error"));
+            }
+
             console.error(pc.red("Build failed:"), error);
             process.exit(1);
         }

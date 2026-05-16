@@ -3,6 +3,7 @@
 MCBEPACK is a small toolkit for building Minecraft Bedrock Edition add-ons with a cleaner project structure, repeatable builds, and optional Script API support.
 
 It is split into focused packages: one package creates new projects, one runs the development/build workflow, one provides Script API helpers, and one holds shared types/utilities used by the rest of the workspace.
+Script API projects are bundled with esbuild, so development rebuilds stay fast while Minecraft modules such as `@minecraft/server` remain external.
 
 ## Packages
 
