@@ -1,7 +1,9 @@
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
+
 import archiver from "archiver";
 import pc from "picocolors";
+
 import { ProjectPaths } from "./paths.js";
 
 export type ArchiveFormat = "mcpack" | "mcaddon" | "zip";

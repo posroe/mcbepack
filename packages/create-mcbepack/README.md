@@ -27,9 +27,10 @@ Script API projects include:
 {
   "scripts": {
     "dev": "mcbepack dev",
-    "build:zip": "mcbepack build -o zip",
-    "build:mcpack": "mcbepack build -o mcpack",
-    "build:mcaddon": "mcbepack build -o mcaddon",
+    "build": "mcbepack build",
+    "build:zip": "mcbepack build zip",
+    "build:mcpack": "mcbepack build mcpack",
+    "build:mcaddon": "mcbepack build mcaddon",
     "update:stable": "mcbepack update -t stable",
     "update:beta": "mcbepack update -t beta",
     "update:preview": "mcbepack update -t preview"
@@ -37,7 +38,7 @@ Script API projects include:
 }
 ```
 
-Non-script projects include the three build commands.
+Non-script projects include the build command and the three archive commands.
 
 ## Generated Layout
 

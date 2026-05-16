@@ -1,27 +1,26 @@
-import { CommandModule } from "yargs";
-import pc from "picocolors";
-import { buildScripts, formatBuildMessages } from "../utils/esbuild.js";
-import { PackArchiver, ArchiveFormat } from "../utils/archiver.js";
-import { getProjectPaths } from "../utils/paths.js";
-import fs from "fs";
+import fs from "node:fs";
+
 import type { BuildFailure } from "esbuild";
+import pc from "picocolors";
+import { CommandModule } from "yargs";
+
+import { ArchiveFormat, PackArchiver } from "../utils/archiver.js";
+import { buildScripts, formatBuildMessages } from "../utils/esbuild.js";
+import { getProjectPaths } from "../utils/paths.js";
 
 interface BuildArgs {
-    output: ArchiveFormat;
+    output?: ArchiveFormat;
 }
 
-export const buildCommand: CommandModule<{}, BuildArgs> = {
-    command: "build",
+export const buildCommand: CommandModule<object, BuildArgs> = {
+    command: "build [output]",
     describe: "Build the project",
-    builder: (yargs) => {
-        return yargs.option("output", {
-            alias: "o",
+    builder: (yargs) => yargs
+        .positional("output", {
             type: "string",
-            description: "Output format",
-            demandOption: true,
+            description: "Optional archive output format",
             choices: ["mcpack", "mcaddon", "zip"] as const
-        });
-    },
+        }),
     handler: async (argv) => {
         try {
             const paths = getProjectPaths();
@@ -40,8 +39,10 @@ export const buildCommand: CommandModule<{}, BuildArgs> = {
                 console.log(pc.green("Script bundle completed\n"));
             }
 
-            const archiver = new PackArchiver(paths);
-            await archiver.archive(output);
+            if (output) {
+                const archiver = new PackArchiver(paths);
+                await archiver.archive(output);
+            }
 
             console.log(pc.green("\nBuild completed successfully!\n"));
         } catch (error) {

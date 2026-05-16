@@ -2,11 +2,13 @@
 
 import fs from "node:fs";
 import path from "node:path";
+
 import pc from "picocolors";
-import { collectProjectInfo } from "./utils/collect-info.js";
-import { generateFileList } from "./utils/generate-files.js";
-import { createFiles, previewFiles } from "./utils/create-files.js";
+
 import prompt from "./prompt.js";
+import { collectProjectInfo } from "./utils/collect-info.js";
+import { createFiles, previewFiles } from "./utils/create-files.js";
+import { generateFileList } from "./utils/generate-files.js";
 
 async function main() {
     try {
@@ -55,6 +57,7 @@ async function main() {
             console.log(pc.dim("   - bun run dev             - Start development server"));
             console.log(pc.dim("   - bun run update:stable   - Update Script API packages"));
         }
+        console.log(pc.dim("   - bun run build           - Build project files"));
         console.log(pc.dim("   - bun run build:zip       - Build a .zip archive"));
         console.log(pc.dim("   - bun run build:mcpack    - Build .mcpack archive(s)"));
         console.log(pc.dim("   - bun run build:mcaddon   - Build a .mcaddon archive"));

@@ -1,4 +1,5 @@
 import fetch from "node-fetch";
+
 import { Version } from "./types.js";
 
 export async function getVersions(packageName: string) {

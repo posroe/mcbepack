@@ -27,7 +27,18 @@ Then follow the generated project's next steps:
 ```bash
 cd your-project
 bun install
+```
+
+For Script API projects, start the development watcher:
+
+```bash
 bun run dev
+```
+
+Build project files:
+
+```bash
+bun run build
 ```
 
 Build distribution archives:

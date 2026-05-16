@@ -1,10 +1,107 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { Manifest, APIBehaviorManifest, constants } from "@mcbepack/common";
-import type { ProjectConfig, FileToCreate } from "../types.js";
+
+import { APIBehaviorManifest, constants, Manifest } from "@mcbepack/common";
+
+import type { FileToCreate, ProjectConfig } from "../types.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+function generateProjectReadme(config: ProjectConfig): string {
+    const hasScripts = Boolean(config.script?.enabled);
+    const startSection = hasScripts
+        ? `Run the development watcher:
+
+\`\`\`bash
+bun run dev
+\`\`\`
+
+The dev command links available pack folders into Minecraft's development folders and watches Script API code from \`scripts/\`.
+`
+        : "Edit files in `src/`, then run a build command when you are ready to package the add-on.\n";
+    const configSection = hasScripts
+        ? `## Configure Minecraft Paths
+
+Edit \`.env.local\` if your Minecraft Bedrock installation uses a different location:
+
+\`\`\`env
+BASE_PATH="C:\\Users\\YourName\\AppData\\Roaming\\Minecraft Bedrock\\Users\\Shared\\games\\com.mojang"
+RESOURCE_PATH="development_resource_packs"
+BEHAVIOR_PATH="development_behavior_packs"
+\`\`\`
+
+`
+        : "";
+    const treeEntries = [
+        ...(hasScripts ? ["scripts/"] : []),
+        "src/",
+        ...(hasScripts ? [".env.local"] : []),
+        "package.json",
+        ...(config.script?.language === "typescript" ? ["tsconfig.json"] : [])
+    ];
+    const packEntries = [
+        ...(config.extensions.includes("behavior") ? ["behavior_pack/"] : []),
+        ...(config.extensions.includes("resource") ? ["resource_pack/"] : [])
+    ];
+    const tree = treeEntries.map((entry, index) => {
+        const connector = index === treeEntries.length - 1 ? "`-- " : "|-- ";
+
+        if (entry !== "src/") {
+            return `${connector}${entry}`;
+        }
+
+        const packLines = packEntries.map((packEntry, packIndex) => {
+            const packConnector = packIndex === packEntries.length - 1 ? "`-- " : "|-- ";
+            return `|   ${packConnector}${packEntry}`;
+        });
+
+        return [`${connector}${entry}`, ...packLines].join("\n");
+    }).join("\n");
+
+    return `# ${config.name}
+
+${config.description}
+
+This add-on was created with \`create-mcbepack\`.
+
+## Start
+
+Install dependencies:
+
+\`\`\`bash
+bun install
+\`\`\`
+
+${startSection}
+## Build
+
+Build project files:
+
+\`\`\`bash
+bun run build
+\`\`\`
+
+Build archives:
+
+\`\`\`bash
+bun run build:zip
+bun run build:mcpack
+bun run build:mcaddon
+\`\`\`
+
+Archive outputs are written to \`out/\`.
+
+${configSection}## Project Structure
+
+\`\`\`text
+.
+${tree}
+\`\`\`
+
+Some folders only exist when they were selected during project creation.
+`;
+}
 
 export function generateFileList(config: ProjectConfig): FileToCreate[] {
     const files: FileToCreate[] = [];
@@ -30,9 +127,8 @@ export function generateFileList(config: ProjectConfig): FileToCreate[] {
 
     files.push({
         path: path.join(projectRoot, "README.md"),
-        content: "",
-        type: "copy",
-        source: path.join(templatesDir, "README.md"),
+        content: generateProjectReadme(config),
+        type: "file",
     });
 
     if (config.extensions.includes("behavior")) {
@@ -101,12 +197,13 @@ export function generateFileList(config: ProjectConfig): FileToCreate[] {
                 name: config.name,
                 scripts: {
                     dev: "mcbepack dev",
-                    "build:zip": "mcbepack build -o zip",
-                    "build:mcpack": "mcbepack build -o mcpack",
-                    "build:mcaddon": "mcbepack build -o mcaddon",
-                    "update:stable": "mcbepack update -t stable",
-                    "update:beta": "mcbepack update -t beta",
-                    "update:preview": "mcbepack update -t preview",
+                    build: "mcbepack build",
+                    "build:zip": "mcbepack build zip",
+                    "build:mcpack": "mcbepack build mcpack",
+                    "build:mcaddon": "mcbepack build mcaddon",
+                    "update:stable": "mcbepack update stable",
+                    "update:beta": "mcbepack update beta",
+                    "update:preview": "mcbepack update preview",
                 },
                 devDependencies: {
                     "@mcbepack/cli": "latest",
@@ -201,9 +298,10 @@ export function generateFileList(config: ProjectConfig): FileToCreate[] {
             path: path.join(projectRoot, "package.json"),
             content: JSON.stringify({
                 scripts: {
-                    "build:zip": "mcbepack build -o zip",
-                    "build:mcpack": "mcbepack build -o mcpack",
-                    "build:mcaddon": "mcbepack build -o mcaddon",
+                    build: "mcbepack build",
+                    "build:zip": "mcbepack build zip",
+                    "build:mcpack": "mcbepack build mcpack",
+                    "build:mcaddon": "mcbepack build mcaddon",
                 },
                 devDependencies: {
                     "@mcbepack/cli": "latest"

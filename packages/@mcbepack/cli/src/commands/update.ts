@@ -1,26 +1,26 @@
-import { CommandModule } from "yargs";
-import pc from "picocolors";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
+
 import { APIBehaviorManifest, constants, getDependency } from "@mcbepack/common";
-import { readFileSync, writeFileSync, existsSync } from "fs";
-import { join } from "path";
+import pc from "picocolors";
+import { CommandModule } from "yargs";
+
 import { getProjectPaths } from "../utils/paths.js";
 
 interface UpdateArgs {
     type?: "stable" | "beta" | "preview"
 }
 
-export const updateCommand: CommandModule<{}, UpdateArgs> = {
-    command: "update",
+export const updateCommand: CommandModule<object, UpdateArgs> = {
+    command: "update [type]",
     describe: "Update the project dependencies",
-    builder: (yargs) => {
-        return yargs.option("type", {
-            alias: "t",
+    builder: (yargs) => yargs
+        .positional("type", {
             type: "string",
-            description: "Update type",
+            description: "Optional update type",
             choices: ["stable", "beta", "preview"] as const,
             default: "stable" as const
-        });
-    },
+        }),
     handler: async (argv) => {
         const { type = "stable" } = argv;
 

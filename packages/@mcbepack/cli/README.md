@@ -2,7 +2,7 @@
 
 Command-line tooling for MCBEPACK projects.
 
-The CLI handles three jobs: running a local development loop, linking pack folders into Minecraft's development folders, and building distributable archives.
+The CLI handles three jobs: running a local development loop, linking pack folders into Minecraft's development folders, and building project files or distributable archives.
 
 ## Install
 
@@ -50,25 +50,39 @@ Start the development watcher:
 mcbepack dev
 ```
 
+Build project files without creating an archive:
+
+```bash
+mcbepack build
+```
+
 Build archives:
 
 ```bash
+mcbepack build zip
+mcbepack build mcpack
+mcbepack build mcaddon
+```
+
+The `-o`/`--output` option is also supported:
+
+```bash
 mcbepack build -o zip
-mcbepack build -o mcpack
-mcbepack build -o mcaddon
 ```
 
 Update selected Minecraft Script API packages in `package.json` and `src/behavior_pack/manifest.json`:
 
 ```bash
-mcbepack update -t stable
-mcbepack update -t beta
-mcbepack update -t preview
+mcbepack update stable
+mcbepack update beta
+mcbepack update preview
 ```
+
+The release channel can also be passed positionally, for example `mcbepack update stable`.
 
 ## Outputs
 
-Build artifacts are written to the project's `dist/` directory.
+Archive artifacts are written to the project's `out/` directory.
 
 - `zip` creates separate behavior/resource `.zip` files when those packs exist.
 - `mcpack` creates separate behavior/resource `.mcpack` files when those packs exist.

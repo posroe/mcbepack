@@ -1,7 +1,8 @@
-import path from "path";
 import fs from "node:fs";
-import { build, context, formatMessages, type BuildOptions, type BuildResult, type Message } from "esbuild";
+import path from "node:path";
+
 import { constants } from "@mcbepack/common";
+import { build, type BuildOptions, type BuildResult, context, formatMessages, type Message } from "esbuild";
 
 type BuildMode = "development" | "production";
 
@@ -46,16 +47,23 @@ export function buildScripts(mode?: BuildMode): Promise<BuildResult> {
 
 export function createBuildContext(
     mode?: BuildMode,
-    onEnd?: (result: BuildResult) => void | Promise<void>
+    onEnd?: (result: BuildResult) => void | Promise<void>,
+    onStart?: () => void | Promise<void>
 ) {
     return context({
         ...createBuildOptions(mode),
-        plugins: onEnd
+        plugins: onEnd || onStart
             ? [
                 {
                     name: "mcbepack-watch",
                     setup(build) {
-                        build.onEnd(onEnd);
+                        if (onStart) {
+                            build.onStart(onStart);
+                        }
+
+                        if (onEnd) {
+                            build.onEnd(onEnd);
+                        }
                     }
                 }
             ]

@@ -1,8 +1,8 @@
 {
     "compilerOptions": {
-        "target": "ESNext",
+        "target": "esnext",
         "moduleResolution": "bundler",
-        "module": "ESNext",
+        "module": "esnext",
         "resolvePackageJsonImports": true,
         "sourceMap": false
     },

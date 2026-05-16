@@ -1,10 +1,10 @@
 import {
-    World,
     Entity,
-    Player,
     ItemStack,
-    world,
-    system
+    Player,
+    system,
+    World,
+    world
 } from "@minecraft/server";
 
 /**

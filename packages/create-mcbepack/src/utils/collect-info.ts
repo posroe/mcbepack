@@ -1,6 +1,8 @@
 import { randomUUID } from "node:crypto";
-import pc from "picocolors";
+
 import { getDependency } from "@mcbepack/common";
+import pc from "picocolors";
+
 import prompt from "../prompt.js";
 import { ProjectConfig } from "../types.js";
 

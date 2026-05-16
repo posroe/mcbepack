@@ -1,5 +1,5 @@
-import enquirer from 'enquirer';
 import { constants } from '@mcbepack/common';
+import enquirer from 'enquirer';
 
 const extension = async () => {
     const response = await enquirer.prompt<{ extensions: string[] }>({

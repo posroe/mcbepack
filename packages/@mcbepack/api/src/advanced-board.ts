@@ -1,4 +1,4 @@
-import { Scoreboard, ScoreboardObjective, Player, world } from "@minecraft/server";
+import { Player, Scoreboard, ScoreboardObjective, world } from "@minecraft/server";
 
 /**
  * Advanced scoreboard utility class for Minecraft Bedrock Edition

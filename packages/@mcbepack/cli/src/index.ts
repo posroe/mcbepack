@@ -1,11 +1,13 @@
 #!/usr/bin/env node
 
 import "@mcbepack/common";
+
+import dotenv from "dotenv";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import dotenv from "dotenv";
-import { devCommand } from "./commands/dev.js";
+
 import { buildCommand } from "./commands/build.js";
+import { devCommand } from "./commands/dev.js";
 import { updateCommand } from "./commands/update.js";
 
 dotenv.config({
