@@ -1,4 +1,4 @@
-import { constants } from '@mcbepack/common';
+import * as constants from "@mcbepack/common/constants";
 import enquirer from 'enquirer';
 
 const extension = async () => {

@@ -7,14 +7,12 @@
     "scripts": {
         "bootstrap": "bun install",
         "build": "bun run --workspaces build",
-        "dev": "bun run --workspaces dev",
         "lint": "eslint .",
         "lint:fix": "eslint . --fix"
     },
     "dependencies": {
         "chokidar": "^5.0.0",
         "dotenv": "^17.2.3",
-        "picocolors": "^1.1.1",
         "yargs": "^18.0.0"
     },
     "devDependencies": {

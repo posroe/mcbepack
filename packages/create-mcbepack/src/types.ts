@@ -1,4 +1,4 @@
-import { Version } from "@mcbepack/common";
+import type { Version } from "@mcbepack/common/types";
 
 export interface ProjectConfig {
     name: string;

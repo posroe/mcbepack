@@ -1,7 +1,8 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { APIBehaviorManifest, constants, Manifest } from "@mcbepack/common";
+import * as constants from "@mcbepack/common/constants";
+import type { APIBehaviorManifest, Manifest } from "@mcbepack/common/types";
 
 import type { FileToCreate, ProjectConfig } from "../types.js";
 
@@ -63,7 +64,7 @@ BEHAVIOR_PATH="development_behavior_packs"
 
 ${config.description}
 
-This add-on was created with \`create-mcbepack\`.
+This add-on was created with [\`create-mcbepack\`](https://npmjs.com/package/create-mcbepack).
 
 ## Start
 
@@ -82,12 +83,12 @@ Build project files:
 bun run build
 \`\`\`
 
-Build archives:
+Export archives:
 
 \`\`\`bash
-bun run build:zip
-bun run build:mcpack
-bun run build:mcaddon
+bun run export:zip
+bun run export:mcpack
+bun run export:mcaddon
 \`\`\`
 
 Archive outputs are written to \`out/\`.
@@ -198,9 +199,9 @@ export function generateFileList(config: ProjectConfig): FileToCreate[] {
                 scripts: {
                     dev: "mcbepack dev",
                     build: "mcbepack build",
-                    "build:zip": "mcbepack build zip",
-                    "build:mcpack": "mcbepack build mcpack",
-                    "build:mcaddon": "mcbepack build mcaddon",
+                    "export:zip": "mcbepack export zip",
+                    "export:mcpack": "mcbepack export mcpack",
+                    "export:mcaddon": "mcbepack export mcaddon",
                     "update:stable": "mcbepack update stable",
                     "update:beta": "mcbepack update beta",
                     "update:preview": "mcbepack update preview",
@@ -299,9 +300,9 @@ export function generateFileList(config: ProjectConfig): FileToCreate[] {
             content: JSON.stringify({
                 scripts: {
                     build: "mcbepack build",
-                    "build:zip": "mcbepack build zip",
-                    "build:mcpack": "mcbepack build mcpack",
-                    "build:mcaddon": "mcbepack build mcaddon",
+                    "export:zip": "mcbepack export zip",
+                    "export:mcpack": "mcbepack export mcpack",
+                    "export:mcaddon": "mcbepack export mcaddon",
                 },
                 devDependencies: {
                     "@mcbepack/cli": "latest"

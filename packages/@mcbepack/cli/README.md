@@ -56,29 +56,22 @@ Build project files without creating an archive:
 mcbepack build
 ```
 
-Build archives:
+Build and export archives:
 
 ```bash
-mcbepack build zip
-mcbepack build mcpack
-mcbepack build mcaddon
+mcbepack export zip
+mcbepack export mcpack
+mcbepack export mcaddon
 ```
 
-The `-o`/`--output` option is also supported:
-
-```bash
-mcbepack build -o zip
-```
-
-Update selected Minecraft Script API packages in `package.json` and `src/behavior_pack/manifest.json`:
+Update selected Minecraft Script API packages in `package.json` and `src/behavior_pack/manifest.json`.
+The release channel is required:
 
 ```bash
 mcbepack update stable
 mcbepack update beta
 mcbepack update preview
 ```
-
-The release channel can also be passed positionally, for example `mcbepack update stable`.
 
 ## Outputs
 

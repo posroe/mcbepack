@@ -28,17 +28,17 @@ Script API projects include:
   "scripts": {
     "dev": "mcbepack dev",
     "build": "mcbepack build",
-    "build:zip": "mcbepack build zip",
-    "build:mcpack": "mcbepack build mcpack",
-    "build:mcaddon": "mcbepack build mcaddon",
-    "update:stable": "mcbepack update -t stable",
-    "update:beta": "mcbepack update -t beta",
-    "update:preview": "mcbepack update -t preview"
+    "export:zip": "mcbepack export zip",
+    "export:mcpack": "mcbepack export mcpack",
+    "export:mcaddon": "mcbepack export mcaddon",
+    "update:stable": "mcbepack update stable",
+    "update:beta": "mcbepack update beta",
+    "update:preview": "mcbepack update preview"
   }
 }
 ```
 
-Non-script projects include the build command and the three archive commands.
+Non-script projects include the build command and the three export commands.
 
 ## Generated Layout
 

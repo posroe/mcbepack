@@ -1,12 +1,12 @@
 import fs from "node:fs";
 import path from "node:path";
 
-import pc from "picocolors";
+import { color, logger } from "@mcbepack/common/logger";
 
 import type { FileToCreate } from "../types.js";
 
 export function createFiles(files: FileToCreate[]): void {
-    console.log(`\nCreating ${files.length} files...\n`);
+    logger.step(`Creating ${files.length} files...`);
 
     for (const file of files) {
         try {
@@ -21,16 +21,16 @@ export function createFiles(files: FileToCreate[]): void {
                 fs.writeFileSync(file.path, file.content);
             }
 
-            console.log(`  ${pc.green("[OK]")} ${path.relative(process.cwd(), file.path)}`);
+            logger.success(path.relative(process.cwd(), file.path));
         } catch (error) {
-            console.error(`  ${pc.red("[ERR]")} ${path.relative(process.cwd(), file.path)}`);
+            logger.error(path.relative(process.cwd(), file.path));
             throw error;
         }
     }
 }
 
 export function previewFiles(files: FileToCreate[], projectName: string): void {
-    console.log(`\nFiles to be created in ${pc.cyan(projectName)}:\n`);
+    logger.step(`Files to be created in ${projectName}:`);
 
     const projectRoot = path.join(process.cwd(), projectName);
     const tree = buildFileTree(files, projectRoot);
@@ -82,10 +82,10 @@ function printTree(node: TreeNode, prefix: string = "", isLast: boolean = true):
     const connector = isLast ? "`-- " : "|-- ";
 
     if (prefix === "") {
-        console.log(`  ${pc.cyan(node.name)}/`);
+        logger.item(`${color.cyan(node.name)}/`);
     } else {
-        const displayName = node.type === "directory" ? `${pc.cyan(node.name)}/` : node.name;
-        console.log(`  ${prefix}${connector}${displayName}`);
+        const displayName = node.type === "directory" ? `${color.cyan(node.name)}/` : node.name;
+        logger.item(`${prefix}${connector}${displayName}`);
     }
 
     if (node.children) {

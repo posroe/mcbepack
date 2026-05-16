@@ -44,9 +44,9 @@ bun run build
 Build distribution archives:
 
 ```bash
-bun run build:zip
-bun run build:mcpack
-bun run build:mcaddon
+bun run export:zip
+bun run export:mcpack
+bun run export:mcaddon
 ```
 
 ## Repository Development

@@ -1,13 +1,12 @@
 #!/usr/bin/env node
 
-import "@mcbepack/common";
-
 import dotenv from "dotenv";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
 import { buildCommand } from "./commands/build.js";
 import { devCommand } from "./commands/dev.js";
+import { exportCommand } from "./commands/export.js";
 import { updateCommand } from "./commands/update.js";
 
 dotenv.config({
@@ -17,7 +16,9 @@ dotenv.config({
 yargs(hideBin(process.argv))
     .command(devCommand)
     .command(buildCommand)
+    .command(exportCommand)
     .command(updateCommand)
+    .scriptName("mcbepack")
     .demandCommand(1, "You need to specify a command")
     .help()
     .alias("h", "help")

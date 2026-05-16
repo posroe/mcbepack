@@ -1,13 +1,13 @@
 import { randomUUID } from "node:crypto";
 
-import { getDependency } from "@mcbepack/common";
-import pc from "picocolors";
+import { logger } from "@mcbepack/common/logger";
+import { getDependency } from "@mcbepack/common/utils";
 
 import prompt from "../prompt.js";
 import { ProjectConfig } from "../types.js";
 
 export async function collectProjectInfo(): Promise<ProjectConfig> {
-    console.log(pc.bold("Please provide project information\n"));
+    logger.section("Please provide project information");
 
     const { extensions } = await prompt.extension();
 
@@ -34,7 +34,7 @@ export async function collectProjectInfo(): Promise<ProjectConfig> {
         if (api) {
             const { language, release, packages } = await prompt.script();
 
-            console.log(pc.dim("\nFetching dependencies..."));
+            logger.step("Fetching dependencies...");
             const dependencies = await Promise.all(
                 packages.map(async (packageName) => {
                     const dep = await getDependency(packageName, release);

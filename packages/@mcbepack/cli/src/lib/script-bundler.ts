@@ -1,10 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
 
-import { constants } from "@mcbepack/common";
+import * as constants from "@mcbepack/common/constants";
 import { build, type BuildOptions, type BuildResult, context, formatMessages, type Message } from "esbuild";
-
-type BuildMode = "development" | "production";
 
 function getScriptEntry(): string {
     const tsEntry = path.join(process.cwd(), "scripts", "index.ts");
@@ -18,10 +16,10 @@ function getScriptEntry(): string {
         return jsEntry;
     }
 
-    throw new Error("This project does not use script api.");
+    throw new Error("This project does not use Script API.");
 }
 
-function createBuildOptions(mode: BuildMode = "development"): BuildOptions {
+function createBuildOptions(): BuildOptions {
     return {
         entryPoints: [getScriptEntry()],
         bundle: true,
@@ -32,26 +30,25 @@ function createBuildOptions(mode: BuildMode = "development"): BuildOptions {
         outfile: path.resolve(process.cwd(), "src", "behavior_pack", "scripts", "index.js"),
         external: constants.packages.modules,
         sourcemap: false,
-        minify: mode === "production",
+        minify: true,
         logLevel: "silent"
     };
 }
 
-export async function formatBuildMessages(messages: Message[], kind: "error" | "warning"): Promise<string> {
+export async function formatBundleMessages(messages: Message[], kind: "error" | "warning"): Promise<string> {
     return (await formatMessages(messages, { kind, color: true })).join("");
 }
 
-export function buildScripts(mode?: BuildMode): Promise<BuildResult> {
-    return build(createBuildOptions(mode));
+export function bundleScripts(): Promise<BuildResult> {
+    return build(createBuildOptions());
 }
 
-export function createBuildContext(
-    mode?: BuildMode,
+export function createBundleWatcher(
     onEnd?: (result: BuildResult) => void | Promise<void>,
     onStart?: () => void | Promise<void>
 ) {
     return context({
-        ...createBuildOptions(mode),
+        ...createBuildOptions(),
         plugins: onEnd || onStart
             ? [
                 {
