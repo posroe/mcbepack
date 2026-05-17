@@ -8,7 +8,8 @@ export default tseslint.config(
         ignores: [
             "**/node_modules/**",
             "**/dist/**",
-            "packages/create-mcbepack/templates/**"
+            "**/templates/**",
+            "**/.cache/**"
         ]
     },
     js.configs.recommended,

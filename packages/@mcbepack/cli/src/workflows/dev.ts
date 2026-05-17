@@ -2,13 +2,13 @@ import { color, formatDuration, formatPath, logger } from "@mcbepack/common/logg
 
 import { PackLinker } from "../lib/pack-linker.js";
 import { getCliVersion } from "../lib/package-info.js";
-import { getProjectPaths, requireMinecraftEnv } from "../lib/project-paths.js";
+import { getMinecraftLinkPaths, getProjectPaths } from "../lib/project-paths.js";
 import { createBundleWatcher, formatBundleMessages } from "../lib/script-bundler.js";
 
 export async function startDevServer(): Promise<void> {
     try {
-        requireMinecraftEnv();
         const projectPaths = getProjectPaths();
+        const minecraftLinkPaths = getMinecraftLinkPaths();
         let startedAt = Date.now();
         let isFirstBuild = true;
 
@@ -20,7 +20,7 @@ export async function startDevServer(): Promise<void> {
         logger.field("Resource", formatPath(projectPaths.resourcePackRoot));
 
         logger.step("Linking packs into Minecraft...");
-        const packLinks = new PackLinker(projectPaths).linkAvailablePacks();
+        const packLinks = new PackLinker(projectPaths, minecraftLinkPaths).linkAvailablePacks();
 
         if (packLinks.behaviorPack) {
             logger.success(`Behavior pack linked ${color.dim(formatPath(packLinks.behaviorPack))}`);

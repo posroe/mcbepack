@@ -1,8 +1,6 @@
 import path from "node:path";
 
 export interface ProjectPaths {
-    behaviorPackLinkDir: string;
-    resourcePackLinkDir: string;
     behaviorPackRoot: string;
     resourcePackRoot: string;
     outputDir: string;
@@ -10,7 +8,12 @@ export interface ProjectPaths {
     projectName: string;
 }
 
-export function requireMinecraftEnv(): void {
+export interface MinecraftLinkPaths {
+    behaviorPackLinkDir: string;
+    resourcePackLinkDir: string;
+}
+
+function requireMinecraftEnv(): void {
     const requiredKeys = ["BASE_PATH", "BEHAVIOR_PATH", "RESOURCE_PATH"];
     const missingKeys = requiredKeys.filter((key) => !process.env[key]);
 
@@ -23,12 +26,19 @@ export function getProjectPaths(): ProjectPaths {
     const projectName = path.basename(process.cwd());
 
     return {
-        behaviorPackLinkDir: path.join(process.env.BASE_PATH!, process.env.BEHAVIOR_PATH!),
-        resourcePackLinkDir: path.join(process.env.BASE_PATH!, process.env.RESOURCE_PATH!),
         behaviorPackRoot: path.join(process.cwd(), "src", "behavior_pack"),
         resourcePackRoot: path.join(process.cwd(), "src", "resource_pack"),
         outputDir: path.join(process.cwd(), "out"),
         scriptsDir: path.join(process.cwd(), "scripts"),
         projectName
+    };
+}
+
+export function getMinecraftLinkPaths(): MinecraftLinkPaths {
+    requireMinecraftEnv();
+
+    return {
+        behaviorPackLinkDir: path.join(process.env.BASE_PATH!, process.env.BEHAVIOR_PATH!),
+        resourcePackLinkDir: path.join(process.env.BASE_PATH!, process.env.RESOURCE_PATH!)
     };
 }

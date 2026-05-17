@@ -1,6 +1,6 @@
 import { CommandModule } from "yargs";
 
-import { type ArchiveFormat,archiveFormats } from "../domain.js";
+import { type ArchiveFormat, archiveFormats } from "../domain.js";
 import { exportProject } from "../workflows/export.js";
 
 interface ExportArgs {

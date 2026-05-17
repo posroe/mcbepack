@@ -1,10 +1,10 @@
 import { CommandModule } from "yargs";
 
-import { type ReleaseChannel,releaseChannels } from "../domain.js";
+import { type ReleaseChannel, releaseChannels } from "../domain.js";
 import { updateProjectDependencies } from "../workflows/update.js";
 
 interface UpdateArgs {
-    releaseChannel: string;
+    releaseChannel: ReleaseChannel;
 }
 
 export const updateCommand: CommandModule<object, UpdateArgs> = {
@@ -18,6 +18,6 @@ export const updateCommand: CommandModule<object, UpdateArgs> = {
             demandOption: true
         }),
     handler: async (argv) => {
-        await updateProjectDependencies(argv.releaseChannel as ReleaseChannel);
+        await updateProjectDependencies(argv.releaseChannel);
     }
 };

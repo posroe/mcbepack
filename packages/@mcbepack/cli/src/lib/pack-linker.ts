@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
-import { ProjectPaths } from "./project-paths.js";
+import type { MinecraftLinkPaths, ProjectPaths } from "./project-paths.js";
 
 export interface PackLinks {
     behaviorPack?: string;
@@ -9,7 +9,10 @@ export interface PackLinks {
 }
 
 export class PackLinker {
-    constructor(private readonly projectPaths: ProjectPaths) { }
+    constructor(
+        private readonly projectPaths: ProjectPaths,
+        private readonly minecraftLinkPaths: MinecraftLinkPaths
+    ) { }
 
     public linkAvailablePacks(): PackLinks {
         return {
@@ -27,7 +30,7 @@ export class PackLinker {
             if (linkStats.isSymbolicLink()) {
                 fs.unlinkSync(linkPath);
             } else {
-                fs.rmSync(linkPath, { recursive: true, force: true });
+                throw new Error(`Refusing to replace unmanaged path: ${linkPath}`);
             }
         }
 
@@ -43,7 +46,7 @@ export class PackLinker {
 
         return this.linkPack(
             this.projectPaths.behaviorPackRoot,
-            this.projectPaths.behaviorPackLinkDir,
+            this.minecraftLinkPaths.behaviorPackLinkDir,
             `${this.projectPaths.projectName}_behavior`
         );
     }
@@ -55,7 +58,7 @@ export class PackLinker {
 
         return this.linkPack(
             this.projectPaths.resourcePackRoot,
-            this.projectPaths.resourcePackLinkDir,
+            this.minecraftLinkPaths.resourcePackLinkDir,
             `${this.projectPaths.projectName}_resource`
         );
     }
