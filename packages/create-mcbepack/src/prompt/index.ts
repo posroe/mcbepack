@@ -2,7 +2,6 @@ import * as constants from "@mcbepack/common/constants";
 import enquirer from "enquirer";
 
 import { ExtensionType, ReleaseChannel, ScriptLanguage } from "../lib/enums.js";
-import type { MinecraftPackageName } from "../lib/types.js";
 import { projectConfigSchema } from "../schema/project.js";
 
 export async function promptExtensions() {
@@ -31,7 +30,7 @@ export async function promptProjectInfo() {
     return enquirer.prompt<{
         name: string;
         description: string;
-        author: string;
+        author: string[];
         minimumEngineVersion: string;
     }>([
         {
@@ -47,7 +46,7 @@ export async function promptProjectInfo() {
         {
             type: "input",
             name: "author",
-            message: "What is the author's name? Use commas to separate multiple authors.",
+            message: "What is the author's name? Use commas to separate multiple authors."
         },
         {
             type: "input",
@@ -66,7 +65,7 @@ export async function promptScriptConfig() {
     return enquirer.prompt<{
         language: ScriptLanguage;
         release: ReleaseChannel;
-        packages: MinecraftPackageName[];
+        packages: string[];
     }>([
         {
             type: "select",

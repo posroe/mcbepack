@@ -12,7 +12,8 @@ export const projectDependencySchema = z.object({
 export const projectUuidsSchema = z.object({
     behavior: z.string().uuid(),
     resource: z.string().uuid(),
-    scriptModule: z.string().uuid()
+    scriptModule: z.string().uuid(),
+    resourceModule: z.string().uuid()
 });
 
 export const scriptConfigSchema = z.object({

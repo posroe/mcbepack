@@ -2,7 +2,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { FileCreateType } from "../lib/enums.js";
-import type { FileToCreate } from "../lib/types.js";
+import type { FileToCreate } from "../schema/file.js";
 import { fileToCreateSchema } from "../schema/file.js";
 
 const currentFilePath = fileURLToPath(import.meta.url);

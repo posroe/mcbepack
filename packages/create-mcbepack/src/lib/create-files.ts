@@ -3,9 +3,16 @@ import path from "node:path";
 
 import { logger } from "@mcbepack/common/logger";
 
+import type { FileToCreate } from "../schema/file.js";
 import { fileToCreateSchema } from "../schema/file.js";
 import { FileCreateType } from "./enums.js";
-import type { FileToCreate } from "./types.js";
+
+export class FileCreationError extends Error {
+    constructor(public readonly filePath: string, cause: unknown) {
+        super(`Failed to create file: ${filePath}`, { cause });
+        this.name = "FileCreationError";
+    }
+}
 
 export function createFiles(files: FileToCreate[]): void {
     const filesToCreate = fileToCreateSchema.array().parse(files);
@@ -27,7 +34,7 @@ export function createFiles(files: FileToCreate[]): void {
 
         } catch (error) {
             logger.error(path.relative(process.cwd(), file.path));
-            throw error;
+            throw new FileCreationError(file.path, error);
         }
     }
 }

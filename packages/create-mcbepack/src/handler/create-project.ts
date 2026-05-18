@@ -1,11 +1,12 @@
+import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 
 import { logger } from "@mcbepack/common/logger";
 
-import { generateFileList } from "../generate/files.js";
+import { generateFileList } from "../generated/files.js";
 import { createFiles } from "../lib/create-files.js";
-import { detectPackageManager, installDependencies } from "../lib/package-manager.js";
+import { createInstallCommand, detectPackageManager } from "../lib/package-manager.js";
 import { printCreatedProjectSummary } from "../log/project-summary.js";
 import { promptConfirm } from "../prompt/index.js";
 import { collectProjectInfo } from "./collect-project-info.js";
@@ -21,8 +22,15 @@ export async function createProject(): Promise<void> {
     createFiles(generateFileList(config));
 
     logger.step("Installing dependencies...");
-    installDependencies(projectRoot, packageManager);
+    runInstallCommand(createInstallCommand(projectRoot, packageManager));
     printCreatedProjectSummary(config, projectRoot, packageManager);
+}
+
+function runInstallCommand(command: { command: string; args: string[]; cwd: string }): void {
+    execFileSync(command.command, command.args, {
+        cwd: command.cwd,
+        stdio: "inherit"
+    });
 }
 
 async function confirmProjectCreation(): Promise<void> {

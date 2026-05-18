@@ -4,8 +4,8 @@ import { logger } from "@mcbepack/common/logger";
 import { getDependency } from "@mcbepack/common/utils";
 
 import { ExtensionType, ScriptLanguage } from "../lib/enums.js";
-import type { ProjectConfig } from "../lib/types.js";
 import { promptExtensions, promptProjectInfo, promptScriptApi, promptScriptConfig } from "../prompt/index.js";
+import type { ProjectConfig } from "../schema/project.js";
 import { projectConfigSchema } from "../schema/project.js";
 
 export async function collectProjectInfo(): Promise<ProjectConfig> {
@@ -17,6 +17,7 @@ export async function collectProjectInfo(): Promise<ProjectConfig> {
         behavior: randomUUID(),
         resource: randomUUID(),
         scriptModule: randomUUID(),
+        resourceModule: randomUUID(),
     };
 
     const config: ProjectConfig = {
