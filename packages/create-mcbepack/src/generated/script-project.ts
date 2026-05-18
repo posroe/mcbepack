@@ -2,14 +2,9 @@ import path from "node:path";
 
 import { ScriptLanguage } from "../lib/enums.js";
 import type { FileToCreate } from "../schema/file.js";
-import type { ProjectConfig } from "../schema/project.js";
 import { copyTemplate, createFile, json } from "./file-entry.js";
+import type { GenerationContext } from "./generation-context.js";
 import { createPackageJson } from "./package-json.js";
-
-interface GenerationContext {
-    config: ProjectConfig;
-    projectRoot: string;
-}
 
 export function generateScriptProject(context: GenerationContext): FileToCreate[] {
     const { config, projectRoot } = context;
@@ -26,7 +21,7 @@ export function generateScriptProject(context: GenerationContext): FileToCreate[
     files.push(
         copyTemplate(path.join(projectRoot, ".env.local"), ".env.local.txt"),
         copyTemplate(path.join(projectRoot, ".gitignore"), ".gitignore.txt"),
-        createFile(path.join(projectRoot, "scripts", scriptEntry), "console.log('Hello World!');")
+        createFile(path.join(projectRoot, "scripts", scriptEntry), "export {};\n")
     );
 
     if (config.script.language === ScriptLanguage.TypeScript) {

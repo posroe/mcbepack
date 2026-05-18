@@ -1,10 +1,8 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
-import * as constants from "@mcbepack/common/constants";
-import { logger } from "@mcbepack/common/logger";
+import { getDependency, logger, MINECRAFT_PACKAGES } from "@mcbepack/common";
 import type { APIBehaviorManifest } from "@mcbepack/common/types";
-import { getDependency } from "@mcbepack/common/utils";
 
 import type { ReleaseChannel } from "../domain.js";
 import { getProjectPaths } from "../lib/project-paths.js";
@@ -13,12 +11,12 @@ type PackageJson = Record<string, Record<string, string> | unknown>;
 
 const dependencyFields = ["dependencies", "devDependencies", "peerDependencies"];
 const minecraftPackageNames = [
-    ...constants.packages.modules,
-    ...constants.packages.plugins,
+    ...MINECRAFT_PACKAGES.modules,
+    ...MINECRAFT_PACKAGES.plugins,
 ];
 
-function readJsonFile<T>(filePath: string): T {
-    return JSON.parse(readFileSync(filePath, "utf-8")) as T;
+function readJsonFile(filePath: string): unknown {
+    return JSON.parse(readFileSync(filePath, "utf-8"));
 }
 
 function writeJsonFile(filePath: string, value: unknown): void {
@@ -27,9 +25,11 @@ function writeJsonFile(filePath: string, value: unknown): void {
 
 function getDependencies(packageJson: PackageJson, dependencyField: string): Record<string, string> | undefined {
     const dependencies = packageJson[dependencyField];
-    return dependencies && typeof dependencies === "object" && !Array.isArray(dependencies)
-        ? dependencies as Record<string, string>
-        : undefined;
+    if (!isStringRecord(dependencies)) {
+        return undefined;
+    }
+
+    return dependencies;
 }
 
 async function updatePackageJson(packageJson: PackageJson, releaseChannel: ReleaseChannel): Promise<number> {
@@ -99,36 +99,56 @@ async function updateManifest(manifestJson: APIBehaviorManifest, releaseChannel:
 export async function updateProjectDependencies(releaseChannel: ReleaseChannel): Promise<void> {
     logger.step(`Updating dependencies to ${releaseChannel}...`);
 
-    try {
-        const packageJsonPath = join(process.cwd(), "package.json");
-        const manifestJsonPath = join(getProjectPaths().behaviorPackRoot, "manifest.json");
+    const packageJsonPath = join(process.cwd(), "package.json");
+    const manifestJsonPath = join(getProjectPaths().behaviorPackRoot, "manifest.json");
 
-        if (!existsSync(packageJsonPath)) {
-            logger.error("package.json not found in current directory");
-            process.exit(1);
-        }
-
-        if (!existsSync(manifestJsonPath)) {
-            logger.error("manifest.json not found in current directory");
-            process.exit(1);
-        }
-
-        const packageJson = readJsonFile<PackageJson>(packageJsonPath);
-        const manifestJson = readJsonFile<APIBehaviorManifest>(manifestJsonPath);
-        const updatedPackages = await updatePackageJson(packageJson, releaseChannel);
-        const updatedManifestEntries = await updateManifest(manifestJson, releaseChannel);
-
-        if (updatedPackages > 0 || updatedManifestEntries > 0) {
-            writeJsonFile(packageJsonPath, packageJson);
-            writeJsonFile(manifestJsonPath, manifestJson);
-            logger.done(`Updated ${updatedPackages} package entr${updatedPackages === 1 ? "y" : "ies"} and ${updatedManifestEntries} manifest entr${updatedManifestEntries === 1 ? "y" : "ies"}`);
-            logger.info("Run bun install to install the new versions");
-            return;
-        }
-
-        logger.done("All dependencies are up to date");
-    } catch (error) {
-        logger.error(`Error updating dependencies: ${error instanceof Error ? error.message : String(error)}`);
-        process.exit(1);
+    if (!existsSync(packageJsonPath)) {
+        throw new Error("package.json not found in current directory");
     }
+
+    if (!existsSync(manifestJsonPath)) {
+        throw new Error("manifest.json not found in current directory");
+    }
+
+    const packageJson = readJsonFile(packageJsonPath);
+    const manifestJson = readJsonFile(manifestJsonPath);
+
+    if (!isPackageJson(packageJson)) {
+        throw new Error("package.json is not a valid package object");
+    }
+
+    if (!isApiBehaviorManifest(manifestJson)) {
+        throw new Error("manifest.json is not a valid behavior manifest");
+    }
+
+    const updatedPackages = await updatePackageJson(packageJson, releaseChannel);
+    const updatedManifestEntries = await updateManifest(manifestJson, releaseChannel);
+
+    if (updatedPackages > 0 || updatedManifestEntries > 0) {
+        writeJsonFile(packageJsonPath, packageJson);
+        writeJsonFile(manifestJsonPath, manifestJson);
+        logger.done(`Updated ${updatedPackages} package entr${updatedPackages === 1 ? "y" : "ies"} and ${updatedManifestEntries} manifest entr${updatedManifestEntries === 1 ? "y" : "ies"}`);
+        logger.info("Run bun install to install the new versions");
+        return;
+    }
+
+    logger.done("All dependencies are up to date");
+}
+
+function isPackageJson(value: unknown): value is PackageJson {
+    return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function isStringRecord(value: unknown): value is Record<string, string> {
+    return typeof value === "object"
+        && value !== null
+        && !Array.isArray(value)
+        && Object.values(value).every((entry) => typeof entry === "string");
+}
+
+function isApiBehaviorManifest(value: unknown): value is APIBehaviorManifest {
+    return typeof value === "object"
+        && value !== null
+        && "dependencies" in value
+        && Array.isArray(value.dependencies);
 }

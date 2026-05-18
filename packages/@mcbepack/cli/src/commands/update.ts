@@ -1,6 +1,7 @@
-import { CommandModule } from "yargs";
+import { logger } from "@mcbepack/common";
+import type { CommandModule } from "yargs";
 
-import { type ReleaseChannel, releaseChannels } from "../domain.js";
+import { RELEASE_CHANNELS, type ReleaseChannel } from "../domain.js";
 import { updateProjectDependencies } from "../workflows/update.js";
 
 interface UpdateArgs {
@@ -14,10 +15,15 @@ export const updateCommand: CommandModule<object, UpdateArgs> = {
         .positional("releaseChannel", {
             type: "string",
             description: "Release channel",
-            choices: releaseChannels,
+            choices: RELEASE_CHANNELS,
             demandOption: true
         }),
     handler: async (argv) => {
-        await updateProjectDependencies(argv.releaseChannel);
+        try {
+            await updateProjectDependencies(argv.releaseChannel);
+        } catch (error) {
+            logger.error(`Error updating dependencies: ${error instanceof Error ? error.message : String(error)}`);
+            process.exit(1);
+        }
     }
 };

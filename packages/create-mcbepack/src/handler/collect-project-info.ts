@@ -1,7 +1,6 @@
 import { randomUUID } from "node:crypto";
 
-import { logger } from "@mcbepack/common/logger";
-import { getDependency } from "@mcbepack/common/utils";
+import { getDependency, logger } from "@mcbepack/common";
 
 import { ExtensionType, ScriptLanguage } from "../lib/enums.js";
 import { promptExtensions, promptProjectInfo, promptScriptApi, promptScriptConfig } from "../prompt/index.js";

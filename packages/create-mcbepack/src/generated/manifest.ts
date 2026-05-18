@@ -1,7 +1,6 @@
-import * as constants from "@mcbepack/common/constants";
-import type { Manifest, Version } from "@mcbepack/common/types";
-import pkg from "../../package.json" with { type: "json" };
+import { type Manifest, MINECRAFT_PACKAGES, type Version } from "@mcbepack/common";
 
+import pkg from "../../package.json" with { type: "json" };
 import {
     MANIFEST_LANGUAGE,
     RESOURCE_MODULE_TYPE,
@@ -11,7 +10,8 @@ import {
 import { ExtensionType } from "../lib/enums.js";
 import type { ProjectConfig } from "../schema/project.js";
 
-const minecraftPluginPackages = new Set<string>(constants.packages.plugins);
+const minecraftPluginPackages = new Set<string>(MINECRAFT_PACKAGES.plugins);
+const scriptCapabilities: ["script_eval"] = ["script_eval"];
 
 export function createBaseManifest(config: ProjectConfig): Manifest {
     return {
@@ -26,7 +26,7 @@ export function createBaseManifest(config: ProjectConfig): Manifest {
         metadata: {
             authors: parseAuthors(config.author),
             generated_with: {
-                "create-mcbepack": pkg.version as Version,
+                "create-mcbepack": parsePackageVersion(pkg.version),
             },
         },
     };
@@ -48,7 +48,7 @@ export function createBehaviorManifest(config: ProjectConfig, baseManifest: Mani
             ...baseManifest.header,
             uuid: config.uuids.behavior,
         },
-        ...(config.script?.enabled ? { capabilities: ["script_eval"] as const } : {}),
+        ...(config.script?.enabled ? { capabilities: scriptCapabilities } : {}),
         modules: config.script?.enabled
             ? [
                 {
@@ -104,5 +104,15 @@ function parseAuthors(author: string): string[] {
 }
 
 function parseMinimumEngineVersion(version: string): [number, number, number] {
-    return version.split(".").map(Number) as [number, number, number];
+    const [major, minor, patch] = version.split(".").map(Number);
+
+    if (major === undefined || minor === undefined || patch === undefined) {
+        throw new Error(`Invalid minimum engine version: ${version}`);
+    }
+
+    return [major, minor, patch];
+}
+
+function parsePackageVersion(version: string): Version {
+    return /^\d+\.\d+\.\d+(?:-.+)?$/.test(version) ? version : undefined;
 }

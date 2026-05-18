@@ -1,4 +1,4 @@
-import { color, logger } from "@mcbepack/common/logger";
+import { color, logger } from "@mcbepack/common";
 
 import type { PackageManager } from "../schema/package-manager.js";
 import type { ProjectConfig } from "../schema/project.js";

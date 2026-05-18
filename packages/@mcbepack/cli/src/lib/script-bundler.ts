@@ -1,8 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
 
-import * as constants from "@mcbepack/common/constants";
-import { build, type BuildOptions, type BuildResult, context, formatMessages, type Message } from "esbuild";
+import { MINECRAFT_PACKAGES } from "@mcbepack/common";
+import { build, type BuildContext, type BuildOptions, type BuildResult, context, formatMessages, type Message } from "esbuild";
 
 function getScriptEntry(): string {
     const tsEntry = path.join(process.cwd(), "scripts", "index.ts");
@@ -28,7 +28,7 @@ function createBuildOptions(): BuildOptions {
         mainFields: ["module", "main"],
         target: "es2020",
         outfile: path.resolve(process.cwd(), "src", "behavior_pack", "scripts", "index.js"),
-        external: constants.packages.modules,
+        external: [...MINECRAFT_PACKAGES.modules],
         sourcemap: false,
         minify: true,
         logLevel: "silent"
@@ -46,24 +46,25 @@ export function bundleScripts(): Promise<BuildResult> {
 export function createBundleWatcher(
     onEnd?: (result: BuildResult) => void | Promise<void>,
     onStart?: () => void | Promise<void>
-) {
-    return context({
-        ...createBuildOptions(),
-        plugins: onEnd || onStart
-            ? [
-                {
-                    name: "mcbepack-watch",
-                    setup(build) {
-                        if (onStart) {
-                            build.onStart(onStart);
-                        }
+): Promise<BuildContext> {
+    const buildOptions = createBuildOptions();
 
-                        if (onEnd) {
-                            build.onEnd(onEnd);
-                        }
+    if (onEnd || onStart) {
+        buildOptions.plugins = [
+            {
+                name: "mcbepack-watch",
+                setup(build): void {
+                    if (onStart) {
+                        build.onStart(onStart);
+                    }
+
+                    if (onEnd) {
+                        build.onEnd(onEnd);
                     }
                 }
-            ]
-            : undefined
-    });
+            }
+        ];
+    }
+
+    return context(buildOptions);
 }

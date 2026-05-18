@@ -1,10 +1,10 @@
-import * as constants from "@mcbepack/common/constants";
+import { MINECRAFT_PACKAGES } from "@mcbepack/common";
 import enquirer from "enquirer";
 
 import { ExtensionType, ReleaseChannel, ScriptLanguage } from "../lib/enums.js";
 import { projectConfigSchema } from "../schema/project.js";
 
-export async function promptExtensions() {
+export async function promptExtensions(): Promise<{ extensions: ExtensionType[] }> {
     return enquirer.prompt<{ extensions: ExtensionType[] }>({
         type: "multiselect",
         name: "extensions",
@@ -17,7 +17,7 @@ export async function promptExtensions() {
     });
 }
 
-export async function promptScriptApi() {
+export async function promptScriptApi(): Promise<{ api: boolean }> {
     return enquirer.prompt<{ api: boolean }>({
         type: "confirm",
         name: "api",
@@ -26,11 +26,16 @@ export async function promptScriptApi() {
     });
 }
 
-export async function promptProjectInfo() {
+export async function promptProjectInfo(): Promise<{
+    name: string;
+    description: string;
+    author: string;
+    minimumEngineVersion: string;
+}> {
     return enquirer.prompt<{
         name: string;
         description: string;
-        author: string[];
+        author: string;
         minimumEngineVersion: string;
     }>([
         {
@@ -61,7 +66,11 @@ export async function promptProjectInfo() {
     ]);
 }
 
-export async function promptScriptConfig() {
+export async function promptScriptConfig(): Promise<{
+    language: ScriptLanguage;
+    release: ReleaseChannel;
+    packages: string[];
+}> {
     return enquirer.prompt<{
         language: ScriptLanguage;
         release: ReleaseChannel;
@@ -84,15 +93,15 @@ export async function promptScriptConfig() {
             name: "packages",
             message: "Which packages would you like to add?",
             choices: [
-                ...constants.packages.modules,
-                ...constants.packages.plugins
+                ...MINECRAFT_PACKAGES.modules,
+                ...MINECRAFT_PACKAGES.plugins
             ],
             validate: (input) => input.length > 0 || "At least one package is required"
         }
     ]);
 }
 
-export async function promptConfirm(options: { message: string; default?: boolean }) {
+export async function promptConfirm(options: { message: string; default?: boolean }): Promise<{ confirmed: boolean }> {
     return enquirer.prompt<{ confirmed: boolean }>({
         type: "confirm",
         name: "confirmed",

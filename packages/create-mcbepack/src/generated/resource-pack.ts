@@ -1,18 +1,10 @@
 import path from "node:path";
 
-import type { Manifest } from "@mcbepack/common/types";
-
 import { ExtensionType } from "../lib/enums.js";
 import type { FileToCreate } from "../schema/file.js";
-import type { ProjectConfig } from "../schema/project.js";
 import { copyTemplate, createFile, json } from "./file-entry.js";
+import type { GenerationContext } from "./generation-context.js";
 import { createResourceManifest } from "./manifest.js";
-
-interface GenerationContext {
-    config: ProjectConfig;
-    projectRoot: string;
-    baseManifest: Manifest;
-}
 
 export function generateResourcePack(context: GenerationContext): FileToCreate[] {
     if (!context.config.extensions.includes(ExtensionType.Resource)) {

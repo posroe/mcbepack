@@ -15,10 +15,19 @@ export class PackLinker {
     ) { }
 
     public linkAvailablePacks(): PackLinks {
-        return {
-            behaviorPack: this.linkBehaviorPack(),
-            resourcePack: this.linkResourcePack()
-        };
+        const behaviorPack = this.linkBehaviorPack();
+        const resourcePack = this.linkResourcePack();
+        const packLinks: PackLinks = {};
+
+        if (behaviorPack) {
+            packLinks.behaviorPack = behaviorPack;
+        }
+
+        if (resourcePack) {
+            packLinks.resourcePack = resourcePack;
+        }
+
+        return packLinks;
     }
 
     private linkPack(sourceDir: string, linkDir: string, linkName: string): string {

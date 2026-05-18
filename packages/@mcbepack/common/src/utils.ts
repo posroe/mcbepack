@@ -2,7 +2,24 @@ import fetch from "node-fetch";
 
 import { Version } from "./types.js";
 
-export async function getVersions(packageName: string) {
+interface NpmVersionsResponse {
+    versions: Record<string, unknown>;
+}
+
+function isNpmVersionsResponse(value: unknown): value is NpmVersionsResponse {
+    return typeof value === "object"
+        && value !== null
+        && "versions" in value
+        && typeof value.versions === "object"
+        && value.versions !== null
+        && !Array.isArray(value.versions);
+}
+
+function toManifestVersion(version: string): Version {
+    return version;
+}
+
+export async function getVersions(packageName: string): Promise<string[]> {
     const url = `https://registry.npmjs.org/${packageName}?fields=versions`;
     const response = await fetch(url);
 
@@ -10,7 +27,11 @@ export async function getVersions(packageName: string) {
         throw new Error(`Package ${packageName} not found`);
     }
 
-    const data = await response.json() as { versions: string[] };
+    const data: unknown = await response.json();
+    if (!isNpmVersionsResponse(data)) {
+        throw new Error(`Invalid registry response for ${packageName}`);
+    }
+
     return Object.keys(data.versions);
 }
 
@@ -33,14 +54,18 @@ export async function getDependency(packageName: string, release: "stable" | "be
         version = versions.filter(v => v.match(patterns.stable)).pop();
     }
 
-    const shouldExtractSemver = release !== "stable" && version!.includes("-");
+    if (!version) {
+        throw new Error(`No ${release} version found for ${packageName}`);
+    }
+
+    const shouldExtractSemver = release !== "stable" && version.includes("-");
     const semanticVersion = shouldExtractSemver
-        ? version!.split(".").slice(0, 3).join(".")
-        : version!;
+        ? version.split(".").slice(0, 3).join(".")
+        : version;
 
     return {
         packageName,
-        fullVersion: version!,
-        version: semanticVersion as Version
+        fullVersion: version,
+        version: toManifestVersion(semanticVersion)
     };
 }

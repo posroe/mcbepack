@@ -2,7 +2,7 @@ import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 
-import { logger } from "@mcbepack/common/logger";
+import { logger } from "@mcbepack/common";
 
 import { generateFileList } from "../generated/files.js";
 import { createFiles } from "../lib/create-files.js";
@@ -10,6 +10,13 @@ import { createInstallCommand, detectPackageManager } from "../lib/package-manag
 import { printCreatedProjectSummary } from "../log/project-summary.js";
 import { promptConfirm } from "../prompt/index.js";
 import { collectProjectInfo } from "./collect-project-info.js";
+
+export class ProjectCreationCancelledError extends Error {
+    public constructor() {
+        super("Project creation cancelled");
+        this.name = "ProjectCreationCancelledError";
+    }
+}
 
 export async function createProject(): Promise<void> {
     const packageManager = await detectPackageManager();
@@ -41,13 +48,12 @@ async function confirmProjectCreation(): Promise<void> {
 
     if (!confirmed) {
         logger.warn("Project creation cancelled");
-        process.exit(0);
+        throw new ProjectCreationCancelledError();
     }
 }
 
 function ensureProjectRootAvailable(projectRoot: string, projectName: string): void {
     if (fs.existsSync(projectRoot)) {
-        logger.error(`Directory ${projectName} already exists`);
-        process.exit(1);
+        throw new Error(`Directory ${projectName} already exists`);
     }
 }

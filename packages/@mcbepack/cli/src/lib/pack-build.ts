@@ -1,17 +1,24 @@
 import fs from "node:fs";
 
-import { color, formatPath, logger } from "@mcbepack/common/logger";
+import { color, formatPath, logger } from "@mcbepack/common";
 import type { BuildFailure } from "esbuild";
+import pkg from "../../package.json" with { type: "json" };
 
-import { getCliVersion } from "./package-info.js";
 import { getProjectPaths } from "./project-paths.js";
 import { bundleScripts, formatBundleMessages } from "./script-bundler.js";
+
+function isBuildFailure(error: unknown): error is BuildFailure {
+    return typeof error === "object"
+        && error !== null
+        && "errors" in error
+        && Array.isArray(error.errors);
+}
 
 export async function packBuild(): Promise<void> {
     const projectPaths = getProjectPaths();
 
     logger.logo();
-    logger.header("mcbepack", getCliVersion());
+    logger.header("mcbepack", pkg.version);
     logger.field("Project", color.bold(projectPaths.projectName));
     logger.field("Mode", color.cyan("production"));
     logger.field("Behavior", formatPath(projectPaths.behaviorPackRoot));
@@ -33,11 +40,9 @@ export async function packBuild(): Promise<void> {
 
         logger.success("Script bundle completed");
     } catch (error) {
-        const buildError = error as BuildFailure;
-
-        if (buildError.errors?.length) {
+        if (isBuildFailure(error) && error.errors.length > 0) {
             logger.error("Compilation errors");
-            logger.errorBlock(await formatBundleMessages(buildError.errors, "error"));
+            logger.errorBlock(await formatBundleMessages(error.errors, "error"));
         }
 
         logger.error(`Build failed: ${error instanceof Error ? error.message : String(error)}`);

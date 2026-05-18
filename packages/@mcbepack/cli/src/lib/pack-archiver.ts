@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
-import { logger } from "@mcbepack/common/logger";
+import { logger } from "@mcbepack/common";
 import archiver from "archiver";
 
 import type { ArchiveFormat } from "../domain.js";

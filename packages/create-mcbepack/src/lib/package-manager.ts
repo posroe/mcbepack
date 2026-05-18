@@ -14,7 +14,12 @@ export interface InstallCommand {
 
 export async function detectPackageManager(): Promise<PackageManager> {
     const detected = await detect();
-    return packageManagerSchema.parse(detected ? { name: detected.name as PackageManagerName } : fallbackPackageManager);
+    if (!detected) {
+        return fallbackPackageManager;
+    }
+
+    const parsed = packageManagerSchema.safeParse({ name: detected.name });
+    return parsed.success ? parsed.data : fallbackPackageManager;
 }
 
 export function createInstallCommand(projectRoot: string, packageManager: PackageManager): InstallCommand {

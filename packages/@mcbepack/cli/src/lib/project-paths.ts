@@ -13,13 +13,30 @@ export interface MinecraftLinkPaths {
     resourcePackLinkDir: string;
 }
 
-function requireMinecraftEnv(): void {
-    const requiredKeys = ["BASE_PATH", "BEHAVIOR_PATH", "RESOURCE_PATH"];
-    const missingKeys = requiredKeys.filter((key) => !process.env[key]);
+interface MinecraftEnv {
+    BASE_PATH: string;
+    BEHAVIOR_PATH: string;
+    RESOURCE_PATH: string;
+}
 
-    if (missingKeys.length > 0) {
+function isMinecraftEnv(env: NodeJS.ProcessEnv): env is NodeJS.ProcessEnv & MinecraftEnv {
+    return typeof env.BASE_PATH === "string"
+        && env.BASE_PATH.length > 0
+        && typeof env.BEHAVIOR_PATH === "string"
+        && env.BEHAVIOR_PATH.length > 0
+        && typeof env.RESOURCE_PATH === "string"
+        && env.RESOURCE_PATH.length > 0;
+}
+
+export function validateMinecraftEnv(env: NodeJS.ProcessEnv): MinecraftEnv {
+    const requiredKeys = ["BASE_PATH", "BEHAVIOR_PATH", "RESOURCE_PATH"];
+    const missingKeys = requiredKeys.filter((key) => !env[key]);
+
+    if (!isMinecraftEnv(env)) {
         throw new Error(`Missing required environment variables: ${missingKeys.join(", ")}`);
     }
+
+    return env;
 }
 
 export function getProjectPaths(): ProjectPaths {
@@ -35,10 +52,10 @@ export function getProjectPaths(): ProjectPaths {
 }
 
 export function getMinecraftLinkPaths(): MinecraftLinkPaths {
-    requireMinecraftEnv();
+    const env = validateMinecraftEnv(process.env);
 
     return {
-        behaviorPackLinkDir: path.join(process.env.BASE_PATH!, process.env.BEHAVIOR_PATH!),
-        resourcePackLinkDir: path.join(process.env.BASE_PATH!, process.env.RESOURCE_PATH!)
+        behaviorPackLinkDir: path.join(env.BASE_PATH, env.BEHAVIOR_PATH),
+        resourcePackLinkDir: path.join(env.BASE_PATH, env.RESOURCE_PATH)
     };
 }

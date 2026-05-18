@@ -1,4 +1,4 @@
-export type Version = Array<number> | `${number}.${number}.${number}` | `${number}.${number}.${number}-${string}` | undefined;
+export type Version = number[] | string | undefined;
 
 export interface BaseManifest {
     format_version: number;

@@ -1,12 +1,8 @@
-import { logger } from "@mcbepack/common/logger";
+import { logger } from "@mcbepack/common";
 
 import { packBuild } from "../lib/pack-build.js";
 
-export async function buildProject() {
-    try {
-        await packBuild();
-        logger.done("Build completed");
-    } catch {
-        process.exit(1);
-    }
+export async function buildProject(): Promise<void> {
+    await packBuild();
+    logger.done("Build completed");
 }

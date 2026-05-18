@@ -1,6 +1,7 @@
-import { CommandModule } from "yargs";
+import { logger } from "@mcbepack/common";
+import type { CommandModule } from "yargs";
 
-import { type ArchiveFormat, archiveFormats } from "../domain.js";
+import { ARCHIVE_FORMATS, type ArchiveFormat } from "../domain.js";
 import { exportProject } from "../workflows/export.js";
 
 interface ExportArgs {
@@ -14,10 +15,15 @@ export const exportCommand: CommandModule<object, ExportArgs> = {
         .positional("archiveFormat", {
             type: "string",
             description: "Archive output format",
-            choices: archiveFormats,
+            choices: ARCHIVE_FORMATS,
             demandOption: true
         }),
     handler: async (argv) => {
-        await exportProject(argv.archiveFormat);
+        try {
+            await exportProject(argv.archiveFormat);
+        } catch (error) {
+            logger.error(`Export failed: ${error instanceof Error ? error.message : String(error)}`);
+            process.exit(1);
+        }
     }
 };

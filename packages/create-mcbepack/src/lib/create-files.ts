@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
-import { logger } from "@mcbepack/common/logger";
+import { logger } from "@mcbepack/common";
 
 import type { FileToCreate } from "../schema/file.js";
 import { fileToCreateSchema } from "../schema/file.js";
