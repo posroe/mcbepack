@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { PackageManagerName } from "../lib/enums.js";
+import { PackageManagerName } from "../constants/create-options.js";
 
 export const packageManagerSchema = z.object({
     name: z.nativeEnum(PackageManagerName)

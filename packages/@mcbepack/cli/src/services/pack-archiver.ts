@@ -1,11 +1,12 @@
 import fs from "node:fs";
 import path from "node:path";
 
-import { logger } from "@mcbepack/common";
 import archiver from "archiver";
 
-import type { ArchiveFormat } from "../domain.js";
-import { ProjectPaths } from "./project-paths.js";
+import { logger } from "@mcbepack/common";
+
+import type { ProjectPaths } from "../config/project-paths.js";
+import type { ArchiveFormat } from "../types/cli-options.js";
 
 export class PackArchiver {
     constructor(private readonly projectPaths: ProjectPaths) {

@@ -1,4 +1,4 @@
-import { ScriptLanguage } from "../lib/enums.js";
+import { ScriptLanguage } from "../constants/create-options.js";
 import type { ProjectConfig } from "../schema/project.js";
 
 export function createPackageJson(config: ProjectConfig): Record<string, unknown> {

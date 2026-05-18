@@ -2,8 +2,8 @@ import { randomUUID } from "node:crypto";
 
 import { getDependency, logger } from "@mcbepack/common";
 
-import { ExtensionType, ScriptLanguage } from "../lib/enums.js";
-import { promptExtensions, promptProjectInfo, promptScriptApi, promptScriptConfig } from "../prompt/index.js";
+import { ExtensionType, ScriptLanguage } from "../constants/create-options.js";
+import { promptExtensions, promptProjectInfo, promptScriptApi, promptScriptConfig } from "../prompts/project-prompts.js";
 import type { ProjectConfig } from "../schema/project.js";
 import { projectConfigSchema } from "../schema/project.js";
 

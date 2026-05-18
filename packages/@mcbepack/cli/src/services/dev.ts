@@ -1,10 +1,9 @@
 import { color, formatDuration, formatPath, logger } from "@mcbepack/common";
 
-import { PackLinker } from "../lib/pack-linker.js";
 import pkg from "../../package.json" with { type: "json" };
-
-import { getMinecraftLinkPaths, getProjectPaths } from "../lib/project-paths.js";
-import { createBundleWatcher, formatBundleMessages } from "../lib/script-bundler.js";
+import { getMinecraftLinkPaths, getProjectPaths } from "../config/project-paths.js";
+import { createBundleWatcher, formatBundleMessages } from "../core/script-bundler.js";
+import { PackLinker } from "./pack-linker.js";
 
 export async function startDevServer(): Promise<void> {
     const projectPaths = getProjectPaths();

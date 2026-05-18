@@ -1,13 +1,13 @@
 import { type Manifest, MINECRAFT_PACKAGES, type Version } from "@mcbepack/common";
 
 import pkg from "../../package.json" with { type: "json" };
+import { ExtensionType } from "../constants/create-options.js";
 import {
     MANIFEST_LANGUAGE,
     RESOURCE_MODULE_TYPE,
     SCRIPT_ENTRY_JS,
     SCRIPT_MODULE_TYPE
 } from "../constants/manifest.js";
-import { ExtensionType } from "../lib/enums.js";
 import type { ProjectConfig } from "../schema/project.js";
 
 const minecraftPluginPackages = new Set<string>(MINECRAFT_PACKAGES.plugins);

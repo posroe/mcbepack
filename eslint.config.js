@@ -28,7 +28,15 @@ export default tseslint.config(
         rules: {
             "@typescript-eslint/no-namespace": ["error", { allowDeclarations: true }],
             "simple-import-sort/exports": "error",
-            "simple-import-sort/imports": "error"
+            "simple-import-sort/imports": ["error", {
+                groups: [
+                    ["^\\u0000"],
+                    ["^node:"],
+                    ["^(?!@mcbepack/)@?\\w"],
+                    ["^@mcbepack/"],
+                    ["^\\."]
+                ]
+            }]
         }
     }
 );

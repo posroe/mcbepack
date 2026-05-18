@@ -1,7 +1,8 @@
-import { logger } from "@mcbepack/common";
 import type { CommandModule } from "yargs";
 
-import { startDevServer } from "../workflows/dev.js";
+import { logger } from "@mcbepack/common";
+
+import { startDevServer } from "../services/dev.js";
 
 export const devCommand: CommandModule = {
     command: "dev",

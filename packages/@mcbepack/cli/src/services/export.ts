@@ -1,9 +1,9 @@
 import { logger } from "@mcbepack/common";
 
-import type { ArchiveFormat } from "../domain.js";
-import { PackArchiver } from "../lib/pack-archiver.js";
-import { packBuild } from "../lib/pack-build.js";
-import { getProjectPaths } from "../lib/project-paths.js";
+import { getProjectPaths } from "../config/project-paths.js";
+import type { ArchiveFormat } from "../types/cli-options.js";
+import { PackArchiver } from "./pack-archiver.js";
+import { packBuild } from "./pack-build.js";
 
 export async function exportProject(archiveFormat: ArchiveFormat): Promise<void> {
     await packBuild();

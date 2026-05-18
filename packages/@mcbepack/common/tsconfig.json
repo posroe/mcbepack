@@ -1,16 +1,10 @@
 {
+  "extends": "../../../tsconfig.base.json",
   "compilerOptions": {
-    "target": "esnext",
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
     "outDir": "./dist",
     "rootDir": "./src",
-    "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "noImplicitReturns": true,
-    "exactOptionalPropertyTypes": true,
     "declaration": true,
-    "esModuleInterop": true
+    "noImplicitOverride": true
   },
   "include": [
     "src/**/*"

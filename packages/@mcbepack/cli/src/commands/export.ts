@@ -1,8 +1,9 @@
-import { logger } from "@mcbepack/common";
 import type { CommandModule } from "yargs";
 
-import { ARCHIVE_FORMATS, type ArchiveFormat } from "../domain.js";
-import { exportProject } from "../workflows/export.js";
+import { logger } from "@mcbepack/common";
+
+import { exportProject } from "../services/export.js";
+import { ARCHIVE_FORMATS, type ArchiveFormat } from "../types/cli-options.js";
 
 interface ExportArgs {
     archiveFormat: ArchiveFormat;

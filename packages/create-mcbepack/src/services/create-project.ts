@@ -4,12 +4,12 @@ import path from "node:path";
 
 import { logger } from "@mcbepack/common";
 
-import { generateFileList } from "../generated/files.js";
-import { createFiles } from "../lib/create-files.js";
-import { createInstallCommand, detectPackageManager } from "../lib/package-manager.js";
-import { printCreatedProjectSummary } from "../log/project-summary.js";
-import { promptConfirm } from "../prompt/index.js";
+import { generateFileList } from "../generators/files.js";
+import { promptConfirm } from "../prompts/project-prompts.js";
 import { collectProjectInfo } from "./collect-project-info.js";
+import { createFiles } from "./create-files.js";
+import { createInstallCommand, detectPackageManager, type InstallCommand } from "./package-manager.js";
+import { printCreatedProjectSummary } from "./project-summary.js";
 
 export class ProjectCreationCancelledError extends Error {
     public constructor() {
@@ -26,14 +26,14 @@ export async function createProject(): Promise<void> {
     await confirmProjectCreation();
     ensureProjectRootAvailable(projectRoot, config.name);
 
-    createFiles(generateFileList(config));
+    createFiles(generateFileList(config, projectRoot));
 
     logger.step("Installing dependencies...");
     runInstallCommand(createInstallCommand(projectRoot, packageManager));
     printCreatedProjectSummary(config, projectRoot, packageManager);
 }
 
-function runInstallCommand(command: { command: string; args: string[]; cwd: string }): void {
+function runInstallCommand(command: InstallCommand): void {
     execFileSync(command.command, command.args, {
         cwd: command.cwd,
         stdio: "inherit"

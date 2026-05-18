@@ -1,8 +1,9 @@
 import fs from "node:fs";
 import path from "node:path";
 
-import { MINECRAFT_PACKAGES } from "@mcbepack/common";
 import { build, type BuildContext, type BuildOptions, type BuildResult, context, formatMessages, type Message } from "esbuild";
+
+import { MINECRAFT_PACKAGES } from "@mcbepack/common";
 
 function getScriptEntry(): string {
     const tsEntry = path.join(process.cwd(), "scripts", "index.ts");

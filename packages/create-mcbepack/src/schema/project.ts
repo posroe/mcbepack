@@ -1,7 +1,8 @@
-import type { Version } from "@mcbepack/common/types";
 import { z } from "zod";
 
-import { ExtensionType, ReleaseChannel, ScriptLanguage } from "../lib/enums.js";
+import type { Version } from "@mcbepack/common/types/manifest";
+
+import { ExtensionType, ReleaseChannel, ScriptLanguage } from "../constants/create-options.js";
 
 export const projectDependencySchema = z.object({
     packageName: z.string().min(1),

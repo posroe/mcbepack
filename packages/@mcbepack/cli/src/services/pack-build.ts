@@ -1,11 +1,12 @@
 import fs from "node:fs";
 
-import { color, formatPath, logger } from "@mcbepack/common";
 import type { BuildFailure } from "esbuild";
-import pkg from "../../package.json" with { type: "json" };
 
-import { getProjectPaths } from "./project-paths.js";
-import { bundleScripts, formatBundleMessages } from "./script-bundler.js";
+import { color, formatPath, logger } from "@mcbepack/common";
+
+import pkg from "../../package.json" with { type: "json" };
+import { getProjectPaths } from "../config/project-paths.js";
+import { bundleScripts, formatBundleMessages } from "../core/script-bundler.js";
 
 function isBuildFailure(error: unknown): error is BuildFailure {
     return typeof error === "object"

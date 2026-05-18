@@ -2,10 +2,10 @@ import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { getDependency, logger, MINECRAFT_PACKAGES } from "@mcbepack/common";
-import type { APIBehaviorManifest } from "@mcbepack/common/types";
+import type { APIBehaviorManifest } from "@mcbepack/common/types/manifest";
 
-import type { ReleaseChannel } from "../domain.js";
-import { getProjectPaths } from "../lib/project-paths.js";
+import { getProjectPaths } from "../config/project-paths.js";
+import type { ReleaseChannel } from "../types/cli-options.js";
 
 type PackageJson = Record<string, Record<string, string> | unknown>;
 

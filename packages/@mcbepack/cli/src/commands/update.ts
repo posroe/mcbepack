@@ -1,8 +1,9 @@
-import { logger } from "@mcbepack/common";
 import type { CommandModule } from "yargs";
 
-import { RELEASE_CHANNELS, type ReleaseChannel } from "../domain.js";
-import { updateProjectDependencies } from "../workflows/update.js";
+import { logger } from "@mcbepack/common";
+
+import { updateProjectDependencies } from "../services/update.js";
+import { RELEASE_CHANNELS, type ReleaseChannel } from "../types/cli-options.js";
 
 interface UpdateArgs {
     releaseChannel: ReleaseChannel;

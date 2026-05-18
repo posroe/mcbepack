@@ -1,7 +1,8 @@
-import { logger } from "@mcbepack/common";
 import type { CommandModule } from "yargs";
 
-import { buildProject } from "../workflows/build.js";
+import { logger } from "@mcbepack/common";
+
+import { buildProject } from "../services/build.js";
 
 export const buildCommand: CommandModule = {
     command: "build",

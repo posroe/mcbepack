@@ -1,7 +1,7 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { FileCreateType } from "../lib/enums.js";
+import { FileCreateType } from "../constants/create-options.js";
 import type { FileToCreate } from "../schema/file.js";
 import { fileToCreateSchema } from "../schema/file.js";
 

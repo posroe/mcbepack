@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
-import type { MinecraftLinkPaths, ProjectPaths } from "./project-paths.js";
+import type { MinecraftLinkPaths, ProjectPaths } from "../config/project-paths.js";
 
 export interface PackLinks {
     behaviorPack?: string;

@@ -3,9 +3,9 @@ import path from "node:path";
 
 import { logger } from "@mcbepack/common";
 
+import { FileCreateType } from "../constants/create-options.js";
 import type { FileToCreate } from "../schema/file.js";
 import { fileToCreateSchema } from "../schema/file.js";
-import { FileCreateType } from "./enums.js";
 
 export class FileCreationError extends Error {
     constructor(public readonly filePath: string, cause: unknown) {

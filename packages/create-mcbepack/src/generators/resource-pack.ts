@@ -1,6 +1,6 @@
 import path from "node:path";
 
-import { ExtensionType } from "../lib/enums.js";
+import { ExtensionType } from "../constants/create-options.js";
 import type { FileToCreate } from "../schema/file.js";
 import { copyTemplate, createFile, json } from "./file-entry.js";
 import type { GenerationContext } from "./generation-context.js";

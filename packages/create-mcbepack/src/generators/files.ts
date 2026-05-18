@@ -11,10 +11,10 @@ import { generateProjectReadme } from "./readme.js";
 import { generateResourcePack } from "./resource-pack.js";
 import { generateScriptProject } from "./script-project.js";
 
-export function generateFileList(config: ProjectConfig): FileToCreate[] {
+export function generateFileList(config: ProjectConfig, projectRoot: string): FileToCreate[] {
     const context: GenerationContext = {
         config,
-        projectRoot: path.join(process.cwd(), config.name),
+        projectRoot,
         baseManifest: createBaseManifest(config)
     };
 

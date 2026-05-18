@@ -1,6 +1,6 @@
 import { logger } from "@mcbepack/common";
 
-import { packBuild } from "../lib/pack-build.js";
+import { packBuild } from "./pack-build.js";
 
 export async function buildProject(): Promise<void> {
     await packBuild();
