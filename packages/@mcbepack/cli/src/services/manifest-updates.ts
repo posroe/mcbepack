@@ -1,5 +1,4 @@
-import { getDependency, logger, MINECRAFT_PACKAGES } from "@mcbepack/common";
-import type { APIBehaviorManifest } from "@mcbepack/common/types/manifest";
+import { type APIBehaviorManifest,getDependency, logger, MINECRAFT_PACKAGES } from "@mcbepack/common";
 
 import { Release } from "../enum.js";
 

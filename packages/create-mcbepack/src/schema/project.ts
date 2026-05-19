@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import type { Version } from "@mcbepack/common/types/manifest";
+import type { Version } from "@mcbepack/common";
 
 import { ExtensionType, ReleaseChannel, ScriptLanguage } from "../constants/enums.js";
 

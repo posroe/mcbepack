@@ -1,6 +1,6 @@
 import fetch from "node-fetch";
 
-import type { Version } from "../types/manifest.js";
+import type { Version } from "../types.js";
 
 interface NpmVersionsResponse {
     versions: Record<string, unknown>;

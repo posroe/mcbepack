@@ -5,7 +5,7 @@ import type { BuildFailure } from "esbuild";
 import { logger } from "@mcbepack/common";
 
 import { Bundler } from "../classes/bundler.js";
-import { directory } from "../constants.js";
+import { DIRECTORIES } from "../constants.js";
 
 function isBuildFailure(error: unknown): error is BuildFailure {
     return typeof error === "object"
@@ -16,7 +16,7 @@ function isBuildFailure(error: unknown): error is BuildFailure {
 
 export async function bundler(): Promise<void> {
     try {
-        if (!fs.existsSync(directory.scripts.origin)) {
+        if (!fs.existsSync(DIRECTORIES.scripts.origin)) {
             logger.info("No scripts directory found; skipped script bundle");
             return;
         }

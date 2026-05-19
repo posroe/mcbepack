@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import dotenv from "dotenv";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
@@ -7,6 +8,10 @@ import { buildCommand } from "./commands/build.js";
 import { devCommand } from "./commands/dev.js";
 import { exportCommand } from "./commands/export.js";
 import { updateCommand } from "./commands/update.js";
+
+dotenv.config({
+    path: `${process.cwd()}/.env.local`
+});
 
 void yargs(hideBin(process.argv))
     .command(devCommand)

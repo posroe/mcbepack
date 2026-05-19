@@ -1,14 +1,15 @@
-import type { CommandModule } from "yargs";
-import path from "node:path";
 import fs from "node:fs";
+import path from "node:path";
+
+import type { CommandModule } from "yargs";
 
 import { logger } from "@mcbepack/common";
 
-import { directory, name } from "../constants.js";
+import { DIRECTORIES, NAMES } from "../constants.js";
 import { Release } from "../enum.js";
-import { isApiBehaviorManifest, isJson, readJsonFile, writeJsonFile } from "../services/utils.js";
-import { updatePackage } from "../services/package-updates.js";
 import { updateManifest } from "../services/manifest-updates.js";
+import { updatePackage } from "../services/package-updates.js";
+import { isApiBehaviorManifest, isJson, readJsonFile, writeJsonFile } from "../services/utils.js";
 
 export const updateCommand: CommandModule<object, {
     release: Release;
@@ -26,8 +27,8 @@ export const updateCommand: CommandModule<object, {
         try {
             logger.step(`Updating dependencies to ${release}...`);
 
-            const packageJsonPath = path.join(process.cwd(), name.package);
-            const manifestJsonPath = path.join(directory.behavior.origin, name.manifest);
+            const packageJsonPath = path.join(process.cwd(), NAMES.package);
+            const manifestJsonPath = path.join(DIRECTORIES.behavior.origin, NAMES.manifest);
             if (!fs.existsSync(manifestJsonPath)) {
                 throw new Error("manifest.json not found in current directory");
             }

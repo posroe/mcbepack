@@ -8,8 +8,7 @@
     ]
   },
   "include": [
-    "src/**/*",
-    "src/constants/.ts"
+    "src/**/*"
   ],
   "exclude": [
     "node_modules",

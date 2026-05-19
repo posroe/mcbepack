@@ -1,11 +1,19 @@
 import fs from "node:fs";
 import path from "node:path";
 
-import { build, type BuildContext, type BuildOptions, type BuildResult, context, formatMessages, type Message } from "esbuild";
+import {
+    build,
+    type BuildContext,
+    type BuildOptions,
+    type BuildResult,
+    context,
+    formatMessages,
+    type Message
+} from "esbuild";
 
 import { MINECRAFT_PACKAGES } from "@mcbepack/common";
 
-import { directory } from "../constants.js";
+import { DIRECTORIES } from "../constants.js";
 
 export class Bundler {
     private readonly buildOptions: BuildOptions = {
@@ -15,7 +23,7 @@ export class Bundler {
         platform: "neutral",
         mainFields: ["module", "main"],
         target: "esnext",
-        outfile: path.resolve(directory.scripts.destination, "index.js"),
+        outfile: path.resolve(DIRECTORIES.scripts.destination, "index.js"),
         external: [...MINECRAFT_PACKAGES.modules],
         sourcemap: false,
         minify: true,
@@ -23,8 +31,8 @@ export class Bundler {
     };
 
     private static getScriptEntry(): string {
-        const tsEntry = path.join(directory.scripts.origin, "index.ts");
-        const jsEntry = path.join(directory.scripts.origin, "index.js");
+        const tsEntry = path.join(DIRECTORIES.scripts.origin, "index.ts");
+        const jsEntry = path.join(DIRECTORIES.scripts.origin, "index.js");
 
         if (fs.existsSync(tsEntry)) {
             return tsEntry;

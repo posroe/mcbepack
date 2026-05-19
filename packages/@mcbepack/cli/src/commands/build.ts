@@ -1,9 +1,9 @@
 import type { CommandModule } from "yargs";
 
-import { color, formatPath, logger } from "@mcbepack/common";
+import { logger } from "@mcbepack/common";
 
-import { constants, directory, name } from "../constants.js";
 import { bundler } from "../services/bundler.js";
+import { statusLog } from "../services/utils.js";
 
 
 export const buildCommand: CommandModule = {
@@ -11,13 +11,7 @@ export const buildCommand: CommandModule = {
     describe: "Build the project",
     handler: async (): Promise<void> => {
         try {
-            logger.logo();
-            logger.header("mcbepack", constants.version);
-            logger.field("Project", color.bold(name.project));
-            logger.field("Mode", color.cyan("production"));
-            logger.field("Behavior", formatPath(directory.behavior.origin));
-            logger.field("Resource", formatPath(directory.resource.origin));
-
+            statusLog("production");
             await bundler();
             logger.done("Build completed");
         } catch (error) {

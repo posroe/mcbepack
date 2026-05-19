@@ -1,9 +1,42 @@
-import { APIBehaviorManifest } from "@mcbepack/common";
 import { readFileSync, writeFileSync } from "node:fs";
 
-type PackageJson = Record<string, Record<string, string> | unknown>;
+import chalk from "chalk";
 
-export function isJson(value: unknown): value is PackageJson {
+import { APIBehaviorManifest, formatPath, logger } from "@mcbepack/common";
+
+import pkg from "../../package.json" with { type: "json" };
+import { DIRECTORIES, NAMES } from "../constants.js";
+
+
+export function validateEnv(env: NodeJS.ProcessEnv, keys: string[]) {
+    try {
+        const values = keys.map((key) => {
+            const value = env[key];
+
+            if (!value || value.length === 0 || typeof value !== "string") {
+                throw new Error(`Missing required environment variable: ${key}`);
+            }
+
+            return value;
+        });
+
+        return values;
+    } catch (error) {
+        logger.error(error instanceof Error ? error.message : String(error));
+        process.exit(1);
+    }
+}
+
+export function statusLog(mode: "production" | "development") {
+    logger.logo();
+    logger.header("mcbepack", pkg.version);
+    logger.field("Project", chalk.bold(NAMES.project));
+    logger.field("Mode", chalk.cyan(mode));
+    logger.field("Behavior", formatPath(DIRECTORIES.behavior.destination));
+    logger.field("Resource", formatPath(DIRECTORIES.resource.destination));
+}
+
+export function isJson(value: unknown): value is Record<string, unknown> {
     return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 

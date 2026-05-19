@@ -1,8 +1,9 @@
 import { execFileSync } from "node:child_process";
 
-import { getDependency, logger, MINECRAFT_PACKAGES } from "@mcbepack/common";
 import { resolveCommand } from "package-manager-detector/commands";
 import { detect } from "package-manager-detector/detect";
+
+import { getDependency, logger, MINECRAFT_PACKAGES } from "@mcbepack/common";
 
 import { DependencyScope, Release } from "../enum.js";
 import { isStringRecord } from "./utils.js";
@@ -20,7 +21,6 @@ function getDependencies(
 
     return dependencies;
 }
-
 
 async function installPackage(updates: string[]): Promise<void> {
     try {

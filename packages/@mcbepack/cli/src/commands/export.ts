@@ -1,12 +1,12 @@
 import type { CommandModule } from "yargs";
 
-import { color, formatPath, logger } from "@mcbepack/common";
+import { logger } from "@mcbepack/common";
 
 import { Archiver } from "../classes/archiver.js";
-import { constants, directory, name } from "../constants.js";
-import { bundler } from "../services/bundler.js";
+import { DIRECTORIES, NAMES } from "../constants.js";
 import { Extension } from "../enum.js";
-
+import { bundler } from "../services/bundler.js";
+import { statusLog } from "../services/utils.js";
 
 export const exportCommand: CommandModule<object, {
     extension: Extension;
@@ -22,12 +22,7 @@ export const exportCommand: CommandModule<object, {
         }),
     handler: async ({ extension }) => {
         try {
-            logger.logo();
-            logger.header("mcbepack", constants.version);
-            logger.field("Project", color.bold(name.project));
-            logger.field("Mode", color.cyan("production"));
-            logger.field("Behavior", formatPath(directory.behavior.origin));
-            logger.field("Resource", formatPath(directory.resource.origin));
+            statusLog("production");
 
             await bundler();
 
@@ -36,19 +31,19 @@ export const exportCommand: CommandModule<object, {
             const archiver = new Archiver(
                 [
                     {
-                        origin: directory.behavior.origin,
-                        name: `${name.project}_${name.behavior}`
+                        origin: DIRECTORIES.behavior.origin,
+                        name: `${NAMES.project}_${NAMES.behavior}`
                     },
                     {
-                        origin: directory.resource.origin,
-                        name: `${name.project}_${name.resource}`
+                        origin: DIRECTORIES.resource.origin,
+                        name: `${NAMES.project}_${NAMES.resource}`
                     }
                 ],
-                directory.output
+                DIRECTORIES.output
             );
 
             if (extension === Extension.MCADDON) {
-                await archiver.createCompound(extension, name.project);
+                await archiver.createCompound(extension, NAMES.project);
             } else {
                 await archiver.create(extension);
             }
