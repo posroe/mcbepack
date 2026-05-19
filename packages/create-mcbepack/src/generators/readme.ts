@@ -1,4 +1,4 @@
-import type { ProjectConfig } from "../schema/project.js";
+import type { ProjectConfig } from "../schema.js";
 
 export function generateProjectReadme(config: ProjectConfig): string {
     return `# ${config.name}

@@ -1,8 +1,8 @@
 import { detect } from "package-manager-detector/detect";
 
-import { PackageManagerName } from "../constants/enums.js";
-import type { PackageManager } from "../schema/manager.js";
-import { managerSchema } from "../schema/manager.js";
+import { PackageManagerName } from "../constants.js";
+import type { PackageManager } from "../schema.js";
+import { managerSchema } from "../schema.js";
 
 const fallbackPackageManager: PackageManager = { name: PackageManagerName.Bun };
 

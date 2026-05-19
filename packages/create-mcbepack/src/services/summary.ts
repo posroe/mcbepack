@@ -1,7 +1,6 @@
 import { color, logger } from "@mcbepack/common";
 
-import type { PackageManager } from "../schema/manager.js";
-import type { ProjectConfig } from "../schema/project.js";
+import type { PackageManager, ProjectConfig } from "../schema.js";
 
 export function printCreatedProjectSummary(
     config: ProjectConfig,

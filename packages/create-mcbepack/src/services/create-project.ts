@@ -4,8 +4,16 @@ import path from "node:path";
 
 import { logger } from "@mcbepack/common";
 
-import { generateFileList } from "../generators/files.js";
-import { promptConfirm } from "../prompts/prompts.js";
+import type { GenerationContext } from "../context.js";
+import { generateBehaviorPack } from "../generators/behavior-pack.js";
+import { createFile } from "../generators/file-factory.js";
+import { createBaseManifest } from "../generators/manifest.js";
+import { generateProjectReadme } from "../generators/readme.js";
+import { generateResourcePack } from "../generators/resource-pack.js";
+import { generateScriptProject } from "../generators/script-project.js";
+import { promptConfirm } from "../prompts.js";
+import type { FileToCreate, ProjectConfig } from "../schema.js";
+import { fileToCreateSchema } from "../schema.js";
 import { collectProjectInfo } from "./collect-info.js";
 import { createFiles } from "./file-writer.js";
 import { createInstallCommand, detectPackageManager, type InstallCommand } from "./manager-detector.js";
@@ -38,6 +46,27 @@ function runInstallCommand(command: InstallCommand): void {
         cwd: command.cwd,
         stdio: "inherit"
     });
+}
+
+function generateFileList(config: ProjectConfig, projectRoot: string): FileToCreate[] {
+    const context: GenerationContext = {
+        config,
+        projectRoot,
+        baseManifest: createBaseManifest(config)
+    };
+
+    const files = [
+        createTextFile(context, "README.md", generateProjectReadme(config)),
+        ...generateBehaviorPack(context),
+        ...generateResourcePack(context),
+        ...generateScriptProject(context)
+    ];
+
+    return fileToCreateSchema.array().parse(files);
+}
+
+function createTextFile(context: GenerationContext, relativePath: string, content: string): FileToCreate {
+    return createFile(path.join(context.projectRoot, relativePath), content);
 }
 
 async function confirmProjectCreation(): Promise<void> {

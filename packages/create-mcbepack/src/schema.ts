@@ -2,13 +2,30 @@ import { z } from "zod";
 
 import type { Version } from "@mcbepack/common";
 
-import { ExtensionType, ReleaseChannel, ScriptLanguage } from "../constants/enums.js";
+import { ExtensionType, FileCreateType, PackageManagerName, ReleaseChannel, ScriptLanguage } from "./constants.js";
+
+export const fileToCreateSchema = z.object({
+    path: z.string().min(1),
+    content: z.union([z.string(), z.instanceof(Buffer)]),
+    type: z.nativeEnum(FileCreateType),
+    source: z.string().min(1).optional()
+});
+
+export type FileToCreate = z.infer<typeof fileToCreateSchema>;
+
+export const managerSchema = z.object({
+    name: z.nativeEnum(PackageManagerName)
+});
+
+export type PackageManager = z.infer<typeof managerSchema>;
 
 export const projectDependencySchema = z.object({
     packageName: z.string().min(1),
     version: z.custom<Version>(),
     fullVersion: z.string().min(1)
 });
+
+export type ProjectDependency = z.infer<typeof projectDependencySchema>;
 
 export const projectUuidsSchema = z.object({
     behavior: z.string().uuid(),
@@ -17,6 +34,8 @@ export const projectUuidsSchema = z.object({
     resourceModule: z.string().uuid()
 });
 
+export type ProjectUuids = z.infer<typeof projectUuidsSchema>;
+
 export const scriptConfigSchema = z.object({
     enabled: z.boolean(),
     language: z.nativeEnum(ScriptLanguage),
@@ -24,6 +43,8 @@ export const scriptConfigSchema = z.object({
     packages: z.array(z.string().min(1)),
     dependencies: z.array(projectDependencySchema)
 });
+
+export type ScriptConfig = z.infer<typeof scriptConfigSchema>;
 
 export const projectConfigSchema = z.object({
     name: z.string().min(1),
@@ -35,7 +56,4 @@ export const projectConfigSchema = z.object({
     uuids: projectUuidsSchema
 });
 
-export type ProjectDependency = z.infer<typeof projectDependencySchema>;
-export type ProjectUuids = z.infer<typeof projectUuidsSchema>;
-export type ScriptConfig = z.infer<typeof scriptConfigSchema>;
 export type ProjectConfig = z.infer<typeof projectConfigSchema>;

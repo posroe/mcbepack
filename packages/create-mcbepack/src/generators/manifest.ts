@@ -1,14 +1,14 @@
 import { type Manifest, MINECRAFT_PACKAGES, type Version } from "@mcbepack/common";
 
 import pkg from "../../package.json" with { type: "json" };
-import { ExtensionType } from "../constants/enums.js";
 import {
+    ExtensionType,
     MANIFEST_LANGUAGE,
     RESOURCE_MODULE_TYPE,
     SCRIPT_ENTRY_JS,
     SCRIPT_MODULE_TYPE
-} from "../constants/manifest-keys.js";
-import type { ProjectConfig } from "../schema/project.js";
+} from "../constants.js";
+import type { ProjectConfig } from "../schema.js";
 
 const minecraftPluginPackages = new Set<string>(MINECRAFT_PACKAGES.plugins);
 const scriptCapabilities: ["script_eval"] = ["script_eval"];

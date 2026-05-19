@@ -2,10 +2,10 @@ import { randomUUID } from "node:crypto";
 
 import { getDependency, logger } from "@mcbepack/common";
 
-import { ExtensionType, ScriptLanguage } from "../constants/enums.js";
-import { promptExtensions, promptProjectInfo, promptScriptApi, promptScriptConfig } from "../prompts/prompts.js";
-import type { ProjectConfig } from "../schema/project.js";
-import { projectConfigSchema } from "../schema/project.js";
+import { ExtensionType, ScriptLanguage } from "../constants.js";
+import { promptExtensions, promptProjectInfo, promptScriptApi, promptScriptConfig } from "../prompts.js";
+import type { ProjectConfig } from "../schema.js";
+import { projectConfigSchema } from "../schema.js";
 
 export async function collectProjectInfo(): Promise<ProjectConfig> {
     const { extensions } = await promptExtensions();

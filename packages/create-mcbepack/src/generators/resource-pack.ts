@@ -1,10 +1,10 @@
 import path from "node:path";
 
-import { ExtensionType } from "../constants/enums.js";
-import type { FileToCreate } from "../schema/file.js";
-import type { GenerationContext } from "./context.js";
+import { ExtensionType } from "../constants.js";
+import type { GenerationContext } from "../context.js";
+import type { FileToCreate } from "../schema.js";
 import { copyTemplate, createFile, json } from "./file-factory.js";
-import { createResourceManifest } from "./manifest-builder.js";
+import { createResourceManifest } from "./manifest.js";
 
 export function generateResourcePack(context: GenerationContext): FileToCreate[] {
     if (!context.config.extensions.includes(ExtensionType.Resource)) {
