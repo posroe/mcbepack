@@ -18,29 +18,29 @@ export const devCommand: CommandModule = {
             logger.header("mcbepack", constants.version);
             logger.field("Project", color.bold(name.project));
             logger.field("Mode", color.cyan("development"));
-            logger.field("Behavior", formatPath(directory.behavior.destination));
-            logger.field("Resource", formatPath(directory.resource.destination));
+            logger.field("Behavior", formatPath(directory.behavior.destination()));
+            logger.field("Resource", formatPath(directory.resource.destination()));
 
             logger.step("Linking packs into Minecraft...");
 
             const behaviorLinked = new Linker(
                 directory.behavior.origin,
-                directory.behavior.destination,
+                directory.behavior.destination(),
                 `${name.project}_${name.behavior}`
             ).linkDir();
 
             const resourceLinked = new Linker(
                 directory.resource.origin,
-                directory.resource.destination,
+                directory.resource.destination(),
                 `${name.project}_${name.resource}`
             ).linkDir();
 
             if (behaviorLinked) {
-                logger.success(`Behavior pack linked ${color.dim(formatPath(directory.behavior.destination))}`);
+                logger.success(`Behavior pack linked ${color.dim(formatPath(directory.behavior.destination()))}`);
             }
 
             if (resourceLinked) {
-                logger.success(`Resource pack linked ${color.dim(formatPath(directory.resource.destination))}`);
+                logger.success(`Resource pack linked ${color.dim(formatPath(directory.resource.destination()))}`);
             }
 
             const bundler = new Bundler();

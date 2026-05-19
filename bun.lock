@@ -44,6 +44,7 @@
         "esbuild": "^0.25.0",
         "inquirer": "^13.2.2",
         "nodemon": "^3.1.11",
+        "package-manager-detector": "^1.6.0",
         "yargs": "^17.7.2",
       },
       "devDependencies": {

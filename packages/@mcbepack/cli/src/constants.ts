@@ -36,14 +36,14 @@ export const name = {
 export const directory = {
     behavior: {
         origin: path.join(process.cwd(), "src", name.behavior),
-        destination: path.join(
+        destination: () => path.join(
             validateEnv(process.env, "BASE_PATH"),
             validateEnv(process.env, "BEHAVIOR_PATH")
         ),
     },
     resource: {
         origin: path.join(process.cwd(), "src", name.resource),
-        destination: path.join(
+        destination: () => path.join(
             validateEnv(process.env, "BASE_PATH"),
             validateEnv(process.env, "RESOURCE_PATH")
         ),
@@ -57,16 +57,4 @@ export const directory = {
 
 export const constants = {
     version: pkg.version,
-}
-
-export enum Extension {
-    MCPACK = "mcpack",
-    MCADDON = "mcaddon",
-    ZIP = "zip",
-}
-
-export enum Release {
-    STABLE = "stable",
-    BETA = "beta",
-    PREVIEW = "preview",
 }

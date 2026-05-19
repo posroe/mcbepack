@@ -3,8 +3,9 @@ import type { CommandModule } from "yargs";
 import { color, formatPath, logger } from "@mcbepack/common";
 
 import { Archiver } from "../classes/archiver.js";
-import { constants, directory, Extension, name } from "../constants.js";
+import { constants, directory, name } from "../constants.js";
 import { bundler } from "../services/bundler.js";
+import { Extension } from "../enum.js";
 
 
 export const exportCommand: CommandModule<object, {
