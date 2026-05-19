@@ -1,10 +1,10 @@
 import path from "node:path";
 
-import { ScriptLanguage } from "../constants/create-options.js";
+import { ScriptLanguage } from "../constants/enums.js";
 import type { FileToCreate } from "../schema/file.js";
-import { copyTemplate, createFile, json } from "./file-entry.js";
-import type { GenerationContext } from "./generation-context.js";
-import { createPackageJson } from "./package-json.js";
+import type { GenerationContext } from "./context.js";
+import { copyTemplate, createFile, json } from "./file-factory.js";
+import { createPackageJson } from "./package-json-builder.js";
 
 export function generateScriptProject(context: GenerationContext): FileToCreate[] {
     const { config, projectRoot } = context;

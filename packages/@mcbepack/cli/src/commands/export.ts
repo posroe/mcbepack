@@ -1,27 +1,58 @@
 import type { CommandModule } from "yargs";
 
-import { logger } from "@mcbepack/common";
+import { color, formatPath, logger } from "@mcbepack/common";
 
-import { exportProject } from "../services/export.js";
-import { ARCHIVE_FORMATS, type ArchiveFormat } from "../types/cli-options.js";
+import { Archiver } from "../classes/archiver.js";
+import { constants, directory, Extension, name } from "../constants.js";
+import { bundler } from "../services/bundler.js";
 
-interface ExportArgs {
-    archiveFormat: ArchiveFormat;
-}
 
-export const exportCommand: CommandModule<object, ExportArgs> = {
-    command: "export <archiveFormat>",
+export const exportCommand: CommandModule<object, {
+    extension: Extension;
+}> = {
+    command: "export <extension>",
     describe: "Build and export an archive",
     builder: (yargs) => yargs
-        .positional("archiveFormat", {
+        .positional("extension", {
             type: "string",
             description: "Archive output format",
-            choices: ARCHIVE_FORMATS,
+            choices: Object.values(Extension),
             demandOption: true
         }),
-    handler: async (argv) => {
+    handler: async ({ extension }) => {
         try {
-            await exportProject(argv.archiveFormat);
+            logger.logo();
+            logger.header("mcbepack", constants.version);
+            logger.field("Project", color.bold(name.project));
+            logger.field("Mode", color.cyan("production"));
+            logger.field("Behavior", formatPath(directory.behavior.origin));
+            logger.field("Resource", formatPath(directory.resource.origin));
+
+            await bundler();
+
+            logger.step(`Creating ${extension} archive...`);
+
+            const archiver = new Archiver(
+                [
+                    {
+                        origin: directory.behavior.origin,
+                        name: `${name.project}_${name.behavior}`
+                    },
+                    {
+                        origin: directory.resource.origin,
+                        name: `${name.project}_${name.resource}`
+                    }
+                ],
+                directory.output
+            );
+
+            if (extension === Extension.MCADDON) {
+                await archiver.createCompound(extension, name.project);
+            } else {
+                await archiver.create(extension);
+            }
+
+            logger.done("Export completed");
         } catch (error) {
             logger.error(`Export failed: ${error instanceof Error ? error.message : String(error)}`);
             process.exit(1);

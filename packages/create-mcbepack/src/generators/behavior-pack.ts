@@ -1,10 +1,10 @@
 import path from "node:path";
 
-import { ExtensionType } from "../constants/create-options.js";
+import { ExtensionType } from "../constants/enums.js";
 import type { FileToCreate } from "../schema/file.js";
-import { copyTemplate, createFile, json } from "./file-entry.js";
-import type { GenerationContext } from "./generation-context.js";
-import { createBehaviorManifest } from "./manifest.js";
+import type { GenerationContext } from "./context.js";
+import { copyTemplate, createFile, json } from "./file-factory.js";
+import { createBehaviorManifest } from "./manifest-builder.js";
 
 export function generateBehaviorPack(context: GenerationContext): FileToCreate[] {
     if (!context.config.extensions.includes(ExtensionType.Behavior)) {

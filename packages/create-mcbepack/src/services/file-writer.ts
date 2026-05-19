@@ -3,7 +3,7 @@ import path from "node:path";
 
 import { logger } from "@mcbepack/common";
 
-import { FileCreateType } from "../constants/create-options.js";
+import { FileCreateType } from "../constants/enums.js";
 import type { FileToCreate } from "../schema/file.js";
 import { fileToCreateSchema } from "../schema/file.js";
 

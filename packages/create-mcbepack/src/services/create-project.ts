@@ -5,11 +5,11 @@ import path from "node:path";
 import { logger } from "@mcbepack/common";
 
 import { generateFileList } from "../generators/files.js";
-import { promptConfirm } from "../prompts/project-prompts.js";
-import { collectProjectInfo } from "./collect-project-info.js";
-import { createFiles } from "./create-files.js";
-import { createInstallCommand, detectPackageManager, type InstallCommand } from "./package-manager.js";
-import { printCreatedProjectSummary } from "./project-summary.js";
+import { promptConfirm } from "../prompts/prompts.js";
+import { collectProjectInfo } from "./collect-info.js";
+import { createFiles } from "./file-writer.js";
+import { createInstallCommand, detectPackageManager, type InstallCommand } from "./manager-detector.js";
+import { printCreatedProjectSummary } from "./summary.js";
 
 export class ProjectCreationCancelledError extends Error {
     public constructor() {

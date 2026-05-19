@@ -1,4 +1,4 @@
-export * from "./constants.js";
 export * from "./logger.js";
+export * from "./minecraft-packages.js";
 export * from "./types/manifest.js";
-export * from "./utils/dependencies.js";
+export * from "./utils/npm-registry.js";

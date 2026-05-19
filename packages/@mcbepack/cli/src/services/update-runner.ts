@@ -4,8 +4,7 @@ import { join } from "node:path";
 import { getDependency, logger, MINECRAFT_PACKAGES } from "@mcbepack/common";
 import type { APIBehaviorManifest } from "@mcbepack/common/types/manifest";
 
-import { getProjectPaths } from "../config/project-paths.js";
-import type { ReleaseChannel } from "../types/cli-options.js";
+import { directory, name, Release } from "../constants.js";
 
 type PackageJson = Record<string, Record<string, string> | unknown>;
 
@@ -32,7 +31,7 @@ function getDependencies(packageJson: PackageJson, dependencyField: string): Rec
     return dependencies;
 }
 
-async function updatePackageJson(packageJson: PackageJson, releaseChannel: ReleaseChannel): Promise<number> {
+async function updatePackageJson(packageJson: PackageJson, release: Release): Promise<number> {
     let updatedPackages = 0;
 
     for (const packageName of minecraftPackageNames) {
@@ -44,7 +43,7 @@ async function updatePackageJson(packageJson: PackageJson, releaseChannel: Relea
             }
 
             try {
-                const latestDependency = await getDependency(packageName, releaseChannel);
+                const latestDependency = await getDependency(packageName, release);
                 const currentVersion = dependencies[packageName];
 
                 if (currentVersion !== latestDependency.fullVersion) {
@@ -63,7 +62,7 @@ async function updatePackageJson(packageJson: PackageJson, releaseChannel: Relea
     return updatedPackages;
 }
 
-async function updateManifest(manifestJson: APIBehaviorManifest, releaseChannel: ReleaseChannel): Promise<number> {
+async function updateManifest(manifestJson: APIBehaviorManifest, release: Release): Promise<number> {
     let updatedManifestEntries = 0;
 
     for (const packageName of minecraftPackageNames) {
@@ -76,7 +75,7 @@ async function updateManifest(manifestJson: APIBehaviorManifest, releaseChannel:
         }
 
         try {
-            const latestDependency = await getDependency(packageName, releaseChannel);
+            const latestDependency = await getDependency(packageName, release);
             const currentVersion = "version" in manifestDependency ? manifestDependency.version : undefined;
 
             if (currentVersion !== latestDependency.version) {
@@ -96,11 +95,11 @@ async function updateManifest(manifestJson: APIBehaviorManifest, releaseChannel:
     return updatedManifestEntries;
 }
 
-export async function updateProjectDependencies(releaseChannel: ReleaseChannel): Promise<void> {
-    logger.step(`Updating dependencies to ${releaseChannel}...`);
+export async function runUpdate(release: Release): Promise<void> {
+    logger.step(`Updating dependencies to ${release}...`);
 
-    const packageJsonPath = join(process.cwd(), "package.json");
-    const manifestJsonPath = join(getProjectPaths().behaviorPackRoot, "manifest.json");
+    const packageJsonPath = join(process.cwd(), name.package);
+    const manifestJsonPath = join(directory.behavior.origin, name.manifest);
 
     if (!existsSync(packageJsonPath)) {
         throw new Error("package.json not found in current directory");
@@ -121,8 +120,8 @@ export async function updateProjectDependencies(releaseChannel: ReleaseChannel):
         throw new Error("manifest.json is not a valid behavior manifest");
     }
 
-    const updatedPackages = await updatePackageJson(packageJson, releaseChannel);
-    const updatedManifestEntries = await updateManifest(manifestJson, releaseChannel);
+    const updatedPackages = await updatePackageJson(packageJson, release);
+    const updatedManifestEntries = await updateManifest(manifestJson, release);
 
     if (updatedPackages > 0 || updatedManifestEntries > 0) {
         writeJsonFile(packageJsonPath, packageJson);

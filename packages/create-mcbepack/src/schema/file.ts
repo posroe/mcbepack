@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { FileCreateType } from "../constants/create-options.js";
+import { FileCreateType } from "../constants/enums.js";
 
 export const fileToCreateSchema = z.object({
     path: z.string().min(1),

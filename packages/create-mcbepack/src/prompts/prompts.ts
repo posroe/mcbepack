@@ -2,7 +2,7 @@ import enquirer from "enquirer";
 
 import { MINECRAFT_PACKAGES } from "@mcbepack/common";
 
-import { ExtensionType, ReleaseChannel, ScriptLanguage } from "../constants/create-options.js";
+import { ExtensionType, ReleaseChannel, ScriptLanguage } from "../constants/enums.js";
 import { projectConfigSchema } from "../schema/project.js";
 
 export async function promptExtensions(): Promise<{ extensions: ExtensionType[] }> {

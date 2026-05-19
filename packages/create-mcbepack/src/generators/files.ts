@@ -4,10 +4,10 @@ import type { FileToCreate } from "../schema/file.js";
 import { fileToCreateSchema } from "../schema/file.js";
 import type { ProjectConfig } from "../schema/project.js";
 import { generateBehaviorPack } from "./behavior-pack.js";
-import { createFile } from "./file-entry.js";
-import type { GenerationContext } from "./generation-context.js";
-import { createBaseManifest } from "./manifest.js";
-import { generateProjectReadme } from "./readme.js";
+import type { GenerationContext } from "./context.js";
+import { createFile } from "./file-factory.js";
+import { createBaseManifest } from "./manifest-builder.js";
+import { generateProjectReadme } from "./readme-builder.js";
 import { generateResourcePack } from "./resource-pack.js";
 import { generateScriptProject } from "./script-project.js";
 
