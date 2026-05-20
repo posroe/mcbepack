@@ -1,23 +1,23 @@
 export enum Extension {
-    BEHAVIOR = "behavior",
-    RESOURCE = "resource",
+    Behavior = "behavior",
+    Resource = "resource",
 }
 
 export enum ScriptLanguage {
-    TYPESCRIPT = "typescript",
-    JAVASCRIPT = "javascript",
+    TypeScript = "typescript",
+    JavaScript = "javascript",
 }
 
 export enum Release {
-    STABLE = "stable",
-    BETA = "beta",
-    PREVIEW = "preview",
+    Stable = "stable",
+    Beta = "beta",
+    Preview = "preview",
 }
 
-export enum PackageManagerName {
-    NPM = "npm",
-    YARN = "yarn",
-    PNPM = "pnpm",
-    BUN = "bun",
-    DENO = "deno",
+export enum PackageManager {
+    Npm = "npm",
+    Yarn = "yarn",
+    Pnpm = "pnpm",
+    Bun = "bun",
+    Deno = "deno",
 }

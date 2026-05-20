@@ -3,7 +3,7 @@ import type { CommandModule } from "yargs";
 import { logger } from "@mcbepack/common";
 
 import { Archiver } from "../classes/archiver.js";
-import { DIRECTORIES, NAMES } from "../config/constants.js";
+import { DIRECTORIES, NAMES } from "../config/constant.js";
 import { Extension } from "../config/enum.js";
 import { bundler } from "../services/bundler.js";
 import { statusLog } from "../services/utils.js";
