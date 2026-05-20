@@ -7,7 +7,7 @@ export const NAMES = {
     manifest: "manifest.json",
     package: "package.json",
     project: path.basename(process.cwd()),
-}
+} as const
 
 export const DIRECTORIES = {
     behavior: {
@@ -23,4 +23,4 @@ export const DIRECTORIES = {
         origin: path.join(process.cwd(), "scripts"),
         destination: path.join(process.cwd(), "src", NAMES.behavior, "scripts"),
     }
-}
+} as const

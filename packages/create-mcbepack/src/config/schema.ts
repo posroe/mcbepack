@@ -2,16 +2,30 @@ import { z } from "zod";
 
 import type { Version } from "@mcbepack/common";
 
-import { ExtensionType, FileCreateType, PackageManagerName, ReleaseChannel, ScriptLanguage } from "./constants.js";
+import { Extension, PackageManagerName, Release, ScriptLanguage } from "./enum.js";
 
-export const fileToCreateSchema = z.object({
+const fileDestinationSchema = z.object({
+    directory: z.string().min(1),
     path: z.string().min(1),
-    content: z.union([z.string(), z.instanceof(Buffer)]),
-    type: z.nativeEnum(FileCreateType),
-    source: z.string().min(1).optional()
+    name: z.string().min(1),
+    extension: z.string(),
 });
 
-export type FileToCreate = z.infer<typeof fileToCreateSchema>;
+export const projectFileDescriptorSchema = z.discriminatedUnion("action", [
+    fileDestinationSchema.extend({
+        action: z.literal("create"),
+        content: z.union([z.string(), z.instanceof(Buffer)])
+    }),
+    fileDestinationSchema.extend({
+        action: z.literal("copy"),
+        source: z.string().min(1)
+    })
+]);
+
+export type ProjectFileDescriptor = z.infer<typeof projectFileDescriptorSchema>;
+
+export const fileToCreateSchema = projectFileDescriptorSchema;
+export type FileToCreate = ProjectFileDescriptor;
 
 export const managerSchema = z.object({
     name: z.nativeEnum(PackageManagerName)
@@ -39,7 +53,7 @@ export type ProjectUuids = z.infer<typeof projectUuidsSchema>;
 export const scriptConfigSchema = z.object({
     enabled: z.boolean(),
     language: z.nativeEnum(ScriptLanguage),
-    release: z.union([z.nativeEnum(ReleaseChannel), z.literal("")]),
+    release: z.union([z.nativeEnum(Release), z.literal("")]),
     packages: z.array(z.string().min(1)),
     dependencies: z.array(projectDependencySchema)
 });
@@ -51,7 +65,7 @@ export const projectConfigSchema = z.object({
     description: z.string(),
     author: z.string(),
     minimumEngineVersion: z.string().regex(/^\d+\.\d+\.\d+$/),
-    extensions: z.array(z.nativeEnum(ExtensionType)).min(1),
+    extensions: z.array(z.nativeEnum(Extension)).min(1),
     script: scriptConfigSchema.optional(),
     uuids: projectUuidsSchema
 });

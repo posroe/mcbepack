@@ -5,8 +5,8 @@ import type { CommandModule } from "yargs";
 
 import { logger } from "@mcbepack/common";
 
-import { DIRECTORIES, NAMES } from "../constants.js";
-import { Release } from "../enum.js";
+import { DIRECTORIES, NAMES } from "../config/constants.js";
+import { Release } from "../config/enum.js";
 import { updateManifest } from "../services/manifest-updates.js";
 import { updatePackage } from "../services/package-updates.js";
 import { isApiBehaviorManifest, isJson, readJsonFile, writeJsonFile } from "../services/utils.js";

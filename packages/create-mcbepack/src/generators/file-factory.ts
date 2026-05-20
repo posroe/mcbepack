@@ -1,31 +1,55 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { FileCreateType } from "../constants.js";
-import type { FileToCreate } from "../schema.js";
-import { fileToCreateSchema } from "../schema.js";
+import type { ProjectFileDescriptor } from "../config/schema.js";
+
+interface CreateFileOptions {
+    directory: string;
+    name: string;
+    action: "create" | "copy";
+    content?: string | Buffer;
+    source?: string;
+}
 
 const currentFilePath = fileURLToPath(import.meta.url);
 const currentDir = path.dirname(currentFilePath);
 const templatesDir = path.join(currentDir, "..", "..", "templates");
 
-export function createFile(filePath: string, content: string | Buffer): FileToCreate {
-    return fileToCreateSchema.parse({
-        path: filePath,
-        content,
-        type: FileCreateType.File,
-    });
+export function createFile(options: CreateFileOptions): ProjectFileDescriptor {
+    const destination = {
+        directory: options.directory,
+        name: options.name,
+        extension: path.extname(options.name),
+        path: path.join(options.directory, options.name),
+    };
+
+    if (options.action === "copy") {
+        if (!options.source) {
+            throw new Error(`Copy file requires source: ${options.name}`);
+        }
+
+        return {
+            action: "copy",
+            ...destination,
+            source: options.source,
+        };
+    }
+
+    if (options.content === undefined) {
+        throw new Error(`Create file requires content: ${options.name}`);
+    }
+
+    return {
+        action: "create",
+        ...destination,
+        content: options.content,
+    };
 }
 
-export function copyTemplate(filePath: string, templateName: string): FileToCreate {
-    return fileToCreateSchema.parse({
-        path: filePath,
-        content: "",
-        type: FileCreateType.Copy,
-        source: path.join(templatesDir, templateName),
-    });
+export function template(templateName: string): string {
+    return path.join(templatesDir, templateName);
 }
 
 export function json(value: unknown): string {
-    return JSON.stringify(value, null, 2);
+    return `${JSON.stringify(value, null, 2)}\n`;
 }

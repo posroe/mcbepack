@@ -1,32 +1,56 @@
 import path from "node:path";
 
-import { ScriptLanguage } from "../constants.js";
-import type { GenerationContext } from "../context.js";
-import type { FileToCreate } from "../schema.js";
-import { copyTemplate, createFile, json } from "./file-factory.js";
+import { PROJECT_DIRECTORIES, PROJECT_FILES, SCRIPT_PROJECT, TEMPLATE_FILES } from "../config/constants.js";
+import type { GenerationContext } from "../config/context.js";
+import type { ProjectFileDescriptor } from "../config/schema.js";
+import { createFile, json, template } from "./file-factory.js";
 import { createPackageJson } from "./package-json.js";
 
-export function generateScriptProject(context: GenerationContext): FileToCreate[] {
-    const { config, projectRoot } = context;
-    const files = [
-        createFile(path.join(projectRoot, "package.json"), json(createPackageJson(config))),
-    ];
+export function generatePackageJsonFile(context: GenerationContext): ProjectFileDescriptor {
+    return createFile({
+        directory: context.projectRoot,
+        name: PROJECT_FILES.packageJson,
+        action: "create",
+        content: json(createPackageJson(context.config)),
+    });
+}
 
-    if (!config.script?.enabled) {
-        return files;
+export function generateEnvTemplateFile(context: GenerationContext): ProjectFileDescriptor {
+    return createFile({
+        directory: context.projectRoot,
+        name: PROJECT_FILES.env,
+        action: "copy",
+        source: template(TEMPLATE_FILES.env),
+    });
+}
+
+export function generateGitignoreTemplateFile(context: GenerationContext): ProjectFileDescriptor {
+    return createFile({
+        directory: context.projectRoot,
+        name: PROJECT_FILES.gitignore,
+        action: "copy",
+        source: template(TEMPLATE_FILES.gitignore),
+    });
+}
+
+export function generateTsconfigTemplateFile(context: GenerationContext): ProjectFileDescriptor {
+    return createFile({
+        directory: context.projectRoot,
+        name: PROJECT_FILES.tsconfig,
+        action: "copy",
+        source: template(TEMPLATE_FILES.tsconfig),
+    });
+}
+
+export function generateScriptEntryFile(context: GenerationContext): ProjectFileDescriptor {
+    if (!context.config.script?.enabled) {
+        throw new Error("Cannot generate script entry without Script API enabled");
     }
 
-    const scriptEntry = config.script.language === ScriptLanguage.TypeScript ? "index.ts" : "index.js";
-
-    files.push(
-        copyTemplate(path.join(projectRoot, ".env.local"), ".env.local.txt"),
-        copyTemplate(path.join(projectRoot, ".gitignore"), ".gitignore.txt"),
-        createFile(path.join(projectRoot, "scripts", scriptEntry), "export {};\n")
-    );
-
-    if (config.script.language === ScriptLanguage.TypeScript) {
-        files.push(copyTemplate(path.join(projectRoot, "tsconfig.json"), "tsconfig.json"));
-    }
-
-    return files;
+    return createFile({
+        directory: path.join(context.projectRoot, PROJECT_DIRECTORIES.scripts),
+        name: SCRIPT_PROJECT.entries[context.config.script.language],
+        action: "create",
+        content: SCRIPT_PROJECT.initialContent,
+    });
 }

@@ -2,7 +2,7 @@
 
 import { logger } from "@mcbepack/common";
 
-import { createProject, ProjectCreationCancelledError } from "./services/create-project.js";
+import { createProject, ProjectCreationCancelledError } from "./project/create-project.js";
 
 try {
     await createProject();

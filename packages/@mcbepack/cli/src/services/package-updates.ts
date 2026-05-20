@@ -5,7 +5,7 @@ import { detect } from "package-manager-detector/detect";
 
 import { getDependency, logger, MINECRAFT_PACKAGES } from "@mcbepack/common";
 
-import { DependencyScope, Release } from "../enum.js";
+import { DependencyScope, Release } from "../config/enum.js";
 import { isStringRecord } from "./utils.js";
 
 type PackageJson = Record<string, Record<string, string> | unknown>;

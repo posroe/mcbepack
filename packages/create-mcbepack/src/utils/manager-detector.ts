@@ -1,10 +1,12 @@
+import { execFileSync } from "node:child_process";
+
 import { detect } from "package-manager-detector/detect";
 
-import { PackageManagerName } from "../constants.js";
-import type { PackageManager } from "../schema.js";
-import { managerSchema } from "../schema.js";
+import { DEFAULT_PACKAGE_MANAGER } from "../config/constants.js";
+import type { PackageManager } from "../config/schema.js";
+import { managerSchema } from "../config/schema.js";
 
-const fallbackPackageManager: PackageManager = { name: PackageManagerName.Bun };
+const fallbackPackageManager: PackageManager = DEFAULT_PACKAGE_MANAGER;
 
 export interface InstallCommand {
     command: string;
@@ -28,4 +30,11 @@ export function createInstallCommand(projectRoot: string, packageManager: Packag
         args: ["install"],
         cwd: projectRoot
     };
+}
+
+export function runInstallCommand(command: InstallCommand): void {
+    execFileSync(command.command, command.args, {
+        cwd: command.cwd,
+        stdio: "inherit"
+    });
 }

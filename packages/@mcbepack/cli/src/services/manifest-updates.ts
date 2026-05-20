@@ -1,6 +1,6 @@
-import { type APIBehaviorManifest,getDependency, logger, MINECRAFT_PACKAGES } from "@mcbepack/common";
+import { type APIBehaviorManifest, getDependency, logger, MINECRAFT_PACKAGES } from "@mcbepack/common";
 
-import { Release } from "../enum.js";
+import { Release } from "../config/enum.js";
 
 export async function updateManifest(manifestJson: APIBehaviorManifest, release: Release): Promise<number> {
     let updates = 0;

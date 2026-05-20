@@ -5,7 +5,7 @@ import { formatDuration, formatPath, logger } from "@mcbepack/common";
 
 import { Bundler } from "../classes/bundler.js";
 import { Linker } from "../classes/linker.js";
-import { DIRECTORIES, NAMES } from "../constants.js";
+import { DIRECTORIES, NAMES } from "../config/constants.js";
 import { statusLog, validateEnv } from "../services/utils.js";
 
 export const devCommand: CommandModule = {

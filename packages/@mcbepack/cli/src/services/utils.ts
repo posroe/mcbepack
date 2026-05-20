@@ -5,7 +5,7 @@ import chalk from "chalk";
 import { APIBehaviorManifest, formatPath, logger } from "@mcbepack/common";
 
 import pkg from "../../package.json" with { type: "json" };
-import { DIRECTORIES, NAMES } from "../constants.js";
+import { DIRECTORIES, NAMES } from "../config/constants.js";
 
 
 export function validateEnv(env: NodeJS.ProcessEnv, keys: string[]) {

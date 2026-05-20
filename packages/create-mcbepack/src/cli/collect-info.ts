@@ -2,10 +2,10 @@ import { randomUUID } from "node:crypto";
 
 import { getDependency, logger } from "@mcbepack/common";
 
-import { ExtensionType, ScriptLanguage } from "../constants.js";
-import { promptExtensions, promptProjectInfo, promptScriptApi, promptScriptConfig } from "../prompts.js";
-import type { ProjectConfig } from "../schema.js";
-import { projectConfigSchema } from "../schema.js";
+import { Extension, ScriptLanguage } from "../config/enum.js";
+import type { ProjectConfig } from "../config/schema.js";
+import { projectConfigSchema } from "../config/schema.js";
+import { promptExtensions, promptProjectInfo, promptScriptApi, promptScriptConfig } from "./prompts.js";
 
 export async function collectProjectInfo(): Promise<ProjectConfig> {
     const { extensions } = await promptExtensions();
@@ -28,7 +28,7 @@ export async function collectProjectInfo(): Promise<ProjectConfig> {
         uuids,
     };
 
-    if (extensions.includes(ExtensionType.Behavior)) {
+    if (extensions.includes(Extension.BEHAVIOR)) {
         const { api } = await promptScriptApi();
 
         if (api) {
@@ -49,7 +49,7 @@ export async function collectProjectInfo(): Promise<ProjectConfig> {
         } else {
             config.script = {
                 enabled: false,
-                language: ScriptLanguage.JavaScript,
+                language: ScriptLanguage.JAVASCRIPT,
                 release: "",
                 packages: [],
                 dependencies: [],

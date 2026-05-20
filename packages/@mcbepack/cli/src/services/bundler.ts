@@ -5,7 +5,7 @@ import type { BuildFailure } from "esbuild";
 import { logger } from "@mcbepack/common";
 
 import { Bundler } from "../classes/bundler.js";
-import { DIRECTORIES } from "../constants.js";
+import { DIRECTORIES } from "../config/constants.js";
 
 function isBuildFailure(error: unknown): error is BuildFailure {
     return typeof error === "object"

@@ -1,18 +1,30 @@
-import type { ProjectConfig } from "../schema.js";
+import { getReadmeScripts, PROJECT_FILES } from "../config/constants.js";
+import type { GenerationContext } from "../config/context.js";
+import type { ProjectFileDescriptor } from "../config/schema.js";
+import { createFile } from "./file-factory.js";
 
-export function generateProjectReadme(config: ProjectConfig): string {
-    return `# ${config.name}
+export function generateProjectReadme(context: GenerationContext): string {
+    const commands = getReadmeScripts(context);
 
-${config.description}
+    return `# ${context.config.name}
+
+${context.config.description}
 
 Generated with \`create-mcbepack\`.
 
 ## Commands
 
 \`\`\`bash
-${config.script?.enabled ? "bun run dev\nbun run build\n" : ""}bun run export:zip
-bun run export:mcpack
-bun run export:mcaddon
+${commands.map((command) => `${context.packageManager.name} run ${command.name}`).join("\n")}
 \`\`\`
 `;
+}
+
+export function generateReadmeFile(context: GenerationContext): ProjectFileDescriptor {
+    return createFile({
+        directory: context.projectRoot,
+        name: PROJECT_FILES.readme,
+        action: "create",
+        content: generateProjectReadme(context),
+    });
 }

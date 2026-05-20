@@ -13,7 +13,7 @@ import {
 
 import { MINECRAFT_PACKAGES } from "@mcbepack/common";
 
-import { DIRECTORIES } from "../constants.js";
+import { DIRECTORIES } from "../config/constants.js";
 
 export class Bundler {
     private readonly buildOptions: BuildOptions = {

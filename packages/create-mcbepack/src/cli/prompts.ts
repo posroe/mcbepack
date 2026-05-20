@@ -2,18 +2,19 @@ import enquirer from "enquirer";
 
 import { MINECRAFT_PACKAGES } from "@mcbepack/common";
 
-import { ExtensionType, ReleaseChannel, ScriptLanguage } from "./constants.js";
-import { projectConfigSchema } from "./schema.js";
+import { PACK_DEFINITIONS } from "../config/constants.js";
+import { Extension, Release, ScriptLanguage } from "../config/enum.js";
+import { projectConfigSchema } from "../config/schema.js";
 
-export async function promptExtensions(): Promise<{ extensions: ExtensionType[] }> {
-    return enquirer.prompt<{ extensions: ExtensionType[] }>({
+export async function promptExtensions(): Promise<{ extensions: Extension[] }> {
+    return enquirer.prompt<{ extensions: Extension[] }>({
         type: "multiselect",
         name: "extensions",
         message: "Select an extension type",
-        choices: [
-            { name: ExtensionType.Behavior, message: "Behavior Pack" },
-            { name: ExtensionType.Resource, message: "Resource Pack" },
-        ],
+        choices: Object.values(PACK_DEFINITIONS).map((pack) => ({
+            name: pack.extension,
+            message: pack.displayName,
+        })),
         validate: (input) => input.length > 0 || "At least one extension type is required"
     });
 }
@@ -69,25 +70,25 @@ export async function promptProjectInfo(): Promise<{
 
 export async function promptScriptConfig(): Promise<{
     language: ScriptLanguage;
-    release: ReleaseChannel;
+    release: Release;
     packages: string[];
 }> {
     return enquirer.prompt<{
         language: ScriptLanguage;
-        release: ReleaseChannel;
+        release: Release;
         packages: string[];
     }>([
         {
             type: "select",
             name: "language",
             message: "Which language do you want to use?",
-            choices: [ScriptLanguage.TypeScript, ScriptLanguage.JavaScript]
+            choices: [ScriptLanguage.TYPESCRIPT, ScriptLanguage.JAVASCRIPT]
         },
         {
             type: "select",
             name: "release",
             message: "What release channel would you like to use?",
-            choices: [ReleaseChannel.Stable, ReleaseChannel.Beta, ReleaseChannel.Preview],
+            choices: [Release.STABLE, Release.BETA, Release.PREVIEW],
         },
         {
             type: "multiselect",
