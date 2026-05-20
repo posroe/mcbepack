@@ -20,7 +20,7 @@ export const SCRIPTS_SCRIPT_API = [
 ] as const;
 
 export const DIRECTORIES = {
-    template: path.join(__dirname, "..", "templates"),
-    [Extension.Behavior]: path.join(__dirname, "..", "templates", "behavior_pack"),
-    [Extension.Resource]: path.join(__dirname, "..", "templates", "resource_pack"),
+    template: path.join(__dirname, "..", "..", "templates"),
+    [Extension.Behavior]: path.join("src", "behavior_pack"),
+    [Extension.Resource]: path.join("src", "resource_pack"),
 } as const;

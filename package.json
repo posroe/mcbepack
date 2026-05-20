@@ -2,11 +2,13 @@
     "private": true,
     "workspaces": [
         "packages/*",
-        "packages/@mcbepack/*"
+        "packages/@mcbepack/*",
+        ".cache/*"
     ],
     "scripts": {
         "bootstrap": "bun install",
         "build": "bun run --workspaces build",
+        "clean": "rm -rf **/dist/",
         "lint": "eslint .",
         "lint:fix": "eslint . --fix"
     },

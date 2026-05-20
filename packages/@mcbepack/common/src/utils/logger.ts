@@ -24,8 +24,6 @@ export function formatPath(filePath: string): string {
     return relativePath && !relativePath.startsWith("..") ? relativePath : filePath;
 }
 
-export const color = chalk;
-
 function line(status: LogStatus, message: string): string {
     return `  ${statusLabel[status]} ${message}`;
 }

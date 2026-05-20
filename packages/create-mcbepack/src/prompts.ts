@@ -2,15 +2,10 @@ import { randomUUID } from "node:crypto";
 
 import enquirer from "enquirer";
 
-import { getDependency, logger, MINECRAFT_PACKAGES } from "@mcbepack/common";
+import { getDependency, MINECRAFT_PACKAGES } from "@mcbepack/common";
 
 import { Extension, PackageManager, Release, ScriptLanguage } from "./config/enum.js";
 import { detectPackageManager } from "./utils.js";
-
-const PACK_CHOICES = [
-    { name: Extension.Behavior, message: "Behavior Pack" },
-    { name: Extension.Resource, message: "Resource Pack" },
-];
 
 export interface Context {
     name: string;
@@ -39,7 +34,7 @@ export async function createContext(): Promise<Context> {
         type: "multiselect",
         name: "extensions",
         message: "What types of development do you need?",
-        choices: PACK_CHOICES,
+        choices: Object.values(Extension),
         validate: (v) => v.length > 0 || "At least one extension type is required",
     });
 
