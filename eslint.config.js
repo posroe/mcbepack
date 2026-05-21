@@ -25,7 +25,9 @@ export default tseslint.config(
             "simple-import-sort": simpleImportSort
         },
         rules: {
-            "@typescript-eslint/no-namespace": ["error", { allowDeclarations: true }],
+            "@typescript-eslint/no-namespace": ["error", {
+                allowDeclarations: true
+            }],
             "simple-import-sort/exports": "error",
             "simple-import-sort/imports": ["error", {
                 groups: [
