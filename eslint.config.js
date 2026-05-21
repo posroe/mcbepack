@@ -9,7 +9,6 @@ export default tseslint.config(
             "**/node_modules/**",
             "**/dist/**",
             "**/templates/**",
-            "**/.cache/**"
         ]
     },
     js.configs.recommended,
