@@ -3,7 +3,7 @@
     "workspaces": [
         "packages/*",
         "packages/@mcbepack/*",
-        ".cache/*"
+        "development/*"
     ],
     "scripts": {
         "bootstrap": "bun install",
