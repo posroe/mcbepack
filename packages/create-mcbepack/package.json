@@ -1,6 +1,6 @@
 {
   "name": "create-mcbepack",
-  "version": "1.0.6",
+  "version": "1.0.8",
   "main": "dist/index.js",
   "type": "module",
   "bin": {
@@ -11,7 +11,7 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@mcbepack/common": "^1.0.1",
+    "@mcbepack/common": "^1.0.2",
     "enquirer": "^2.4.1",
     "nodemon": "^3.1.11",
     "package-manager-detector": "^1.6.0"

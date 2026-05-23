@@ -1,6 +1,6 @@
 {
     "name": "@mcbepack/cli",
-    "version": "1.0.6",
+    "version": "1.0.7",
     "main": "dist/index.js",
     "type": "module",
     "bin": {
@@ -11,7 +11,7 @@
         "build": "tsc"
     },
     "dependencies": {
-        "@mcbepack/common": "^1.0.1",
+        "@mcbepack/common": "^1.0.2",
         "archiver": "^7.0.1",
         "dotenv": "^16.4.7",
         "esbuild": "^0.25.0",
