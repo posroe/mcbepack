@@ -26,7 +26,6 @@ export class Bundler {
         outfile: path.resolve(DIRECTORIES.scripts.destination, "index.js"),
         external: [...MINECRAFT_PACKAGES.modules],
         sourcemap: false,
-        minify: true,
         logLevel: "silent"
     };
 
@@ -50,7 +49,7 @@ export class Bundler {
     }
 
     public async build(): Promise<BuildResult> {
-        return build(this.buildOptions);
+        return build({ ...this.buildOptions, minify: true });
     }
 
     public async watcher(
