@@ -5,6 +5,7 @@ node_modules
 out
 dist
 *.tgz
+src/behavior_pack/scripts
 
 # code coverage
 coverage
